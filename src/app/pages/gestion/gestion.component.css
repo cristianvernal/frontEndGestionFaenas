@@ -1,0 +1,44 @@
+.container {
+    max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+    margin: 0 auto; /* Centra el contenido */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px; /* Espaciado alrededor del encabezado */
+  }
+  
+  .mat-table {
+    width: 100%; /* Asegura que la tabla use todo el ancho disponible */
+  }
+  
+  .mat-header-cell {
+    font-weight: bold; /* Resaltar encabezados */
+  }
+
+  mat-divider {
+    margin-bottom: 50px;
+  }
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column; 
+    gap: 16px; 
+    width: 100%; 
+  }
+  
+  .button {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    margin-top: 16px;
+  }
+  

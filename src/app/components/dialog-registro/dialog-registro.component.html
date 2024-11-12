@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Formulario de Empleado</h2>
+    <mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="nombre">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Apellido</mat-label>
+        <input matInput [(ngModel)]="apellido">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>RUT</mat-label>
+        <input matInput [(ngModel)]="rut">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Edad</mat-label>
+        <input matInput type="number" [(ngModel)]="edad">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Dirección</mat-label>
+        <input matInput [(ngModel)]="direccion">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha de Contratación</mat-label>
+        <input matInput [(ngModel)]="fechaContratacion" type="date">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="tel" [(ngModel)]="telefono">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email">
+      </mat-form-field>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="close()">Cancelar</button>
+      <button mat-button color="primary" (click)="confirm()">Guardar</button>
+    </mat-dialog-actions>

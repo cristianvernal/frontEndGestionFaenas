@@ -1,0 +1,56 @@
+.container {
+  max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+  margin: 0 auto; /* Centra el contenido */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+}
+
+
+.form-item {
+  display: inline-flex;
+  max-width: 300px; /* Ajusta este valor según sea necesario */
+  margin-right: 16px;
+}
+
+button.form-item {
+  max-width: none;
+  margin-right: 0;
+}
+.form-container {
+  display: flex;
+  align-items: end;
+  gap: 16px; /* Controla el espacio entre los elementos */
+  justify-content: space-evenly;
+}
+
+mat-form-field {
+  max-width: 200px; /* Ajusta el ancho según tus necesidades */
+}
+
+button {
+  margin-left: 16px; /* Espaciado adicional opcional */
+  margin-bottom: 25px;
+}
+
+mat-divider {
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    flex-direction: column; /* Cambia la dirección para apilarlos verticalmente */
+    align-items: flex-start; /* Alinea a la izquierda (puedes ajustar según necesidad) */
+    gap: 12px; /* Espacio entre elementos cuando están apilados */
+  }
+
+  mat-form-field,
+  button {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+}

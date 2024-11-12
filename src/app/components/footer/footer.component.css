@@ -1,0 +1,14 @@
+.custom-class {
+    color: black;
+    padding: 1rem;      /* p-4 */
+    margin-top: 2.5rem; /* mt-10 */
+    text-align: right;
+    align-items: end;
+    font-size: larger;
+}
+
+@media (max-width: 768px) {
+    .custom-class {
+        text-align: center;
+    }
+}

@@ -1,0 +1,42 @@
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  mat-form-field {
+    width: 450px;
+  }
+
+  /* Responsividad */
+  @media (max-width: 600px) {
+    mat-dialog-content {
+      max-width: 90vw; /* Ancho casi completo en pantallas pequeñas */
+    }
+  }
+
+  @media (min-width: 768px) {
+    mat-dialog-content {
+      max-width: 600px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    mat-dialog-content {
+      max-width: 800px; /* Más ancho en pantallas grandes */
+    }
+  }
+
+  .success-snack-bar {
+    background-color: green;
+    color: white;
+  }
+  
+  .error-snack-bar {
+    background-color: red;
+    color: white;
+  }

@@ -1,0 +1,10 @@
+.container {
+  max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+  margin: 0 auto; /* Centra el contenido */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px; /* Espaciado alrededor del encabezado */
+  }

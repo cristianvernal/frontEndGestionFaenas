@@ -1,0 +1,171 @@
+<div class="container">
+  <div class="header">
+    <h2>Registro</h2>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="content">
+    <div class="worker-details">
+      <div class="detail-item">
+        <label class="label">Nombre:</label>
+        <span class="detail">{{ trabajador.nombre }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Apellido:</label>
+        <span class="detail">{{ trabajador.apellido }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">RUT:</label>
+        <span class="detail">{{ trabajador.rut }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Fecha de Nacimiento:</label>
+        <span class="detail">{{ trabajador.fechaNacimiento | date: "dd/MM/yyyy"  }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Dirección:</label>
+        <span class="detail">{{ trabajador.direccion }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Fecha de Contratación:</label>
+        <span class="detail">{{ trabajador.fechaContratacion | date: "dd/MM/yyyy" }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Teléfono:</label>
+        <span class="detail">{{ trabajador.telefono }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Email:</label>
+        <span class="detail">{{ trabajador.email }}</span>
+      </div>
+      <div class="detail-item">
+        <label class="label">Transporte:</label>
+        <mat-form-field>
+          <mat-select>
+            @for (hospedaje of hospedajes; track hospedaje) {
+              <mat-option [value]="hospedaje.value">{{hospedaje.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="detail-item">
+        <label class="label">Cargo:</label>
+        <mat-form-field>
+          <mat-select>
+            @for (cargo of cargos; track cargo) {
+              <mat-option [value]="cargo.value">{{cargo.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="detail-item">
+        <label class="label">Faena:</label>
+        <mat-form-field>
+          <mat-select>
+            @for (faena of faenas; track faena) {
+              <mat-option [value]="faena.value">{{faena.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="button-group">
+        <button mat-raised-button color="primary">Ingresar a Faena</button>
+      </div>
+    </div>
+    
+    <div class="scan-section">
+      <div class="scan-content">
+        <button mat-raised-button color="primary">Escanear Trabajador</button>
+        <img [src]="trabajador.fotoUrl" alt="{{ trabajador.nombre }} {{ trabajador.apellido }}" class="image-preview" />
+        <label class="label">¿El trabajador no existe?</label>
+        <button mat-raised-button color="primary" class="modal" (click)="openDialogWithTemplate(template1)">
+          Agregar Trabajador
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal -->
+  <ng-template #template1>
+    <h2 mat-dialog-title>Crear Trabajador</h2>
+    <div mat-dialog-content>
+      <form [formGroup]="formGroup" class="form">
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="apellido" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>RUT</mat-label>
+          <input matInput formControlName="rut" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Fecha Nacimiento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerNacimiento"
+            formControlName="fechaNacimiento"
+          />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="pickerNacimiento"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerNacimiento></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="direccion" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Fecha Contratación</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerContratacion"
+            formControlName="fechaContratacion"
+          />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="pickerContratacion"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerContratacion></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" type="tel" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" />
+        </mat-form-field>
+      </form>
+
+      <div class="button">
+        <button mat-raised-button mat-dialog-close color="primary">
+          Cerrar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSave()"
+          [disabled]="formGroup.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </ng-template>
+  <app-footer></app-footer>
+</div>
