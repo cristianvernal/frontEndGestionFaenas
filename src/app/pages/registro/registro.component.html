@@ -40,6 +40,10 @@
         <span class="detail">{{ trabajador.email }}</span>
       </div>
       <div class="detail-item">
+        <label class="label">Cargo:</label>
+        <span class="detail">{{ trabajador.cargo }}</span>
+      </div>
+      <div class="detail-item">
         <label class="label">Transporte:</label>
         <mat-form-field>
           <mat-select>
@@ -50,14 +54,6 @@
         </mat-form-field>
       </div>
       <div class="detail-item">
-        <label class="label">Cargo:</label>
-        <mat-form-field>
-          <mat-select>
-            @for (cargo of cargos; track cargo) {
-              <mat-option [value]="cargo.value">{{cargo.viewValue}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
       </div>
       <div class="detail-item">
         <label class="label">Faena:</label>
@@ -140,7 +136,14 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #pickerContratacion></mat-datepicker>
         </mat-form-field>
-
+        <mat-form-field>
+          <mat-label class="label">Cargo:</mat-label>
+          <mat-select formControlName="cargos">
+            @for (cargo of cargos; track cargo) {
+              <mat-option [value]="cargo.value">{{cargo.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Teléfono</mat-label>
           <input matInput formControlName="telefono" type="tel" />

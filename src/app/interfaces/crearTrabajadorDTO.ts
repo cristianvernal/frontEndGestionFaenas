@@ -1,5 +1,4 @@
 export interface CrearTrabajadorDTO {
-  idTrabajador: number;
   idTipoUsuario: number;
   primerNombre: string;
   segundoNombre: string;
