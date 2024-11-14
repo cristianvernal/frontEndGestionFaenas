@@ -21,7 +21,9 @@
       </div>
       <div class="detail-item">
         <label class="label">Fecha de Nacimiento:</label>
-        <span class="detail">{{ trabajador.fechaNacimiento | date: "dd/MM/yyyy"  }}</span>
+        <span class="detail">{{
+          trabajador.fechaNacimiento | date : "dd/MM/yyyy"
+        }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Dirección:</label>
@@ -29,7 +31,9 @@
       </div>
       <div class="detail-item">
         <label class="label">Fecha de Contratación:</label>
-        <span class="detail">{{ trabajador.fechaContratacion | date: "dd/MM/yyyy" }}</span>
+        <span class="detail">{{
+          trabajador.fechaContratacion | date : "dd/MM/yyyy"
+        }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Teléfono:</label>
@@ -47,20 +51,21 @@
         <label class="label">Transporte:</label>
         <mat-form-field>
           <mat-select>
-            @for (hospedaje of hospedajes; track hospedaje) {
-              <mat-option [value]="hospedaje.value">{{hospedaje.viewValue}}</mat-option>
+            @for (transporte of transportes; track transporte) {
+            <mat-option [value]="transporte.value">{{
+              transporte.viewValue
+            }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="detail-item">
-      </div>
+      <div class="detail-item"></div>
       <div class="detail-item">
         <label class="label">Faena:</label>
         <mat-form-field>
           <mat-select>
             @for (faena of faenas; track faena) {
-              <mat-option [value]="faena.value">{{faena.viewValue}}</mat-option>
+            <mat-option [value]="faena.value">{{ faena.viewValue }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -69,23 +74,36 @@
         <button mat-raised-button color="primary">Ingresar a Faena</button>
       </div>
     </div>
-    
+
     <div class="scan-section">
       <div class="scan-content">
-        <button mat-raised-button color="primary" (click)="onScanWorker()">Escanear Trabajador</button>
+        <button mat-raised-button color="primary" (click)="onScanWorker()">
+          Escanear Trabajador
+        </button>
         @if(scanWorker) {
-          <img [src]="imageUrl" alt="{{ trabajador.nombre }} {{ trabajador.apellido }}" class="image-preview" />
+        <img
+          [src]="imageUrl"
+          alt="{{ trabajador.nombre }} {{ trabajador.apellido }}"
+          class="image-preview"
+        />
         }@else {
-          <app-webcam [trigger]="trigger" (capture)="imageUrl=$event"></app-webcam>
+        <app-webcam
+          [trigger]="trigger"
+          (capture)="imageUrl = $event"
+        ></app-webcam>
         }
         <label class="label">¿El trabajador no existe?</label>
-        <button mat-raised-button color="primary" class="modal" (click)="openDialogWithTemplate(template1)">
+        <button
+          mat-raised-button
+          color="primary"
+          class="modal"
+          (click)="openDialogWithTemplate(template1)"
+        >
           Agregar Trabajador
         </button>
       </div>
     </div>
   </div>
-  
 
   <!-- modal -->
   <ng-template #template1>
@@ -145,7 +163,7 @@
           <mat-label class="label">Cargo:</mat-label>
           <mat-select formControlName="cargos">
             @for (cargo of cargos; track cargo) {
-              <mat-option [value]="cargo.value">{{cargo.viewValue}}</mat-option>
+            <mat-option [value]="cargo.value">{{ cargo.viewValue }}</mat-option>
             }
           </mat-select>
         </mat-form-field>

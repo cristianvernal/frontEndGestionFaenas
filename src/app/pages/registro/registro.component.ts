@@ -42,16 +42,8 @@ import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { SelectOption } from '../../interfaces/select-option';
 import { WebcamComponent } from '../../components/webcam/webcam.component';
 import { Subject } from 'rxjs';
-
-interface Hospedaje {
-  value: string;
-  viewValue: string;
-}
-
-interface Faenas {
-  value: string;
-  viewValue: string;
-}
+import { EnpointsService } from '../../services/enpoints.service';
+import { TransporteEndpointsService } from '../../services/transporte-endpoints.service';
 
 @Component({
   selector: 'app-registro',
@@ -75,7 +67,7 @@ interface Faenas {
     MatDialogClose,
     MatDatepickerModule,
     MatSelectModule,
-    WebcamComponent
+    WebcamComponent,
   ],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css',
@@ -85,12 +77,14 @@ export class RegistroComponent implements OnInit {
   sidenav!: MatSidenav;
   colActions = viewChild.required('colActions', { read: TemplateRef });
   registeApiService = inject(RegisterApiService);
+  faenaService = inject(EnpointsService);
+  transporteService = inject(TransporteEndpointsService);
   scanWorker = false;
   triggerSource = new Subject<void>();
   imageUrl = '';
 
   get trigger() {
-    return this.triggerSource.asObservable()
+    return this.triggerSource.asObservable();
   }
 
   constructor(
@@ -99,6 +93,8 @@ export class RegistroComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.getTipoCargo();
+    this.getNombreFaena();
+    this.getTransporte();
   }
 
   formGroup: FormGroup = new FormGroup<{
@@ -151,12 +147,8 @@ export class RegistroComponent implements OnInit {
     faena: '',
     fotoUrl: 'img/istockphoto-1386479313-612x612.jpg',
   };
-  hospedajes: Hospedaje[] = [{ value: '1', viewValue: 'Jate' }];
-
-  faenas: Faenas[] = [
-    { value: '1', viewValue: 'Faena 1' },
-    { value: '2', viewValue: 'Faena 2' },
-  ];
+  transportes: SelectOption<number>[] = [];
+  faenas: SelectOption<number>[] = [];
   cargos: SelectOption<number>[] = [];
 
   openDialogWithTemplate(template: TemplateRef<any>) {
@@ -170,8 +162,8 @@ export class RegistroComponent implements OnInit {
   }
 
   onScanWorker() {
-    this.scanWorker = !this.scanWorker
-    this.triggerSource.next()
+    this.scanWorker = !this.scanWorker;
+    this.triggerSource.next();
   }
 
   onSave() {
@@ -245,12 +237,14 @@ export class RegistroComponent implements OnInit {
     this.registeApiService.getTipoCargo().subscribe({
       next: (data) => {
         console.log('Data fetched', data);
-        if(data && data.resultado && Array.isArray(data.resultado)) {
-          this.cargos = data.resultado.map<SelectOption<number>>(tipoCargo => ({
-            value: tipoCargo.id,
-            viewValue: tipoCargo.nombre,
-          }))
-        }else {
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.cargos = data.resultado.map<SelectOption<number>>(
+            (tipoCargo) => ({
+              value: tipoCargo.id,
+              viewValue: tipoCargo.nombre,
+            })
+          );
+        } else {
           console.error('unexpected data format:', data);
           this.cargos = [];
         }
@@ -259,6 +253,52 @@ export class RegistroComponent implements OnInit {
         console.error('Error fetching faenas:', error);
         this.cargos = [];
       },
-    })
+    });
+  }
+
+  getNombreFaena() {
+    this.faenaService.getFaenas().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.faenas = data.resultado.map<SelectOption<number>>(
+            (nombreFaena) => ({
+              value: nombreFaena.idTrabajador,
+              viewValue: nombreFaena.nombreFaena,
+            })
+          );
+        } else {
+          console.error('unexpected data format:', data);
+          this.faenas = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching nombre faenas', error);
+        this.faenas = [];
+      },
+    });
+  }
+
+  getTransporte() {
+    this.transporteService.getTipoTransporte().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.transportes = data.resultado.map<SelectOption<number>>(
+            (transporte) => ({
+              value: transporte.idTransporte,
+              viewValue: transporte.tipoTransporte,
+            })
+          );
+        } else {
+          console.error('unexpected data format:', data);
+          this.transportes = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching nombre faenas', error);
+        this.transportes = [];
+      },
+    });
   }
 }

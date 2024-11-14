@@ -66,9 +66,9 @@
   }
   
   .image-preview {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px; /* Bordes redondeados en la imagen */
+    width: 612px;
+    height: 408px;
+    
   }
   
   /* Responsividad para pantallas menores a 1200px */

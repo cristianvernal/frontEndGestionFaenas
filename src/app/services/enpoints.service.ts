@@ -17,8 +17,8 @@ export class EnpointsService {
 
   readonly API_URL = "http://3.90.157.39:8080/faena"
 
-  getFaenas(): Observable<Faena> {
-    return this._http.get<Faena>(`${this.API_URL}/${'traer'}`).pipe(
+  getFaenas(): Observable<BaseResponse<Faena[]>> {
+    return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/${'traer'}`).pipe(
       catchError(error => {
         console.error('Error fetching data:', error);
         return throwError(() => new Error('Error fetching data'));
