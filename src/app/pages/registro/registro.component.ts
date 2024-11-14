@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   Inject,
+  OnInit,
   TemplateRef,
   viewChild,
   ViewChild,
@@ -38,12 +39,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { RegisterApiService } from '../../services/register-api.service';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
+import { SelectOption } from '../../interfaces/select-option';
+import { WebcamComponent } from '../../components/webcam/webcam.component';
+import { Subject } from 'rxjs';
 
 interface Hospedaje {
-  value: string;
-  viewValue: string;
-}
-interface cargo {
   value: string;
   viewValue: string;
 }
@@ -75,20 +75,31 @@ interface Faenas {
     MatDialogClose,
     MatDatepickerModule,
     MatSelectModule,
+    WebcamComponent
   ],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css',
 })
-export class RegistroComponent {
+export class RegistroComponent implements OnInit {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
   colActions = viewChild.required('colActions', { read: TemplateRef });
   registeApiService = inject(RegisterApiService);
+  scanWorker = false;
+  triggerSource = new Subject<void>();
+  imageUrl = '';
+
+  get trigger() {
+    return this.triggerSource.asObservable()
+  }
 
   constructor(
     private dialog: MatDialog,
     private dialogService: DialogService
   ) {}
+  ngOnInit(): void {
+    this.getTipoCargo();
+  }
 
   formGroup: FormGroup = new FormGroup<{
     nombre: FormControl;
@@ -146,11 +157,7 @@ export class RegistroComponent {
     { value: '1', viewValue: 'Faena 1' },
     { value: '2', viewValue: 'Faena 2' },
   ];
-  cargos: cargo[] = [
-    { value: '41', viewValue: 'Guardia de seguridad' },
-    { value: '21', viewValue: 'informatico' },
-    { value: '9', viewValue: 'Pintor' },
-  ];
+  cargos: SelectOption<number>[] = [];
 
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
@@ -160,6 +167,11 @@ export class RegistroComponent {
       console.log('Dialog with template close', res);
       this.formGroup.reset();
     });
+  }
+
+  onScanWorker() {
+    this.scanWorker = !this.scanWorker
+    this.triggerSource.next()
   }
 
   onSave() {
@@ -227,5 +239,26 @@ export class RegistroComponent {
         console.error('Error al guardar trabajador:', err);
       },
     });
+  }
+
+  getTipoCargo() {
+    this.registeApiService.getTipoCargo().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if(data && data.resultado && Array.isArray(data.resultado)) {
+          this.cargos = data.resultado.map<SelectOption<number>>(tipoCargo => ({
+            value: tipoCargo.id,
+            viewValue: tipoCargo.nombre,
+          }))
+        }else {
+          console.error('unexpected data format:', data);
+          this.cargos = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching faenas:', error);
+        this.cargos = [];
+      },
+    })
   }
 }

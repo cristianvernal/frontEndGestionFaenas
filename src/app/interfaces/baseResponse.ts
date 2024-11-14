@@ -1,6 +1,7 @@
-export interface BaseResponse {
+export interface BaseResponse<T> {
     codigoRetorno: number,
     glosaRetorno: string,
-    resultado: any,
+    resultado: T,
     timestamp: Date,
 }
+

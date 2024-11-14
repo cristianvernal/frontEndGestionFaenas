@@ -47,6 +47,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { FaenaDto } from '../../interfaces/faena-dto';
+import { TipoFaena } from '../../interfaces/tipoFaena';
+import { SelectOption } from '../../interfaces/select-option';
 
 interface tipoFaena {
   value: string;
@@ -88,11 +90,7 @@ export class GestionComponent implements OnInit {
     private dialogService: DialogService
   ) {}
 
-  tipoFaenas: tipoFaena[] = [
-    { value: '1', viewValue: 'Limpieza 3' },
-    { value: '21', viewValue: 'Clases Remotas' },
-  ];
-
+  tipoFaenas: SelectOption<number>[] = [];
   faenas: Faena[] = [];
   tableColumns: tableColumn<Faena>[] = [];
   loading: boolean = false;
@@ -114,6 +112,7 @@ export class GestionComponent implements OnInit {
   ngOnInit(): void {
     this.setTableColumns();
     this.getFaenas();
+    this.getTipoFaena();
   }
 
   setTableColumns() {
@@ -181,6 +180,27 @@ export class GestionComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  getTipoFaena() {
+    this.faenasService.getTipoFaena().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if(data && data.resultado && Array.isArray(data.resultado)) {
+          this.tipoFaenas = data.resultado.map<SelectOption<number>>(tipoFaena => ({
+            value: tipoFaena.idTipoFaena,
+            viewValue: tipoFaena.nombreFaena,
+          }))
+        }else {
+          console.error('unexpected data format:', data);
+          this.tipoFaenas = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching faenas:', error);
+        this.tipoFaenas = [];
+      },
+    })
   }
 
   onSave() {

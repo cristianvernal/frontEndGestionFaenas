@@ -72,8 +72,12 @@
     
     <div class="scan-section">
       <div class="scan-content">
-        <button mat-raised-button color="primary">Escanear Trabajador</button>
-        <img [src]="trabajador.fotoUrl" alt="{{ trabajador.nombre }} {{ trabajador.apellido }}" class="image-preview" />
+        <button mat-raised-button color="primary" (click)="onScanWorker()">Escanear Trabajador</button>
+        @if(scanWorker) {
+          <img [src]="imageUrl" alt="{{ trabajador.nombre }} {{ trabajador.apellido }}" class="image-preview" />
+        }@else {
+          <app-webcam [trigger]="trigger" (capture)="imageUrl=$event"></app-webcam>
+        }
         <label class="label">¿El trabajador no existe?</label>
         <button mat-raised-button color="primary" class="modal" (click)="openDialogWithTemplate(template1)">
           Agregar Trabajador
@@ -81,6 +85,7 @@
       </div>
     </div>
   </div>
+  
 
   <!-- modal -->
   <ng-template #template1>
