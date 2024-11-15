@@ -79,9 +79,10 @@ export class RegistroComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
   faenaService = inject(EnpointsService);
   transporteService = inject(TransporteEndpointsService);
-  scanWorker = false;
   triggerSource = new Subject<void>();
-  imageUrl = '';
+  webcam = viewChild.required(WebcamComponent)
+  scanFail = false
+ 
 
   get trigger() {
     return this.triggerSource.asObservable();
@@ -147,6 +148,7 @@ export class RegistroComponent implements OnInit {
     faena: '',
     fotoUrl: 'img/istockphoto-1386479313-612x612.jpg',
   };
+  
   transportes: SelectOption<number>[] = [];
   faenas: SelectOption<number>[] = [];
   cargos: SelectOption<number>[] = [];
@@ -162,8 +164,41 @@ export class RegistroComponent implements OnInit {
   }
 
   onScanWorker() {
-    this.scanWorker = !this.scanWorker;
     this.triggerSource.next();
+  }
+
+  ingresarFaena() {
+    this.webcam().onCleanImage()
+    
+  }
+
+
+  onCapture(image: string) {
+    
+    this.registeApiService.identifyPicture(image).subscribe({
+      next: (res) => {
+        console.log('Data fetched', res);
+        this.scanFail = !!res
+        this.trabajador = res
+        if(this.trabajador == undefined) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin registrar',
+            text: 'Trabajador no registrado',
+            confirmButtonText: 'OK'
+          })
+        }
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo guardar el trabajador',
+          confirmButtonText: 'OK',
+        });
+        console.error('Error al guardar trabajador:', err);
+      },
+    })
   }
 
   onSave() {

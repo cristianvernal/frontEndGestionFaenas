@@ -9,43 +9,43 @@
     <div class="worker-details">
       <div class="detail-item">
         <label class="label">Nombre:</label>
-        <span class="detail">{{ trabajador.nombre }}</span>
+        <span class="detail">{{ trabajador?.nombre }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Apellido:</label>
-        <span class="detail">{{ trabajador.apellido }}</span>
+        <span class="detail">{{ trabajador?.apellido }}</span>
       </div>
       <div class="detail-item">
         <label class="label">RUT:</label>
-        <span class="detail">{{ trabajador.rut }}</span>
+        <span class="detail">{{ trabajador?.rut }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Fecha de Nacimiento:</label>
         <span class="detail">{{
-          trabajador.fechaNacimiento | date : "dd/MM/yyyy"
+          trabajador?.fechaNacimiento | date : "dd/MM/yyyy"
         }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Dirección:</label>
-        <span class="detail">{{ trabajador.direccion }}</span>
+        <span class="detail">{{ trabajador?.direccion }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Fecha de Contratación:</label>
         <span class="detail">{{
-          trabajador.fechaContratacion | date : "dd/MM/yyyy"
+          trabajador?.fechaContratacion | date : "dd/MM/yyyy"
         }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Teléfono:</label>
-        <span class="detail">{{ trabajador.telefono }}</span>
+        <span class="detail">{{ trabajador?.telefono }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Email:</label>
-        <span class="detail">{{ trabajador.email }}</span>
+        <span class="detail">{{ trabajador?.email }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Cargo:</label>
-        <span class="detail">{{ trabajador.cargo }}</span>
+        <span class="detail">{{ trabajador?.cargo }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Transporte:</label>
@@ -71,7 +71,7 @@
         </mat-form-field>
       </div>
       <div class="button-group">
-        <button mat-raised-button color="primary">Ingresar a Faena</button>
+        <button mat-raised-button color="primary" (click)="ingresarFaena()">Ingresar a Faena</button>
       </div>
     </div>
 
@@ -80,18 +80,7 @@
         <button mat-raised-button color="primary" (click)="onScanWorker()">
           Escanear Trabajador
         </button>
-        @if(scanWorker) {
-        <img
-          [src]="imageUrl"
-          alt="{{ trabajador.nombre }} {{ trabajador.apellido }}"
-          class="image-preview"
-        />
-        }@else {
-        <app-webcam
-          [trigger]="trigger"
-          (capture)="imageUrl = $event"
-        ></app-webcam>
-        }
+        <app-webcam [trigger]="trigger" (capture)="onCapture($event)"></app-webcam>   
         <label class="label">¿El trabajador no existe?</label>
         <button
           mat-raised-button
