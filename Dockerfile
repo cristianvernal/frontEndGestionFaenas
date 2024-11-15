@@ -19,7 +19,7 @@ FROM nginx:stable-alpine AS production-stage
 COPY --from=build-stage /app/dist/front-end3 /usr/share/nginx/html
  
 # Copia un archivo de configuración de NGINX personalizado (opcional)
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
  
 # Exponer el puerto en el que se ejecutará NGINX
 EXPOSE 80
