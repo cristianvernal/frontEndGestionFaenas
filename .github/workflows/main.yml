@@ -61,4 +61,4 @@ jobs:
             docker stop angular-app || true && docker rm angular-app || true
             # Iniciar el contenedor
             docker run -d --name angular-app -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
-          EOF
+          EOF 
