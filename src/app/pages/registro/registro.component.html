@@ -9,15 +9,15 @@
     <div class="worker-details">
       <div class="detail-item">
         <label class="label">Nombre:</label>
-        <span class="detail">{{ trabajador?.nombre }}</span>
+        <span class="detail">{{ trabajador?.primerNombre }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Apellido:</label>
-        <span class="detail">{{ trabajador?.apellido }}</span>
+        <span class="detail">{{ trabajador?.primerApellido }}</span>
       </div>
       <div class="detail-item">
         <label class="label">RUT:</label>
-        <span class="detail">{{ trabajador?.rut }}</span>
+        <span class="detail">{{ trabajador?.run }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Fecha de Nacimiento:</label>
@@ -45,7 +45,7 @@
       </div>
       <div class="detail-item">
         <label class="label">Cargo:</label>
-        <span class="detail">{{ trabajador?.cargo }}</span>
+        <span class="detail">{{ trabajador?.cargos?.nombre }}</span>
       </div>
       <div class="detail-item">
         <label class="label">Transporte:</label>

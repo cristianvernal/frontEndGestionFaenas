@@ -49,11 +49,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FaenaDto } from '../../interfaces/faena-dto';
 import { TipoFaena } from '../../interfaces/tipoFaena';
 import { SelectOption } from '../../interfaces/select-option';
-
-interface tipoFaena {
-  value: string;
-  viewValue: string;
-}
+import { CrearFaenas } from '../../interfaces/Crearfaenass';
+import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 
 @Component({
   selector: 'app-gestion',
@@ -93,6 +90,7 @@ export class GestionComponent implements OnInit {
   tipoFaenas: SelectOption<number>[] = [];
   faenas: Faena[] = [];
   tableColumns: tableColumn<Faena>[] = [];
+  tableWorker: tableColumn<CrearTrabajadorDTO>[] = []
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
 
@@ -113,6 +111,7 @@ export class GestionComponent implements OnInit {
     this.setTableColumns();
     this.getFaenas();
     this.getTipoFaena();
+    this.setTableDialog();
   }
 
   setTableColumns() {
@@ -147,6 +146,31 @@ export class GestionComponent implements OnInit {
         template: this.colActions(),
       },
     ];
+  }
+
+  setTableDialog() {
+    this.tableWorker = [
+      {
+        label:'Nombre',
+        def: 'nombre',
+        content: (row) => row.primerNombre
+      },
+      {
+        label:'Apellido',
+        def: 'apellido',
+        content: (row) => row.primerApellido
+      },
+      {
+        label:'Rut',
+        def: 'eun',
+        content: (row) => row.run
+      },
+      {
+        label:'Cargo',
+        def: 'cargo',
+        content: (row) => row.cargos.nombre
+      },
+    ]
   }
 
   openDialogWithTemplate(template: TemplateRef<any>) {

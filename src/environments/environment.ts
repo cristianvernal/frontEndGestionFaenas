@@ -5,14 +5,11 @@
 import { EnvironmentConfiguration } from "../app/services/environment-configuration";
 
 
-const serverUrl='https://localhost:4200';
-
-
 // The list of file replacements can be found in `angular.json`.
 export const environment: EnvironmentConfiguration = {
   env_name: 'dev',
   production: true,
-  apiUrl: serverUrl,
+  apiUrl: 'https://localhost:4200',
   apiEndpoints: {
     userProfile:'user-profiles'
   },

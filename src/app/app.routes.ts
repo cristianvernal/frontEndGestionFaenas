@@ -38,11 +38,11 @@ export const routes: Routes = [
             component: RegistroComponent ,
             canActivate:[MsalGuard],
          },
-         // {
-         //    path: 'reportes',
-         //    component: ReportesComponent ,
-         //    canActivate:[MsalGuard],
-         // },
+         {
+            path: 'reportes',
+            component: ReportesComponent ,
+            canActivate:[MsalGuard],
+         },
       ]
     },
     

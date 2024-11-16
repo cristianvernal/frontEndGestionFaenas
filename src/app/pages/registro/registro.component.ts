@@ -134,20 +134,7 @@ export class RegistroComponent implements OnInit {
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 
-  trabajador = {
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    rut: '12345678-9',
-    fechaNacimiento: '1990-01-01',
-    direccion: '123 Calle Falsa',
-    fechaContratacion: new Date(),
-    telefono: '123456789',
-    email: 'juan.perez@example.com',
-    hospedaje: '',
-    cargo: 'Pintor',
-    faena: '',
-    fotoUrl: 'img/istockphoto-1386479313-612x612.jpg',
-  };
+  trabajador: CrearTrabajadorDTO | undefined
   
   transportes: SelectOption<number>[] = [];
   faenas: SelectOption<number>[] = [];
@@ -245,7 +232,8 @@ export class RegistroComponent implements OnInit {
       },
     });
 
-    this.registeApiService.createTrabajador(crearTrabajadorDTO).subscribe({
+    const image = this.webcam().imageUrl.split(',')[1]
+    this.registeApiService.createTrabajador(crearTrabajadorDTO, image).subscribe({
       next: (response) => {
         Swal.fire({
           icon: 'success',
@@ -255,6 +243,7 @@ export class RegistroComponent implements OnInit {
         });
         this.formGroup.reset();
         this.matDialogRef.close();
+        this.trabajador = response.worker.resultado
       },
       error: (err) => {
         Swal.fire({

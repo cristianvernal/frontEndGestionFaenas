@@ -21,53 +21,89 @@
   <app-footer></app-footer>
 
   <ng-template #colActions let-faenas>
-    <button mat-icon-button matTooltip="Trabajadores">
+    <button
+      mat-icon-button
+      matTooltip="Trabajadores"
+      (click)="openDialogWithTemplate(template2)"
+    >
       <mat-icon>person</mat-icon>
     </button>
     <button mat-icon-button (click)="onEditFaenas(faenas)" matTooltip="Editar">
       <mat-icon>edit</mat-icon>
     </button>
-    <button mat-icon-button matTooltip="Eliminar" (click)="onDeleteFaena(faenas)">
+    <button
+      mat-icon-button
+      matTooltip="Eliminar"
+      (click)="onDeleteFaena(faenas)"
+    >
       <mat-icon>delete</mat-icon>
     </button>
   </ng-template>
 
   <ng-template #template1>
     <h2 mat-dialog-title>Crear Faena</h2>
-    <div  mat-dialog-content>
+    <div mat-dialog-content>
       <form [formGroup]="formGroup" class="form">
         <mat-form-field>
           <mat-label>Tipo Faena</mat-label>
           <mat-select formControlName="tipoFaenas">
             @for (tipo of tipoFaenas; track tipo) {
-              <mat-option [value]="tipo.value">{{ tipo.viewValue }}</mat-option>
+            <mat-option [value]="tipo.value">{{ tipo.viewValue }}</mat-option>
             }
-            </mat-select>
+          </mat-select>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Fecha de Inicio</mat-label>
-          <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio">
+          <input
+            matInput
+            [matDatepicker]="pickerInicio"
+            formControlName="fechaInicio"
+          />
           <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="pickerInicio"
+          ></mat-datepicker-toggle>
           <mat-datepicker #pickerInicio></mat-datepicker>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Fecha de Término</mat-label>
-          <input matInput [matDatepicker]="pickerTermino" formControlName="fechaTermino">
+          <input
+            matInput
+            [matDatepicker]="pickerTermino"
+            formControlName="fechaTermino"
+          />
           <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="pickerTermino"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="pickerTermino"
+          ></mat-datepicker-toggle>
           <mat-datepicker #pickerTermino></mat-datepicker>
         </mat-form-field>
-        
+
         <mat-form-field>
           <mat-label>Encargado</mat-label>
-          <input matInput formControlName="encargado">
+          <input matInput formControlName="encargado" />
         </mat-form-field>
       </form>
       <div class="button">
-        <button mat-raised-button mat-dialog-close color="primary">Cerrar</button>
-        <button mat-raised-button color="primary" (click)="onSave()" [disabled]="formGroup.invalid">Guardar</button>
+        <button mat-raised-button mat-dialog-close color="primary">
+          Cerrar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSave()"
+          [disabled]="formGroup.invalid"
+        >
+          Guardar
+        </button>
       </div>
     </div>
+  </ng-template>
+
+  <ng-template #template2>
+    <h2 mat-dialog-title>Trabajadores</h2>
+    <app-ui-table [columns]="tableWorker"> </app-ui-table>
   </ng-template>
 </div>

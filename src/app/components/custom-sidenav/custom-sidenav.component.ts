@@ -45,11 +45,11 @@ export class CustomSidenavComponent {
       label: 'registro',
       route: 'registro',
     },
-    // {
-    //   icon: 'analytics',
-    //   label: 'reportes',
-    //   route: 'reportes',
-    // },
+    {
+      icon: 'analytics',
+      label: 'reportes',
+      route: 'reportes',
+    },
   ])
 
   profilePicSize = computed(() => this.sideNavCollapsed() ? '30' : '100')
