@@ -15,6 +15,9 @@ RUN npm run build -- --configuration=production
 # Log para ver el contenido de los directorios antes de copiar
 RUN echo "Contenido del directorio /app/dist:" && ls -R /app/dist
 
+RUN echo "Contenido del directorio ./dist:" && ls -R ./dist
+
+
 # Etapa 2: Servir la aplicación con NGINX
 # Usa una imagen base de NGINX
 FROM nginx:alpine
