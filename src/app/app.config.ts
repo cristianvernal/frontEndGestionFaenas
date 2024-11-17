@@ -74,7 +74,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       clientId: environment.adb2cConfig.clientId,
       authority: b2cPolicies.authorities.signUpSignIn.authority, //environment.msalConfig.auth.authority,
       knownAuthorities: [b2cPolicies.authorityDomain], // Mark your B2C tenant's domain as trusted.
-      redirectUri: '/',
+      redirectUri: 'http://3.90.157.39',
       postLogoutRedirectUri: '/',
     },
     cache: {
