@@ -25,16 +25,21 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
           
+      - name: Install dependencies
+        run: npm install
+
       - name: Install Angular CLI
         run: npm install -g @angular/cli
-          
-      - name: Build Angular Application
-        run: |
-         npm install
-         ng build --prod
 
-      - name: List files before Docker build
+      - name: Verify Angular CLI installation
+        run: ng --version
+  
+      - name: Build Angular Application
+        run: ng build --configuration production
+  
+      - name: List files after build
         run: ls -R ./dist
+
 
 
  
