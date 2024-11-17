@@ -48,6 +48,11 @@ export class CustomSidenavComponent {
     {
       icon: 'checklist',
       label: 'Asistencia',
+      route: 'asistencia',
+    },
+    {
+      icon: 'assignment',
+      label: 'Reportes',
       route: 'reportes',
     },
   ])

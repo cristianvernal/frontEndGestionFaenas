@@ -6,6 +6,7 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MsalGuard } from '@azure/msal-angular';
+import { AsistenciaComponent } from './pages/asistencia/asistencia.component';
 
 export const routes: Routes = [
     {
@@ -41,6 +42,11 @@ export const routes: Routes = [
          {
             path: 'reportes',
             component: ReportesComponent ,
+            canActivate:[MsalGuard],
+         },
+         {
+            path: 'asistencia',
+            component: AsistenciaComponent ,
             canActivate:[MsalGuard],
          },
       ]

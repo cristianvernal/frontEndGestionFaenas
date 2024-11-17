@@ -13,16 +13,14 @@ COPY . .
 RUN npm run build -- --configuration=production
  
 # Etapa 2: Servir la aplicación con NGINX
+# Usa una imagen base de NGINX
 FROM nginx:alpine
  
 # Elimina la configuración predeterminada de NGINX
 RUN rm -rf /usr/share/nginx/html/*
  
-# Muestra la estructura de directorios para depuración
-RUN echo "Contenido del directorio /app/dist:" && ls -R /app/dist
- 
 # Copia los archivos de la aplicación Angular desde la carpeta dist a la carpeta de NGINX
-COPY ./dist/front-end3 /usr/share/nginx/html
+COPY ./dist/front-end3/browser /usr/share/nginx/html
  
 # Expone el puerto 80 para el tráfico HTTP
 EXPOSE 80
