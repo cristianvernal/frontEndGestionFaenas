@@ -24,4 +24,5 @@ mat-sidenav, mat-sidenava-content {
 
 .logout {
     color: #005cbb;
+    margin-left: 8px;
 }
