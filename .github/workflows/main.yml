@@ -25,6 +25,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
           
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+          
       - name: Build Angular Application
         run: |
          npm install
