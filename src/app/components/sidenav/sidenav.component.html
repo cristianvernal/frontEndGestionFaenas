@@ -2,7 +2,7 @@
     <button mat-icon-button (click)="collapsed.set(!collapsed())">
       <mat-icon> menu </mat-icon>
     </button>
-    <button mat-raised-button color="primary" class="logOut" (click)="logout()">Cerrar Sesión</button>
+    <button mat-raised-button color="primary" class="logOut" (click)="logout()">Cerrar Sesión<mat-icon class="logout">exit_to_app</mat-icon></button>
   </mat-toolbar>
   <mat-sidenav-container >
     <mat-sidenav opened mode="side" [style.width]="sidenavWidth()"> 

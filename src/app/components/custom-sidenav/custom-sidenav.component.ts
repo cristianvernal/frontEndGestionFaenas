@@ -31,23 +31,23 @@ export class CustomSidenavComponent {
 
   menuItems = signal<menuItem[]>([
     {
-      icon: 'home',
-      label: 'gestion',
+      icon: 'extension',
+      label: 'Gestión',
       route: 'gestion',
     },
     {
-      icon: 'check',
-      label: 'verificacion',
+      icon: 'mail',
+      label: 'Verificación',
       route: 'verificacion',
     },
     {
-      icon: 'person',
-      label: 'registro',
+      icon: 'person_add',
+      label: 'Registro',
       route: 'registro',
     },
     {
-      icon: 'analytics',
-      label: 'reportes',
+      icon: 'checklist',
+      label: 'Asistencia',
       route: 'reportes',
     },
   ])

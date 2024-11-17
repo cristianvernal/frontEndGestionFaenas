@@ -13,16 +13,17 @@ COPY . .
 RUN npm run build -- --configuration=production
  
 # Etapa 2: Servir la aplicación con NGINX
-FROM nginx:stable-alpine AS production-stage
+# Usa una imagen base de NGINX
+FROM nginx:alpine
  
-# Copia los archivos compilados de Angular desde la etapa de construcción a la carpeta predeterminada de NGINX
-COPY --from=build-stage /app/dist/front-end3 /usr/share/nginx/html
+# Elimina la configuración predeterminada de NGINX
+RUN rm -rf /usr/share/nginx/html/*
  
-# Copia un archivo de configuración de NGINX personalizado (opcional)
-# COPY nginx.conf /etc/nginx/nginx.conf
+# Copia los archivos de la aplicación Angular desde la carpeta dist a la carpeta de NGINX
+COPY ./dist/front-end3/browser /usr/share/nginx/html
  
-# Exponer el puerto en el que se ejecutará NGINX
+# Expone el puerto 80 para el tráfico HTTP
 EXPOSE 80
  
-# Comando de inicio
+# Comando para ejecutar NGINX en primer plano
 CMD ["nginx", "-g", "daemon off;"]

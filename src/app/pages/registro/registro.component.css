@@ -70,10 +70,21 @@
     height: 408px;
     
   }
+
+  webcam {
+    max-width: 100%;
+    height: auto;
+  }
   
   /* Responsividad para pantallas menores a 1200px */
 
   @media (max-width: 1350px) {
+
+    .image-preview {
+      width: auto;
+      height: auto;
+      
+    }
 
     .container {
       max-width: 800px; /* Asegura que la tabla no se estire demasiado */
