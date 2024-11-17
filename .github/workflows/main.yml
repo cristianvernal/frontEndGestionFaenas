@@ -23,6 +23,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+          
+      - name: Build Angular Application
+        run: |
+         npm install
+         ng build --prod
+
+      - name: List files before Docker build
+        run: ls -R ./dist
+
+
  
       # Paso 3: Construir la imagen de Docker para Angular
       - name: Build Docker Image
