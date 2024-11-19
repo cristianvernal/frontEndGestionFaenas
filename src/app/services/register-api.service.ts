@@ -1,6 +1,5 @@
 import {
   HttpClient,
-  HttpErrorResponse,
   HttpResponse,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
