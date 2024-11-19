@@ -5,13 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list'
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
+import { MenuItemComponent } from "../menu-item/menu-item.component";
 
-export type menuItem = {
+export type MenuItem = {
 
   icon: string;
   label: string;
   route: string;
-  subitem?: menuItem[];
+  subitem?: MenuItem[];
 }
 
 @Component({
@@ -30,7 +31,7 @@ export class CustomSidenavComponent {
     this.sideNavCollapsed.set(val)
   }
 
-  menuItems = signal<menuItem[]>([
+  menuItems = signal<MenuItem[]>([
     {
       icon: 'extension',
       label: 'Gestión',
@@ -50,6 +51,19 @@ export class CustomSidenavComponent {
       icon: 'checklist',
       label: 'Asistencia',
       route: 'asistencia',
+      subitem: [
+        {
+          icon: '',
+          label: 'Ingreso Faena',
+          route:  'ingreso',
+        },
+        {
+          icon: '',
+          label: 'Salida Faena',
+          route: 'salida',
+        }
+
+      ]
     },
     {
       icon: 'assignment',

@@ -47,31 +47,8 @@
         <label class="label">Cargo:</label>
         <span class="detail">{{ trabajador?.cargos?.nombre }}</span>
       </div>
-      <div class="detail-item">
-        <label class="label">Transporte:</label>
-        <mat-form-field>
-          <mat-select>
-            @for (transporte of transportes; track transporte) {
-            <mat-option [value]="transporte.value">{{
-              transporte.viewValue
-            }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="detail-item"></div>
-      <div class="detail-item">
-        <label class="label">Faena:</label>
-        <mat-form-field>
-          <mat-select>
-            @for (faena of faenas; track faena) {
-            <mat-option [value]="faena.value">{{ faena.viewValue }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
       <div class="button-group">
-        <button mat-raised-button color="primary" (click)="ingresarFaena()">Ingresar a Faena</button>
+        <button mat-raised-button color="primary" (click)="limpiar()">Limpiar Datos</button>
       </div>
     </div>
 

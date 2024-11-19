@@ -1,7 +1,40 @@
 <div class="container">
-    <div class="header">
-      <h2>Asistencia</h2>
+  <div class="header">
+    <h2>Asistencia</h2>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="content">
+    <div>
+      <button mat-raised-button color="primary" (click)="onScanWorker()" class="buttonScan">
+        Escanear Trabajador
+      </button>
     </div>
-    <mat-divider></mat-divider>
-      <app-footer></app-footer>
-    </div>
+    <app-webcam class="webcam" [trigger]="trigger" (capture)="onCapture($event)"></app-webcam>
+    <div class="detail-item-container">
+      <div class="detail-items-row">
+        <div class="detail-item">
+          <label class="label">Tipo de Registro:</label>
+          <mat-form-field>
+            <mat-select [formControl]="tipoRegistro">
+              @for (tipoRegistro of tipoRegistroList; track tipoRegistro) {
+              <mat-option [value]="tipoRegistro.value">{{ tipoRegistro.viewValue }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="detail-item">
+          <label class="label">Faena:</label>
+          <mat-form-field>
+            <mat-select [formControl]="tipoFaena">
+              @for (faena of faenas; track faena) {
+              <mat-option [value]="faena.value">{{ faena.viewValue }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <button mat-raised-button (click)="ingresarFaena()" color="primary" class="buttonFaena">Ingresar a Faena</button>
+    </div>   
+  </div>
+  <app-footer></app-footer>
+</div>

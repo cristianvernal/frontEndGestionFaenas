@@ -4,7 +4,21 @@
     
   }
 
-  webcam {
+  .webcam {
     max-width: 100%;
     height: auto;
+  }
+
+  @media (max-width: 768px) {
+
+    .webcam {
+      max-width: 300px; /* Ajusta el tamaño máximo para pantallas más pequeñas */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    
+    .webcam {
+      max-width: 100%; /* Utiliza todo el ancho disponible en pantallas muy pequeñas */
+    }
   }

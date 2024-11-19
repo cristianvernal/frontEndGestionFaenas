@@ -154,9 +154,9 @@ export class RegistroComponent implements OnInit {
     this.triggerSource.next();
   }
 
-  ingresarFaena() {
+  limpiar() {
     this.webcam().onCleanImage()
-    
+    this.trabajador = undefined
   }
 
 
@@ -180,7 +180,7 @@ export class RegistroComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se pudo guardar el trabajador',
+          text: 'No se pudo escanear usuario',
           confirmButtonText: 'OK',
         });
         console.error('Error al guardar trabajador:', err);

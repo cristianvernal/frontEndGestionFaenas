@@ -1,0 +1,12 @@
+<a
+    mat-list-item
+    class="menu-item"
+   
+    [routerLink]="item().route"
+    routerLinkActive="selected-menu-item"
+    #rla="routerLinkActive"
+    [activated]="rla.isActive"
+  >
+    <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'" matListItemIcon>{{ item().icon }}</mat-icon>
+    <span matListItemTitle *ngIf="!collapsed()">{{ item().label }}</span>
+  </a>

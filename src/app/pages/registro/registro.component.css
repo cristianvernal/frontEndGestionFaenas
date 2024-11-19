@@ -12,7 +12,7 @@
   .worker-details {
     display: flex;
     flex-direction: column; /* Apila los elementos verticalmente */
-    gap: 10px; /* Espacio entre los elementos de la columna */
+    gap: 35px; /* Espacio entre los elementos de la columna */
     flex: 0.7; /* Hace que esta columna ocupe todo el ancho disponible */
     background-color: white; /* Fondo blanco */
     padding: 20px; /* Espaciado interno */
@@ -30,11 +30,14 @@
   .detail-item label {
     flex: 1; /* Hace que las etiquetas ocupen el espacio disponible a la izquierda */
     text-align: left; /* Alinea las etiquetas a la izquierda */
+    font-size: larger;
+    font-weight: bold;
   }
   
   .detail-item span, .detail-item select {
     flex: 0.5; /* Los valores, inputs y selects ocupan el espacio disponible a la derecha */
     text-align: right; /* Alinea el texto a la derecha */
+    font-size: larger;
   }
   
   .select-field, .button-group button {
@@ -42,8 +45,9 @@
   }
   
   .button-group {
+    margin-top: 50px;
     display: flex;
-    justify-content: flex-end; /* Alinea el botón al final de la columna */
+    justify-content: end; /* Alinea el botón al final de la columna */
   }
   
   .scan-section {

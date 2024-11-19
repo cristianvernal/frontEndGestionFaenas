@@ -8,6 +8,8 @@ import { catchError, forkJoin, map, Observable, of, switchMap, throwError } from
 import { CrearTrabajadorDTO } from '../interfaces/crearTrabajadorDTO';
 import { BaseResponse } from '../interfaces/baseResponse';
 import { Cargo } from '../interfaces/cargo';
+import { TipoRegistro } from '../interfaces/tipoRegistro';
+import { RegistroAsistencia } from '../interfaces/registro-asistencia';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +48,27 @@ export class RegisterApiService {
         })
       );
   }
+
+  getTipoRegistro(): Observable<BaseResponse<TipoRegistro[]>> {
+    return this._http
+      .get<BaseResponse<TipoRegistro[]>>('http://3.90.157.39:8083/tiporegistro/traer')
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching data:', error);
+          return throwError(() => 'Error fetching data');
+        })
+      );
+  }
+
+  createAsistencia(registro: RegistroAsistencia) {
+    return this._http.post('http://3.90.157.39:8083/registroasistencia/crear', registro)
+    .pipe(
+      catchError((error) => {
+        console.error('Error fetching data:', error);
+        return throwError(() => 'Error fetching data');
+      })
+    );
+  } 
 
   identifyPicture(pictureImg: string): Observable<any> {
     const formData = new FormData();
