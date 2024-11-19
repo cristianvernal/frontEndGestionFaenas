@@ -4,7 +4,7 @@
     <button
       mat-raised-button
       color="primary"
-      (click)="openDialogWithTemplate(template1)"
+      (click)="onCreateFaena(template1)"
     >
       Crear Faena
     </button>
@@ -24,11 +24,11 @@
     <button
       mat-icon-button
       matTooltip="Trabajadores"
-      (click)="openDialogWithTemplate(template2)"
+      (click)="openDialogWithTemplate(workers)"
     >
       <mat-icon>person</mat-icon>
     </button>
-    <button mat-icon-button (click)="onEditFaenas(faenas)" matTooltip="Editar">
+    <button mat-icon-button (click)="onEditFaenas(faenas, template1)" matTooltip="Editar">
       <mat-icon>edit</mat-icon>
     </button>
     <button
@@ -41,7 +41,7 @@
   </ng-template>
 
   <ng-template #template1>
-    <h2 mat-dialog-title>Crear Faena</h2>
+    <h2 mat-dialog-title>{{titleEditAndCreateDialog}}</h2>
     <div mat-dialog-content>
       <form [formGroup]="formGroup" class="form">
         <mat-form-field>
@@ -102,7 +102,7 @@
     </div>
   </ng-template>
 
-  <ng-template #template2>
+  <ng-template #workers>
     <h2 mat-dialog-title>Trabajadores</h2>
     <app-ui-table [columns]="tableWorker"> </app-ui-table>
   </ng-template>

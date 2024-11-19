@@ -51,6 +51,7 @@ import { TipoFaena } from '../../interfaces/tipoFaena';
 import { SelectOption } from '../../interfaces/select-option';
 import { CrearFaenas } from '../../interfaces/Crearfaenass';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
+import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
 
 @Component({
   selector: 'app-gestion',
@@ -93,6 +94,7 @@ export class GestionComponent implements OnInit {
   tableWorker: tableColumn<CrearTrabajadorDTO>[] = []
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
+  titleEditAndCreateDialog = ''
 
 
   formGroup: FormGroup = new FormGroup({
@@ -103,6 +105,7 @@ export class GestionComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]*'),
     ]),
+    idFaena: new FormControl<number | null>(null)
   });
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
@@ -176,7 +179,12 @@ export class GestionComponent implements OnInit {
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
-    });
+    });   
+  }
+
+  onCreateFaena(template: TemplateRef<any>) {
+    this.titleEditAndCreateDialog = 'Crear Faena'
+    this.openDialogWithTemplate(template)
     this.matDialogRef.afterClosed().subscribe((res) => {
       console.log('Dialog with template close', res);
       this.formGroup.reset();
@@ -254,33 +262,82 @@ export class GestionComponent implements OnInit {
       },
     });
 
-    this.faenasService.createFaena(faenaDataDto).subscribe({
-      next: (response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Faena guardada exitosamente',
-          text: 'La faena ha sido guardada correctamente',
-          confirmButtonText: 'OK',
-        });
-        this.formGroup.reset();
-        this.getFaenas();
-        this.matDialogRef.close();
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo guardar la faena',
-          confirmButtonText: 'OK',
-        });
-        console.error('Error al guardar la faena:', err);
-      },
-    });
+    if(this.formGroup.get('idFaena')?.value !== null) {
+        const editFaena: EditFaenaDto = {
+          idFaena: this.formGroup.get('idFaena')?.value,
+          nombreFaena: this.formGroup.get('nombreFaena')?.value,
+          idTrabajador: 1,
+          fechaInicio: this.formGroup.get('fechaInicio')?.value,
+          fechaTermino: this.formGroup.get('fechaTermino')?.value,
+          encargado: this.formGroup.get('encargado')?.value,
+          idTipoFaena: this.formGroup.get('idTipoFaena')?.value
+  
+        } 
+        this.faenasService.updateFaena(editFaena).subscribe({
+          next: (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Faena guardada exitosamente',
+              text: 'La faena ha sido guardada correctamente',
+              confirmButtonText: 'OK',
+            });
+            this.formGroup.reset();
+            this.getFaenas();
+            this.matDialogRef.close();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo guardar la faena',
+              confirmButtonText: 'OK',
+            });
+            console.error('Error al guardar la faena:', err);
+          },
+        })
+    }else {
+      this.faenasService.createFaena(faenaDataDto).subscribe({
+        next: (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Faena guardada exitosamente',
+            text: 'La faena ha sido guardada correctamente',
+            confirmButtonText: 'OK',
+          });
+          this.formGroup.reset();
+          this.getFaenas();
+          this.matDialogRef.close();
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo guardar la faena',
+            confirmButtonText: 'OK',
+          });
+          console.error('Error al guardar la faena:', err);
+        },
+      });
+    }
   }
 
-  onEditFaenas(faenas: FaenaDto) {
-    console.log('Faenas to edit: ', faenas);
+  onEditFaenas(faena: Faena, template: TemplateRef<any>) {
+    this.titleEditAndCreateDialog = 'Editar Faena'
+    this.formGroup.reset({
+      tipoFaenas: faena.idTipoFaena,
+      fechaInicio: faena.fechaInicio,
+      fechaTermino: faena.fechaTermino,
+      encargado: faena.encargado,
+      idFaena: faena.idFaena
+    })
+    this.openDialogWithTemplate(template)
+    this.matDialogRef.afterClosed().subscribe(() => {
+      this.formGroup.reset()
+    }) 
+    
   }
+
+  
 
   onDeleteFaena(faena: Faena) {
     Swal.fire({

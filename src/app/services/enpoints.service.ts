@@ -5,6 +5,7 @@ import { Faena } from '../interfaces/faenas';
 import { FaenaDto } from '../interfaces/faena-dto';
 import { BaseResponse } from '../interfaces/baseResponse';
 import { TipoFaena } from '../interfaces/tipoFaena';
+import { EditFaenaDto } from '../interfaces/faena-edit-dto';
 
  
 
@@ -44,7 +45,7 @@ export class EnpointsService {
     );
   }
   
-  updateFaena(faena: Faena): Observable<Faena> {
+  updateFaena(faena: EditFaenaDto): Observable<Faena> {
     return this._http.put<Faena>(`${this.API_URL}/editar`, faena).pipe(
       catchError(error => {
         console.error('Error updating faena:', error);

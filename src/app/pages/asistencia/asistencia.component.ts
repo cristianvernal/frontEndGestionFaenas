@@ -67,11 +67,10 @@ export class AsistenciaComponent implements OnInit {
       return
     }
     const registroAsistencia: RegistroAsistencia = {
-      idTrabajador: this.trabajador?.idTrabajador as number,
+      runTrabajador: this.trabajador?.run as string,
       fechaHora: new Date(),
-      asistencia: true,
       tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
-      faena: this.tipoFaena.value as Faena
+      idFaena: this.tipoFaena.value?.idFaena as number
     }
     console.log('Registro asistencia: ', registroAsistencia)
     this.registeApiService.createAsistencia(registroAsistencia).subscribe({
@@ -93,6 +92,7 @@ export class AsistenciaComponent implements OnInit {
       }
     })
     this.webcam().onCleanImage()
+    this.trabajador = undefined
     // this.tipoRegistro.setValue(null)
     // this.tipoFaena.setValue(null)
   }
@@ -133,6 +133,7 @@ export class AsistenciaComponent implements OnInit {
             text: 'Trabajador no registrado',
             confirmButtonText: 'OK',
           });
+          this.webcam().onCleanImage()
         }else {
           Swal.fire({
             icon: 'success',

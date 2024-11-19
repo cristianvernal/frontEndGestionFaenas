@@ -3,9 +3,9 @@ import { TipoRegistro } from "./tipoRegistro"
 
 export interface RegistroAsistencia {
     idRegistro?: number;
-    faena: Faena;
-    idTrabajador: number;
+    idFaena: number;
+    runTrabajador: string;
     fechaHora: Date;
-    asistencia: boolean;
+    // asistencia: boolean;
     tipoRegistroJoin: TipoRegistro;
 }
