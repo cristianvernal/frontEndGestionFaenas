@@ -29,7 +29,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY ./dist/front-end3/browser /usr/share/nginx/html
 
 # Expone el puerto 80 para el tráfico HTTP
-EXPOSE 80
+EXPOSE 443
 
 # Comando para ejecutar NGINX en primer plano
 CMD ["nginx", "-g", "daemon off;"]
