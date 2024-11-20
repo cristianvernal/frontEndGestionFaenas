@@ -52,6 +52,7 @@ import { SelectOption } from '../../interfaces/select-option';
 import { CrearFaenas } from '../../interfaces/Crearfaenass';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
+import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
 
 @Component({
   selector: 'app-gestion',
@@ -82,11 +83,6 @@ import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
   styleUrl: './gestion.component.css',
 })
 export class GestionComponent implements OnInit {
-  constructor(
-    private dialog: MatDialog,
-    private faenasService: EnpointsService,
-    private dialogService: DialogService
-  ) {}
 
   tipoFaenas: SelectOption<number>[] = [];
   faenas: Faena[] = [];
@@ -95,6 +91,8 @@ export class GestionComponent implements OnInit {
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
   titleEditAndCreateDialog = '';
+  attendanceService = inject(AttendanceEndpointService);
+  workerList: CrearTrabajadorDTO[] = []
 
   formGroup: FormGroup = new FormGroup({
     tipoFaenas: new FormControl(null, Validators.required),
@@ -108,6 +106,13 @@ export class GestionComponent implements OnInit {
   });
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
+  
+  constructor(
+    private dialog: MatDialog,
+    private faenasService: EnpointsService,
+    private dialogService: DialogService
+  ) {}
+
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -162,7 +167,7 @@ export class GestionComponent implements OnInit {
       },
       {
         label: 'Rut',
-        def: 'eun',
+        def: 'run',
         content: (row) => row.run,
       },
       {
@@ -177,6 +182,16 @@ export class GestionComponent implements OnInit {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
     });
+  }
+
+  onShowWorker(faena: Faena, template: TemplateRef<any>) {
+    this.attendanceService.getWorkerByFaenaId(faena.idFaena).subscribe({
+      next: (res) => {
+        console.log('res: ', res)
+        this.workerList = res
+        this.openDialogWithTemplate(template)
+      }
+    })
   }
 
   onCreateFaena(template: TemplateRef<any>) {

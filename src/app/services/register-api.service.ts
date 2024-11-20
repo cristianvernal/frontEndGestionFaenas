@@ -71,20 +71,6 @@ export class RegisterApiService {
 
   identifyPicture(pictureImg: string): Observable<any> {
     const formData = new FormData();
-    const worker = {
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      rut: '12345678-9',
-      fechaNacimiento: '1990-01-01',
-      direccion: '123 Calle Falsa',
-      fechaContratacion: new Date(),
-      telefono: '123456789',
-      email: 'juan.perez@example.com',
-      hospedaje: '',
-      cargo: 'Pintor',
-      faena: '',
-      fotoUrl: 'img/istockphoto-1386479313-612x612.jpg',
-    };
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
       .post(

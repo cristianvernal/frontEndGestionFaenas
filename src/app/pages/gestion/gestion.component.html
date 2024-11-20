@@ -20,21 +20,21 @@
   ></app-ui-table>
   <app-footer></app-footer>
 
-  <ng-template #colActions let-faenas>
+  <ng-template #colActions let-faena>
     <button
       mat-icon-button
       matTooltip="Trabajadores"
-      (click)="openDialogWithTemplate(workers)"
+      (click)="onShowWorker(faena, workers)"
     >
       <mat-icon>person</mat-icon>
     </button>
-    <button mat-icon-button (click)="onEditFaenas(faenas, template1)" matTooltip="Editar">
+    <button mat-icon-button (click)="onEditFaenas(faena, template1)" matTooltip="Editar">
       <mat-icon>edit</mat-icon>
     </button>
     <button
       mat-icon-button
       matTooltip="Eliminar"
-      (click)="onDeleteFaena(faenas)"
+      (click)="onDeleteFaena(faena)"
     >
       <mat-icon>delete</mat-icon>
     </button>
@@ -104,6 +104,6 @@
 
   <ng-template #workers>
     <h2 mat-dialog-title>Trabajadores</h2>
-    <app-ui-table [columns]="tableWorker"> </app-ui-table>
+    <app-ui-table [columns]="tableWorker" [data]="workerList"> </app-ui-table>
   </ng-template>
 </div>
