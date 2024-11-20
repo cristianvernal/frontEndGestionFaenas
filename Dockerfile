@@ -25,6 +25,9 @@ FROM nginx:alpine
 # Elimina la configuración predeterminada de NGINX
 RUN rm -rf /usr/share/nginx/html/*
 
+# Copiar configuración personalizada de NGINX
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copia los archivos de la aplicación Angular desde la carpeta dist a la carpeta de NGINX
 COPY ./dist/front-end3/browser /usr/share/nginx/html
 
