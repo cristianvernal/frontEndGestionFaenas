@@ -91,11 +91,10 @@ export class GestionComponent implements OnInit {
   tipoFaenas: SelectOption<number>[] = [];
   faenas: Faena[] = [];
   tableColumns: tableColumn<Faena>[] = [];
-  tableWorker: tableColumn<CrearTrabajadorDTO>[] = []
+  tableWorker: tableColumn<CrearTrabajadorDTO>[] = [];
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
-  titleEditAndCreateDialog = ''
-
+  titleEditAndCreateDialog = '';
 
   formGroup: FormGroup = new FormGroup({
     tipoFaenas: new FormControl(null, Validators.required),
@@ -105,7 +104,7 @@ export class GestionComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]*'),
     ]),
-    idFaena: new FormControl<number | null>(null)
+    idFaena: new FormControl<number | null>(null),
   });
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
@@ -123,7 +122,6 @@ export class GestionComponent implements OnInit {
         label: 'Nombre Faena',
         def: 'tipoFaena.nombreFaena',
         content: (row) => row.nombreFaena,
-        
       },
       {
         label: 'Fecha de inicio',
@@ -134,9 +132,8 @@ export class GestionComponent implements OnInit {
       {
         label: 'Fecha de Término',
         def: 'fechaTermino',
-        content: (row) => new Date(row.fechaTermino).toLocaleDateString(
-          'es-CL'
-        ),
+        content: (row) =>
+          new Date(row.fechaTermino).toLocaleDateString('es-CL'),
       },
       {
         label: 'Encargado',
@@ -154,37 +151,37 @@ export class GestionComponent implements OnInit {
   setTableDialog() {
     this.tableWorker = [
       {
-        label:'Nombre',
+        label: 'Nombre',
         def: 'nombre',
-        content: (row) => row.primerNombre
+        content: (row) => row.primerNombre,
       },
       {
-        label:'Apellido',
+        label: 'Apellido',
         def: 'apellido',
-        content: (row) => row.primerApellido
+        content: (row) => row.primerApellido,
       },
       {
-        label:'Rut',
+        label: 'Rut',
         def: 'eun',
-        content: (row) => row.run
+        content: (row) => row.run,
       },
       {
-        label:'Cargo',
+        label: 'Cargo',
         def: 'cargo',
-        content: (row) => row.cargos.nombre
+        content: (row) => row.cargos.nombre,
       },
-    ]
+    ];
   }
 
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
-    });   
+    });
   }
 
   onCreateFaena(template: TemplateRef<any>) {
-    this.titleEditAndCreateDialog = 'Crear Faena'
-    this.openDialogWithTemplate(template)
+    this.titleEditAndCreateDialog = 'Crear Faena';
+    this.openDialogWithTemplate(template);
     this.matDialogRef.afterClosed().subscribe((res) => {
       console.log('Dialog with template close', res);
       this.formGroup.reset();
@@ -197,7 +194,7 @@ export class GestionComponent implements OnInit {
       next: (data: any) => {
         console.log('Data fetched:', data);
         if (data && data.resultado && Array.isArray(data.resultado)) {
-          this.faenas = data.resultado
+          this.faenas = data.resultado;
         } else {
           console.error('Unexpected data format:', data);
           this.faenas = [];
@@ -218,12 +215,14 @@ export class GestionComponent implements OnInit {
     this.faenasService.getTipoFaena().subscribe({
       next: (data) => {
         console.log('Data fetched', data);
-        if(data && data.resultado && Array.isArray(data.resultado)) {
-          this.tipoFaenas = data.resultado.map<SelectOption<number>>(tipoFaena => ({
-            value: tipoFaena.idTipoFaena,
-            viewValue: tipoFaena.nombreFaena,
-          }))
-        }else {
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.tipoFaenas = data.resultado.map<SelectOption<number>>(
+            (tipoFaena) => ({
+              value: tipoFaena.idTipoFaena,
+              viewValue: tipoFaena.nombreFaena,
+            })
+          );
+        } else {
           console.error('unexpected data format:', data);
           this.tipoFaenas = [];
         }
@@ -232,7 +231,7 @@ export class GestionComponent implements OnInit {
         console.error('Error fetching faenas:', error);
         this.tipoFaenas = [];
       },
-    })
+    });
   }
 
   onSave() {
@@ -262,40 +261,39 @@ export class GestionComponent implements OnInit {
       },
     });
 
-    if(this.formGroup.get('idFaena')?.value !== null) {
-        const editFaena: EditFaenaDto = {
-          idFaena: this.formGroup.get('idFaena')?.value,
-          nombreFaena: this.formGroup.get('nombreFaena')?.value,
-          idTrabajador: 1,
-          fechaInicio: this.formGroup.get('fechaInicio')?.value,
-          fechaTermino: this.formGroup.get('fechaTermino')?.value,
-          encargado: this.formGroup.get('encargado')?.value,
-          idTipoFaena: this.formGroup.get('idTipoFaena')?.value
-  
-        } 
-        this.faenasService.updateFaena(editFaena).subscribe({
-          next: (response) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Faena guardada exitosamente',
-              text: 'La faena ha sido guardada correctamente',
-              confirmButtonText: 'OK',
-            });
-            this.formGroup.reset();
-            this.getFaenas();
-            this.matDialogRef.close();
-          },
-          error: (err) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo guardar la faena',
-              confirmButtonText: 'OK',
-            });
-            console.error('Error al guardar la faena:', err);
-          },
-        })
-    }else {
+    if (this.formGroup.get('idFaena')?.value !== null) {
+      const editFaena: EditFaenaDto = {
+        idFaena: this.formGroup.get('idFaena')?.value,
+        nombreFaena: this.formGroup.get('nombreFaena')?.value,
+        idTrabajador: 1,
+        fechaInicio: this.formGroup.get('fechaInicio')?.value,
+        fechaTermino: this.formGroup.get('fechaTermino')?.value,
+        encargado: this.formGroup.get('encargado')?.value,
+        idTipoFaena: this.formGroup.get('idTipoFaena')?.value,
+      };
+      this.faenasService.updateFaena(editFaena).subscribe({
+        next: (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Faena guardada exitosamente',
+            text: 'La faena ha sido guardada correctamente',
+            confirmButtonText: 'OK',
+          });
+          this.formGroup.reset();
+          this.getFaenas();
+          this.matDialogRef.close();
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo guardar la faena',
+            confirmButtonText: 'OK',
+          });
+          console.error('Error al guardar la faena:', err);
+        },
+      });
+    } else {
       this.faenasService.createFaena(faenaDataDto).subscribe({
         next: (response) => {
           Swal.fire({
@@ -322,33 +320,30 @@ export class GestionComponent implements OnInit {
   }
 
   onEditFaenas(faena: Faena, template: TemplateRef<any>) {
-    this.titleEditAndCreateDialog = 'Editar Faena'
+    this.titleEditAndCreateDialog = 'Editar Faena';
     this.formGroup.reset({
       tipoFaenas: faena.idTipoFaena,
       fechaInicio: faena.fechaInicio,
       fechaTermino: faena.fechaTermino,
       encargado: faena.encargado,
-      idFaena: faena.idFaena
-    })
-    this.openDialogWithTemplate(template)
+      idFaena: faena.idFaena,
+    });
+    this.openDialogWithTemplate(template);
     this.matDialogRef.afterClosed().subscribe(() => {
-      this.formGroup.reset()
-    }) 
-    
+      this.formGroup.reset();
+    });
   }
-
-  
 
   onDeleteFaena(faena: Faena) {
     Swal.fire({
       title: '¿Está seguro de eliminar la faena?',
-      text: "Esta acción no se puede deshacer.",
+      text: 'Esta acción no se puede deshacer.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.faenasService.deleteFaena(faena).subscribe({
@@ -358,8 +353,10 @@ export class GestionComponent implements OnInit {
               title: 'Faena eliminada',
               text: 'La faena ha sido eliminada correctamente.',
               confirmButtonText: 'OK',
-            })
-            this.faenas = this.faenas.filter(currentFaena => currentFaena.idFaena !== faena.idFaena) 
+            });
+            this.faenas = this.faenas.filter(
+              (currentFaena) => currentFaena.idFaena !== faena.idFaena
+            );
           },
           error: (err) => {
             console.error('Error eliminando la faena:', err);
@@ -369,7 +366,7 @@ export class GestionComponent implements OnInit {
               text: 'Ocurrió un problema al eliminar la faena.',
               confirmButtonText: 'OK',
             });
-          }
+          },
         });
       }
     });
