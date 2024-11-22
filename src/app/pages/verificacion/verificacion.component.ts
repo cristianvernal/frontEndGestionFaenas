@@ -43,7 +43,6 @@ interface Estado {
     MatInputModule,
     FormsModule,
     MatButtonModule,
-    FooterComponent,
     MatDividerModule,
     MatPaginatorModule
   ],

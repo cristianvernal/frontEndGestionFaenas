@@ -58,7 +58,6 @@ import { TransporteEndpointsService } from '../../services/transporte-endpoints.
     CommonModule,
     FormsModule,
     MatTableModule,
-    FooterComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

@@ -20,7 +20,6 @@ import { Faena } from '../../interfaces/faenas';
   standalone: true,
   imports: [
     MatDividerModule,
-    FooterComponent,
     FormsModule,
     MatSelectModule,
     MatButtonModule,

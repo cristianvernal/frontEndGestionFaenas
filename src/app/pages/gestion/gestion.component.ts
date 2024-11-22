@@ -1,11 +1,10 @@
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   inject,
   OnInit,
   TemplateRef,
   viewChild,
-  ViewChild,
 } from '@angular/core';
 import {
   FormControl,
@@ -34,7 +33,6 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { DialogComponent } from '../../components/dialog/dialog.component';
 import { EnpointsService } from '../../services/enpoints.service';
 import { Faena } from '../../interfaces/faenas';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -47,9 +45,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { FaenaDto } from '../../interfaces/faena-dto';
-import { TipoFaena } from '../../interfaces/tipoFaena';
 import { SelectOption } from '../../interfaces/select-option';
-import { CrearFaenas } from '../../interfaces/Crearfaenass';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
 import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
@@ -66,7 +62,6 @@ import { AttendanceEndpointService } from '../../services/attendance-endpoint.se
     MatButtonModule,
     MatIconModule,
     UiTableComponent,
-    FooterComponent,
     MatDividerModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
@@ -95,9 +90,9 @@ export class GestionComponent implements OnInit {
   workerList: CrearTrabajadorDTO[] = []
 
   formGroup: FormGroup = new FormGroup({
-    tipoFaenas: new FormControl(null, Validators.required),
     fechaInicio: new FormControl('', Validators.required),
     fechaTermino: new FormControl('', Validators.required),
+    nombreFaena: new FormControl('', Validators.required),
     encargado: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]*'),
@@ -110,9 +105,9 @@ export class GestionComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private faenasService: EnpointsService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private router: Router
   ) {}
-
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -178,20 +173,14 @@ export class GestionComponent implements OnInit {
     ];
   }
 
+  trabajadores(faena: Faena ) {
+    this.router.navigate(['trabajadores', faena.idFaena])
+   }
+
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
     });
-  }
-
-  onShowWorker(faena: Faena, template: TemplateRef<any>) {
-    this.attendanceService.getWorkerByFaenaId(faena.idFaena).subscribe({
-      next: (res) => {
-        console.log('res: ', res)
-        this.workerList = res
-        this.openDialogWithTemplate(template)
-      }
-    })
   }
 
   onCreateFaena(template: TemplateRef<any>) {
@@ -260,11 +249,12 @@ export class GestionComponent implements OnInit {
       return;
     }
     const faenaDataDto: FaenaDto = {
-      idTipoFaena: Number(this.formGroup.value.tipoFaenas),
+      nombreFaena: this.formGroup.value.nombreFaena,
       idTrabajador: 1,
       fechaInicio: this.formGroup.value.fechaInicio,
       fechaTermino: this.formGroup.value.fechaTermino,
       encargado: this.formGroup.value.encargado,
+      idFaena: this.formGroup.value.idFaena as number,
     };
 
     Swal.fire({
@@ -320,6 +310,7 @@ export class GestionComponent implements OnInit {
           this.formGroup.reset();
           this.getFaenas();
           this.matDialogRef.close();
+          console.log('faena creada: ', faenaDataDto)
         },
         error: (err) => {
           Swal.fire({
@@ -341,7 +332,8 @@ export class GestionComponent implements OnInit {
       fechaInicio: faena.fechaInicio,
       fechaTermino: faena.fechaTermino,
       encargado: faena.encargado,
-      idFaena: faena.idFaena,
+      nombreFaena: faena.nombreFaena,
+      idFaena: faena.idFaena
     });
     this.openDialogWithTemplate(template);
     this.matDialogRef.afterClosed().subscribe(() => {

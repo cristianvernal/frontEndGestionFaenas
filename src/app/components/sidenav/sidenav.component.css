@@ -10,6 +10,14 @@ mat-icon {
 }
 .content {
     padding: 24px;
+    margin: 0 auto;
+}
+
+.footer {
+    max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+    margin: 0 auto; /* Centra el contenido */
+    display: flex;
+    justify-content: flex-end;
 }
 
 mat-sidenav-container {

@@ -1,0 +1,21 @@
+.container {
+    max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+    margin: 0 auto; /* Centra el contenido */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px; /* Espaciado alrededor del encabezado */
+  }
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }
+
+  mat-divider {
+    margin-bottom: 50px;
+  }

@@ -5,7 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 @Component({
   selector: 'app-reportes',
   standalone: true,
-  imports: [FooterComponent, MatDividerModule],
+  imports: [MatDividerModule],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.css'
 })

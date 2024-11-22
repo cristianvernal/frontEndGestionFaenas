@@ -7,11 +7,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { CustomSidenavComponent } from '../custom-sidenav/custom-sidenav.component';
 import { MsalService } from '@azure/msal-angular';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [ RouterOutlet, CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, CustomSidenavComponent],
+  imports: [RouterOutlet, CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, CustomSidenavComponent, FooterComponent],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
 })

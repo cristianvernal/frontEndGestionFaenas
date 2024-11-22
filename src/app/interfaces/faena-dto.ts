@@ -3,5 +3,6 @@ export interface FaenaDto {
   fechaInicio: string;
   fechaTermino: string;
   encargado: string;
-  idTipoFaena: number;
+  nombreFaena: string;
+  idFaena: number;
 }

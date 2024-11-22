@@ -65,11 +65,11 @@ export class CustomSidenavComponent {
 
       ]
     },
-    {
-      icon: 'assignment',
-      label: 'Reportes',
-      route: 'reportes',
-    },
+    // {
+    //   icon: 'assignment',
+    //   label: 'Reportes',
+    //   route: 'reportes',
+    // },
   ])
 
   profilePicSize = computed(() => this.sideNavCollapsed() ? '30' : '100')

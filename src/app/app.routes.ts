@@ -7,6 +7,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { AsistenciaComponent } from './pages/asistencia/asistencia.component';
+import { TrabajadoresComponent } from './pages/trabajadores/trabajadores.component';
 
 export const routes: Routes = [
     {
@@ -39,15 +40,20 @@ export const routes: Routes = [
             component: RegistroComponent ,
             canActivate:[MsalGuard],
          },
-         {
-            path: 'reportes',
-            component: ReportesComponent ,
-            canActivate:[MsalGuard],
-         },
+         // {
+         //    path: 'reportes',
+         //    component: ReportesComponent ,
+         //    canActivate:[MsalGuard],
+         // },
          {
             path: 'asistencia',
             component: AsistenciaComponent ,
             canActivate:[MsalGuard],
+         },
+         {
+            path: 'trabajadores/:idFaena',
+            component: TrabajadoresComponent,
+            canActivate: [MsalGuard],
          },
       ]
     },

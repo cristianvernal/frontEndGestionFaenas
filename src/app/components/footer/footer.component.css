@@ -1,7 +1,6 @@
 .custom-class {
     color: black;
-    padding: 1rem;      /* p-4 */
-    margin-top: 1rem; /* mt-10 */
+    margin-top: 10px;
     text-align: right;
     align-items: end;
     font-size: larger;
