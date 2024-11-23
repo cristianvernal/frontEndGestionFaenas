@@ -35,13 +35,17 @@ jobs:
         run: ng --version
   
       - name: Build Angular Application
-        run: ng build --configuration production  # 2. Crear los certificados SSL a partir de los secretos
+        run: ng build --configuration production
+        
+        # 2. Crear los certificados SSL a partir de los secretos
       - name: Create SSL certificates
         run: |
-          mkdir -p ssl
-          echo "${{ secrets.SS_PUBLIC }}" > ssl/certs/sistemagfclpublic.pem
-          echo "${{ secrets.SS_PRIVATE }}" > ssl/certs/sistemagfclprivate.pem
-  
+          sudo mkdir -p /etc/ssl/certs /etc/ssl/private
+          echo "${{ secrets.SSL_PUBLIC }}" | sudo tee /etc/ssl/certs/sistemagfclpublic.pem > /dev/null
+          echo "${{ secrets.SSL_PRIVATE }}" | sudo tee /etc/ssl/private/sistemagfclprivate.pem > /dev/null
+          sudo chmod 600 /etc/ssl/certs/sistemagfclpublic.pem
+          sudo chmod 600 /etc/ssl/private/sistemagfclprivate.pem
+        
       - name: List files after build
         run: ls -R ./dist   
 
@@ -83,5 +87,5 @@ jobs:
             # Parar y eliminar cualquier contenedor previo
             docker stop frontend || true && docker rm frontend || true
             # Iniciar el contenedor
-            docker run -d --name frontend -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+            docker run -d --name frontend -p 80:80 -p 443:443 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
           EOF
