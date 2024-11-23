@@ -26,13 +26,18 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copiar configuración personalizada de NGINX
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+#Copiar certificados (cloudflare)
+COPY ssl/sistemagfclpublic.pem /etc/ssl/certs/sistemagfclpublic.pem
+COPY ssl/sistemagfclprivate.pem /etc/ssl/private/sistemagfclprivate.pem
 
 # Copia los archivos de la aplicación Angular desde la carpeta dist a la carpeta de NGINX
 COPY ./dist/front-end3/browser /usr/share/nginx/html
 
 # Expone el puerto 80 para el tráfico HTTP
 EXPOSE 80
+EXPOSE 443
 
 # Comando para ejecutar NGINX en primer plano
 CMD ["nginx", "-g", "daemon off;"]
