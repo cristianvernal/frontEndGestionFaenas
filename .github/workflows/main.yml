@@ -35,11 +35,15 @@ jobs:
         run: ng --version
   
       - name: Build Angular Application
-        run: ng build --configuration production
+        run: ng build --configuration production  # 2. Crear los certificados SSL a partir de los secretos
+      - name: Create SSL certificates
+        run: |
+          mkdir -p ssl
+          echo "${{ secrets.SS_PUBLIC }}" > ssl/certs/sistemagfclpublic.pem
+          echo "${{ secrets.SS_PRIVATE }}" > ssl/certs/sistemagfclprivate.pem
   
       - name: List files after build
-        run: ls -R ./dist
-
+        run: ls -R ./dist   
 
 
  
