@@ -22,6 +22,7 @@
     "@angular/router": "^18.2.0",
     "@azure/msal-angular": "^3.0.25",
     "@azure/msal-browser": "^3.26.1",
+    "front-end3": "file:",
     "ngx-webcam": "^0.4.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.5",
