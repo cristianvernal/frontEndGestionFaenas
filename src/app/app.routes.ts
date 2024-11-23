@@ -8,6 +8,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { AsistenciaComponent } from './pages/asistencia/asistencia.component';
 import { TrabajadoresComponent } from './pages/trabajadores/trabajadores.component';
+import { IngresoComponent } from './pages/ingreso/ingreso.component';
+import { SalidaComponent } from './pages/salida/salida.component';
 
 export const routes: Routes = [
     {
@@ -50,6 +52,18 @@ export const routes: Routes = [
             component: AsistenciaComponent ,
             canActivate:[MsalGuard],
          },
+               {
+                  path: 'ingreso',
+                  component: IngresoComponent,
+                  
+               },
+               {
+                  path: 'salida',
+                  component: SalidaComponent,
+                  
+               },
+            
+         
          {
             path: 'trabajadores/:idFaena',
             component: TrabajadoresComponent,

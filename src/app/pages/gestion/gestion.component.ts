@@ -23,11 +23,9 @@ import {
   tableColumn,
   UiTableComponent,
 } from '../../components/ui-table/ui-table.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { MatDividerModule } from '@angular/material/divider';
 import {
   MatDialog,
-  MatDialogActions,
   MatDialogClose,
   MatDialogContent,
   MatDialogRef,
@@ -250,11 +248,10 @@ export class GestionComponent implements OnInit {
     }
     const faenaDataDto: FaenaDto = {
       nombreFaena: this.formGroup.value.nombreFaena,
-      idTrabajador: 1,
       fechaInicio: this.formGroup.value.fechaInicio,
       fechaTermino: this.formGroup.value.fechaTermino,
       encargado: this.formGroup.value.encargado,
-      idFaena: this.formGroup.value.idFaena as number,
+      idFaena: this.formGroup.value.idFaena,
     };
 
     Swal.fire({

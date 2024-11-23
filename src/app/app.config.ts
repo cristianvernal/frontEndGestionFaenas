@@ -52,17 +52,22 @@ export function loggerCallback(logLevel: LogLevel, message: string) {
 
 export const b2cPolicies = {
   names: {
-    signUpSignIn: "B2C_1_signupsignin1",  
+    signUpSignIn: "B2C_1_signIn",  
     editProfile: "B2C_1_profileediting1",
+    resetPassword: "B2C_1_resetpassword1"
   },
   authorities: {
     signUpSignIn: {
       authority:
-        "https://proyectoDeTitulo2024.b2clogin.com/proyectoDeTitulo2024.onmicrosoft.com/B2C_1_signupsignin1",
+        "https://proyectoDeTitulo2024.b2clogin.com/proyectoDeTitulo2024.onmicrosoft.com/B2C_1_signIn",
     },
     editProfile: {
       authority:
         "https://proyectoDeTitulo2024.b2clogin.com/proyectoDeTitulo2024.onmicrosoft.com/B2C_1_profileediting1",
+    },
+    resetPassword: {
+      authority:
+        "https://proyectoDeTitulo2024.b2clogin.com/proyectoDeTitulo2024.onmicrosoft.com/B2C_1_resetpassword1",
     },
   },
   authorityDomain: "proyectoDeTitulo2024.b2clogin.com",

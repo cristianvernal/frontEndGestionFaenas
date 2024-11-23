@@ -1,0 +1,93 @@
+.container {
+    max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
+    margin: 0 auto; /* Centra el contenido */
+  }
+  
+  .header {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 16px; /* Espaciado alrededor del encabezado */
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      width: 90%; /* Ajuste de ancho responsivo */
+      max-width: 600px; /* Ancho máximo para mantener el diseño en pantallas grandes */
+      margin: 0 auto;
+    }
+    
+    .detail-item-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px; /* Espacio entre los selects y el botón */
+    }
+    
+    .detail-items-row {
+      display: flex;
+      gap: 15px; /* Espacio entre los selects */
+      justify-content: center; /* Centra los selects horizontalmente */
+    }
+    
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px; /* Espacio entre la etiqueta y el select */
+    }
+     
+    .detail-item .label {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    .mat-form-field {
+      flex-grow: 1; /* Permite que el campo de selección ocupe el espacio disponible */
+      max-width: 300px; /* Ajusta el ancho máximo según sea necesario */
+    }
+    
+    .buttonScan {
+      margin-top: 20px;
+      justify-content: center;
+      margin-left: 30px;
+    }
+
+    
+    .webcam {
+      width: 100%;
+      height: auto; /* Mantiene la proporción */
+      justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+      .content {
+        max-width: 100%; /* Utiliza todo el ancho disponible en pantallas más pequeñas */
+      }
+
+      .webcam {
+        max-width: 300px; /* Ajusta el tamaño máximo para pantallas más pequeñas */
+      }
+    
+      .mat-form-field {
+        max-width: 100%; /* Ocupa todo el ancho disponible */
+      }
+    
+      .detail-item {
+        align-items: stretch; /* Alineación para mejorar la apariencia en pantallas pequeñas */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .content {
+        gap: 15px; /* Reduce el espacio entre elementos para pantallas muy pequeñas */
+      }
+
+      .webcam {
+        max-width: 100%; /* Utiliza todo el ancho disponible en pantallas muy pequeñas */
+      }
+    }
+    

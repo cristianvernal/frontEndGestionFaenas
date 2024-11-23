@@ -12,18 +12,7 @@
 </div>
 <mat-nav-list>
   @for (item of menuItems(); track item.label) {
-    <a
-    mat-list-item
-    class="menu-item"
-   
-    [routerLink]="item.route"
-    routerLinkActive="selected-menu-item"
-    #rla="routerLinkActive"
-    [activated]="rla.isActive"
-  >
-    <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'" matListItemIcon>{{ item.icon }}</mat-icon>
-    <span matListItemTitle *ngIf="!sideNavCollapsed()">{{ item.label }}</span>
-  </a>
+    <app-menu-item [item]="item" [collapsed]="sideNavCollapsed()"></app-menu-item>
   }
 </mat-nav-list>
 

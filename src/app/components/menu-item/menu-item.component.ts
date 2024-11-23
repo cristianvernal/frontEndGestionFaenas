@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
@@ -19,4 +19,12 @@ export class MenuItemComponent {
 
   collapsed = input(false)
 
+  nestedMenuOpen = signal(false);
+
+  toggleNested() {
+    if(!this.item().subItems) {
+      return
+    }
+    this.nestedMenuOpen.set(!this.nestedMenuOpen())
+  }
 }
