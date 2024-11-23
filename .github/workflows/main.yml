@@ -1,45 +1,52 @@
-name: Deploy to AWS
+name: Deploy Angular App with SSL
 
 on:
   push:
     branches:
-      - master
+      - master  # O la rama principal de tu repositorio
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the code
-      uses: actions/checkout@v3
+      # 1. Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # 2. Configurar Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Build and Push NGINX Image
-      run: |
-        docker build -f Dockerfile-certbot -t your-dockerhub-repo/certbot .
-        docker push your-dockerhub-repo/certbot
+      # 3. Construir la imagen Docker de la app Angular
+      - name: Build Angular app Docker image
+        run: |
+          docker build -f Dockerfile -t angular_app .
 
-    - name: Deploy Docker Compose on AWS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: "us-east-1"
-      run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-          # Clonar el repositorio en la máquina de AWS
-          cd /path/to/your/project || git clone https://github.com/your-repo/project.git /path/to/your/project
-          cd /path/to/your/project
-          git pull origin master
+      # 4. Subir la imagen a Docker Hub (opcional)
+      - name: Push Docker image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: leonelarandap/angular_app:latest  # Ajusta tu repositorio de Docker Hub
 
-          # Construir y levantar los servicios con Docker Compose
-          docker-compose pull
-          docker-compose up -d --remove-orphans
-          
-          # Verificar estado
-          docker-compose ps
-        EOF
+      # 5. Configuración de Certbot (Generación de certificados)
+      - name: Request SSL Certificates with Certbot
+        run: |
+          docker-compose -f docker-compose.yml run --rm certbot \
+            certonly --webroot -w /var/www/certbot -d sistemagf.cl -d www.sistemagf.cl
+
+      # 6. Iniciar el contenedor con la app y NGINX
+      - name: Deploy with Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
+
+      # 7. (Opcional) Prueba de que la aplicación está corriendo
+      - name: Check if the application is running
+        run: |
+          curl -sSf http://sistemagf.cl || exit 1
+
+      # 8. Enviar notificación (opcional, si se desea)
+      - name: Send Notification on Success (opcional)
+        run: |
+          echo "Deployment to production was successful!" | mail -s "Deployment Status" youremail@example.com
