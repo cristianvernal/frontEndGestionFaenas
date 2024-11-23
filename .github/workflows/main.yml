@@ -1,60 +1,58 @@
 name: Build and Push Docker Image for Angular
-
+ 
 on:
   push:
     branches:
-      - master
+      - master 
   pull_request:
     branches:
       - master
-
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+ 
     steps:
       # Paso 1: Checkout del repositorio
       - name: Checkout repository
         uses: actions/checkout@v3
-
+ 
       # Paso 2: Autenticar en DockerHub
       - name: Log in to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2 
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Paso 3: Instalar dependencias
+          
       - name: Install dependencies
         run: npm install
 
-      # Paso 4: Instalar Angular CLI
       - name: Install Angular CLI
         run: npm install -g @angular/cli
 
-      # Paso 5: Verificar la instalación de Angular CLI
       - name: Verify Angular CLI installation
         run: ng --version
-
-      # Paso 6: Construir la aplicación Angular
+  
       - name: Build Angular Application
         run: ng build --configuration production
-
-      # Paso 7: Listar los archivos después de la construcción
+  
       - name: List files after build
         run: ls -R ./dist
 
-      # Paso 8: Construir la imagen Docker para Angular
+
+
+ 
+      # Paso 3: Construir la imagen de Docker para Angular
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest .
-
-      # Paso 9: Hacer push de la imagen a DockerHub
+ 
+      # Paso 4: Hacer push de la imagen a DockerHub
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-
-      # Paso 10: Configurar credenciales de AWS para SSH
+      # Paso 5: Configurar credenciales de AWS para SSH
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -62,30 +60,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1  # Cambia a tu región
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-
-      # Paso 11: Agregar clave SSH
+ 
+      # Paso 5.5: Agregar clave SSH
       - name: Add SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-      # Paso 12: Conectarse a EC2 y desplegar el contenedor de Angular
+ 
+      # Paso 6: Conectarse a EC2 y desplegar el contenedor de Angular
       - name: SSH commands to deploy
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@3.90.157.39 << 'EOF'
-            # Actualizar y obtener certificados SSL con Certbot
-            docker-compose -f /path/to/your/docker-compose.yml up -d certbot
-
             # Autenticar en DockerHub desde EC2
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            
             # Descargar la última versión de la imagen
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-            
             # Parar y eliminar cualquier contenedor previo
             docker stop frontend || true && docker rm frontend || true
-
-            # Iniciar el contenedor con NGINX y la configuración SSL
-            docker run -d --name frontend -p 80:80 -p 443:443 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+            # Iniciar el contenedor
+            docker run -d --name frontend -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
           EOF
