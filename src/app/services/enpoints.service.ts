@@ -16,7 +16,7 @@ export class EnpointsService {
 
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = "http://3.90.157.39:8080/faena"
+  readonly API_URL = "https://3.90.157.39:8080/faena"
 
   getFaenas(): Observable<BaseResponse<Faena[]>> {
     return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/${'traer'}`).pipe(
@@ -28,7 +28,7 @@ export class EnpointsService {
   }
 
   getTipoFaena(): Observable<BaseResponse<TipoFaena[]>> {
-      return this._http.get<BaseResponse<TipoFaena[]>>("http://3.90.157.39:8080/tipofaena/traer").pipe(
+      return this._http.get<BaseResponse<TipoFaena[]>>("https://3.90.157.39:8080/tipofaena/traer").pipe(
         catchError(error => {
           console.error('Error fetching data:', error);
           return throwError(() => 'Error fetching data')
