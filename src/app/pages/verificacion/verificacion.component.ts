@@ -100,7 +100,7 @@ export class VerificacionComponent implements OnInit {
         content: (row) => row.cargo,
       },
       {
-        label: 'Disponibilidad',
+        label: 'Estado',
         def: 'Disponibilidad',
         content: (row) => row.disponibilidad,
       },

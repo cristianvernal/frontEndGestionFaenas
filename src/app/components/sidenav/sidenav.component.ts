@@ -20,7 +20,7 @@ export class SidenavComponent {
 
   constructor( private authService: MsalService) {}
 
-  collapsed = signal(false)
+  collapsed = signal(true)
 
   sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px')
 
