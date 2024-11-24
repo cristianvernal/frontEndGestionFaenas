@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+  min-height: 100vh;
   background-color: #f7fafc;
 }
 
@@ -27,6 +27,7 @@
   color: black;
   position: relative;
   z-index: 10;
+  text-align: center; /* Asegura el centrado horizontal */
 }
 
 .login-image {
@@ -54,13 +55,52 @@
 }
 
 p {
-  margin: 0; /* Elimina márgenes innecesarios */
+  margin: 0;
   font-weight: 500;
   font-size: x-large;
   color: #333;
-  position: absolute; /* Posiciona el párrafo */
-  bottom: 10px; /* Lo coloca al fondo */
-  left: 50%; /* Centra horizontalmente */
-  transform: translateX(-50%); /* Ajusta el centrado */
-  z-index: 10; /* Asegura que se vea sobre el fondo */
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center; /* Centra el texto */
+}
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem; /* Reduce el tamaño del título */
+    padding: 0 1rem; /* Agrega un poco de espacio a los lados */
+  }
+
+  .login-image {
+    width: 250px; /* Ajusta el tamaño de la imagen */
+    height: 250px;
+  }
+
+  .login-button {
+    padding: 0.5rem 0.75rem; /* Reduce ligeramente el padding */
+  }
+
+  p {
+    font-size: medium; /* Reduce el tamaño del texto */
+    bottom: 20px; /* Eleva ligeramente el texto */
+  }
+}
+
+/* Media Queries para pantallas extra pequeñas */
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem; /* Reduce aún más el tamaño del título */
+  }
+
+  .login-image {
+    width: 200px; /* Ajusta el tamaño de la imagen */
+    height: 200px;
+  }
+
+  p {
+    font-size: small; /* Ajusta el texto final */
+  }
 }
