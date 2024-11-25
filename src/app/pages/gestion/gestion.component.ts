@@ -48,6 +48,12 @@ import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
 import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
 
+interface FaenaResponse {
+  resultado: {
+    idFaena: number;
+  };
+}
+
 @Component({
   selector: 'app-gestion',
   standalone: true,
@@ -298,6 +304,7 @@ export class GestionComponent implements OnInit {
     } else {
       this.faenasService.createFaena(faenaDataDto).subscribe({
         next: (response) => {
+          console.log('Respuesta de creación:', response)
           Swal.fire({
             icon: 'success',
             title: 'Faena guardada exitosamente',
