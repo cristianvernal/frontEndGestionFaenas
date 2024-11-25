@@ -320,52 +320,65 @@ export class GestionComponent implements OnInit {
           const idFaena = parsedResponse.resultado.idFaena;
           console.log('ID Faena:', idFaena);
 
-          // Llamar al servicio getTrabajadores para obtener la lista
+          // Obtener la lista de trabajadores
           this.registerService.getTrabajadores().subscribe({
             next: (trabajadoresResponse) => {
-              // Guardar la lista de trabajadores en una variable
-              const trabajadoresList = trabajadoresResponse.resultado; // Asegúrate de que "resultado" sea la lista
-              console.log('Lista de trabajadores:', trabajadoresList);
+              const trabajadoresList = trabajadoresResponse.resultado;
 
-              if (Array.isArray(trabajadoresList)) {
+              if (Array.isArray(trabajadoresList) && trabajadoresList.length > 0) {
+                console.log('Lista de trabajadores obtenida:', trabajadoresList);
+
+                // Procesar cada trabajador dentro del foreach
                 trabajadoresList.forEach((trabajador: any) => {
                   const run = trabajador.run;
-                  console.log(`Run del trabajador: ${run}`);
-                  const cumplimientoDto: CumplimientoDTO = {
-                  idFaena: idFaena,
-                  runTrabajador: run,
-                  tipoCumplimiento: 2,
-                  }
-                  this.registerService.createCumplimiento(cumplimientoDto).subscribe({
-                    next: (response) => {
-                      console.log('Data fetched: ', response)
-                      console.log('aca va el cumplimiento: ',cumplimientoDto)
-                    }
-                  })
-                });
-              } else {
-                console.error('El resultado no es un array:', trabajadoresList);
-              }
+                  console.log(`Procesando trabajador con RUN: ${run}`);
 
-              Swal.fire({
-                icon: 'success',
-                title: 'Faena guardada exitosamente',
-                text: 'La faena ha sido guardada correctamente',
-                confirmButtonText: 'OK',
-              });
-              this.formGroup.reset();
-              this.getFaenas();
-              this.matDialogRef.close();
-              console.log('faena creada: ', faenaDataDto);
+                  const cumplimientoDto: CumplimientoDTO = {
+                    idFaena: idFaena,
+                    runTrabajador: run,
+                    tipoCumplimiento: 2,
+                  };
+
+                  // Hacer la solicitud para registrar el cumplimiento
+                  this.registerService.createCumplimiento(cumplimientoDto).subscribe({
+                    next: (cumplimientoResponse) => {
+                      console.log(
+                        `Cumplimiento registrado para RUN: ${run}`,
+                        cumplimientoResponse
+                      );
+                    },
+                    error: (err) => {
+                      console.error(
+                        `Error al registrar el cumplimiento para RUN: ${run}`,
+                        err
+                      );
+                    },
+                  });
+                });
+
+                // Mostrar mensaje de éxito una vez que el foreach termina
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Faena y cumplimientos registrados',
+                  text: 'La faena y los cumplimientos se guardaron correctamente.',
+                  confirmButtonText: 'OK',
+                });
+
+                this.formGroup.reset();
+                this.getFaenas();
+                this.matDialogRef.close();
+              } else {
+                console.warn('No se encontraron trabajadores para registrar.');
+              }
             },
             error: (err) => {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo guardar la faena',
+                text: 'No se pudo obtener la lista de trabajadores.',
                 confirmButtonText: 'OK',
               });
-              console.error('Error al guardar la faena:', err);
+              console.error('Error al obtener la lista de trabajadores:', err);
             },
           });
         },
@@ -373,12 +386,13 @@ export class GestionComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'No se pudo guardar la faena',
+            text: 'No se pudo crear la faena.',
             confirmButtonText: 'OK',
           });
-          console.error('Error al guardar la faena:', err);
+          console.error('Error al crear la faena:', err);
         },
       });
+
     }
   }
 

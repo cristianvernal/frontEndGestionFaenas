@@ -70,15 +70,15 @@ export class RegisterApiService {
       );
   }
 
-  
+
   createCumplimiento(cumplimento: CumplimientoDTO) {
     return this._http.post('http://3.90.157.39:8081/registro/crear', cumplimento)
-    .pipe(
-      catchError((error) => {
-        console.error('Error fetching data: ', error);
-        return throwError(() => 'Error fetching data');
-      })
-    )
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching data: ', error);
+          return throwError(() => 'Error fetching data');
+        })
+      )
   }
 
   identifyPicture(pictureImg: string): Observable<any> {
