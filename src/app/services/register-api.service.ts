@@ -9,6 +9,7 @@ import { BaseResponse } from '../interfaces/baseResponse';
 import { Cargo } from '../interfaces/cargo';
 import { TipoRegistro } from '../interfaces/tipoRegistro';
 import { RegistroAsistencia } from '../interfaces/registro-asistencia';
+import { CumplimientoDTO } from '../interfaces/cumplimiento-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +68,17 @@ export class RegisterApiService {
           return throwError(() => 'Error fetching data');
         })
       );
+  }
+
+  
+  createCumplimiento(cumplimento: CumplimientoDTO) {
+    return this._http.post('http://3.90.157.39:8081/registro/crear', cumplimento)
+    .pipe(
+      catchError((error) => {
+        console.error('Error fetching data: ', error);
+        return throwError(() => 'Error fetching data');
+      })
+    )
   }
 
   identifyPicture(pictureImg: string): Observable<any> {

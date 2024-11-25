@@ -9,18 +9,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 
 interface Customer {
   nombre: string;
   apellido: string;
-  rut: string;
-  edad: string;
-  cargo: string;
-  disponibilidad: string;
+  email: string;
+  nombreCargo: string;
+  nombreCumplimineto: string;
+  nombreFaena: string;
 }
 
 interface Food {
@@ -74,6 +72,11 @@ export class VerificacionComponent implements OnInit {
   setTableColumns() {
     this.tableColumns = [
       {
+        label: 'Faena',
+        def: 'nombreFaena',
+        content: (row) => row.nombreFaena
+      },
+      {
         label: 'Nombre',
         def: 'Nombre',
         content: (row) => row.nombre,
@@ -85,24 +88,19 @@ export class VerificacionComponent implements OnInit {
         isSortable: true,
       },
       {
-        label: 'Rut',
-        def: 'Rut',
-        content: (row) => row.rut,
+        label: 'Email',
+        def: 'email',
+        content: (row) => row.email,
       },
       {
-        label: 'Edad',
-        def: 'Edad',
-        content: (row) => row.edad,
-      },
-      {
-        label: 'Cargo',
-        def: 'Cargo',
-        content: (row) => row.cargo,
+        label: 'Nombre Cargo',
+        def: 'nombreCargo',
+        content: (row) => row.nombreCargo,
       },
       {
         label: 'Estado',
-        def: 'Disponibilidad',
-        content: (row) => row.disponibilidad,
+        def: 'nombreCumplimiento',
+        content: (row) => row.nombreCumplimineto,
       },
     ];
   }
@@ -111,36 +109,40 @@ export class VerificacionComponent implements OnInit {
     timer(100).subscribe(() => {
       this.verificacion = [
         {
+          nombreFaena:'Enero',
           nombre: 'Cristian',
           apellido: 'Vernal',
-          rut: '15979732-5',
-          edad: '38',
-          cargo: 'Ingeniero',
-          disponibilidad: 'disponible',
+          email: '18782428-4',
+          nombreCargo: '34',
+          nombreCumplimineto: 'Soldador',
+          
         },
         {
+          nombreFaena:'Enero',
           nombre: 'Leonel',
           apellido: 'Aranda',
-          rut: '18782428-4',
-          edad: '34',
-          cargo: 'Soldador',
-          disponibilidad: 'No disponible',
+          email: '18782428-4',
+          nombreCargo: '34',
+          nombreCumplimineto: 'Soldador',
+          
         },
         {
+          nombreFaena:'Enero',
           nombre: 'Leonel',
           apellido: 'Aranda',
-          rut: '18782428-4',
-          edad: '34',
-          cargo: 'Soldador',
-          disponibilidad: 'No disponible',
+          email: '18782428-4',
+          nombreCargo: '34',
+          nombreCumplimineto: 'Soldador',
+          
         },
         {
+          nombreFaena:'Enero',
           nombre: 'Leonel',
           apellido: 'Aranda',
-          rut: '18782428-4',
-          edad: '34',
-          cargo: 'Soldador',
-          disponibilidad: 'No disponible',
+          email: '18782428-4',
+          nombreCargo: '34',
+          nombreCumplimineto: 'Soldador',
+          
         },
       ];
     });

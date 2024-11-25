@@ -5,14 +5,6 @@
     <mat-divider></mat-divider>
     <div class="form-container">
       <mat-form-field>
-        <mat-label>Mensaje</mat-label>
-        <mat-select>
-          @for (food of foods; track food) {
-            <mat-option [value]="food.value">{{ food.viewValue }}</mat-option>
-          }
-          </mat-select>
-      </mat-form-field>
-      <mat-form-field>
         <mat-label>Estado</mat-label>
         <mat-select>
           @for(estado of estados; track estado) {

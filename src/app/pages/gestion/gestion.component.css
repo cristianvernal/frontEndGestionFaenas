@@ -42,6 +42,10 @@
     margin-top: 16px;
   }
 
+  .boton {
+    cursor: pointer;
+  }
+
   .tablaTrabajadores {
     margin: 0 auto;
     margin-bottom: 40px;

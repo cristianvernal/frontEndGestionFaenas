@@ -24,8 +24,8 @@ button.form-item {
 .form-container {
   display: flex;
   align-items: end;
-  gap: 16px; /* Controla el espacio entre los elementos */
-  justify-content: space-evenly;
+  gap: 40px; /* Controla el espacio entre los elementos */
+  justify-content: end;
 }
 
 mat-form-field {

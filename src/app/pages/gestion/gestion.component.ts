@@ -48,6 +48,7 @@ import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
 import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
 import { RegisterApiService } from '../../services/register-api.service';
+import { CumplimientoDTO } from '../../interfaces/cumplimiento-dto';
 
 interface FaenaResponse {
   resultado: {
@@ -92,7 +93,9 @@ export class GestionComponent implements OnInit {
   colActions = viewChild.required('colActions', { read: TemplateRef });
   titleEditAndCreateDialog = '';
   attendanceService = inject(AttendanceEndpointService);
+  registerService = inject(RegisterApiService);
   workerList: CrearTrabajadorDTO[] = []
+  cumplimiento: CumplimientoDTO[] = []
 
   formGroup: FormGroup = new FormGroup({
     fechaInicio: new FormControl('', Validators.required),
@@ -112,7 +115,7 @@ export class GestionComponent implements OnInit {
     private faenasService: EnpointsService,
     private dialogService: DialogService,
     private router: Router,
-    private registerService: RegisterApiService
+    // private registerService: RegisterApiService
   ) { }
 
   ngOnInit(): void {
@@ -328,6 +331,17 @@ export class GestionComponent implements OnInit {
                 trabajadoresList.forEach((trabajador: any) => {
                   const run = trabajador.run;
                   console.log(`Run del trabajador: ${run}`);
+                  const cumplimientoDto: CumplimientoDTO = {
+                  idFaena: idFaena,
+                  runTrabajador: run,
+                  tipoCumplimiento: 2,
+                  }
+                  this.registerService.createCumplimiento(cumplimientoDto).subscribe({
+                    next: (response) => {
+                      console.log('Data fetched: ', response)
+                      console.log('aca va el cumplimiento: ',cumplimientoDto)
+                    }
+                  })
                 });
               } else {
                 console.error('El resultado no es un array:', trabajadoresList);

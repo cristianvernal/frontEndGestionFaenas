@@ -21,26 +21,33 @@
 
   <ng-template #colActions let-faena>
     <button
-    mat-icon-button
-    matTooltip="Trabajadores"
-    (click)="trabajadores(faena)"
-  >
-    <mat-icon>person</mat-icon>
-  </button>
-    <button mat-icon-button (click)="onEditFaenas(faena, template1)" matTooltip="Editar">
+      mat-icon-button
+      matTooltip="Trabajadores"
+      (click)="trabajadores(faena)"
+      class="boton"
+    >
+      <mat-icon>person</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="onEditFaenas(faena, template1)"
+      matTooltip="Editar"
+      class="boton"
+    >
       <mat-icon>edit</mat-icon>
     </button>
     <button
       mat-icon-button
       matTooltip="Eliminar"
       (click)="onDeleteFaena(faena)"
+      class="boton"
     >
       <mat-icon>delete</mat-icon>
     </button>
   </ng-template>
 
   <ng-template #template1>
-    <h2 mat-dialog-title>{{titleEditAndCreateDialog}}</h2>
+    <h2 mat-dialog-title>{{ titleEditAndCreateDialog }}</h2>
     <div mat-dialog-content>
       <form [formGroup]="formGroup" class="form">
         <mat-form-field>
@@ -98,6 +105,11 @@
 
   <ng-template #workers class="template">
     <h2 mat-dialog-title>Trabajadores</h2>
-    <app-ui-table [columns]="tableWorker" [data]="workerList" class="tablaTrabajadores"> </app-ui-table>
+    <app-ui-table
+      [columns]="tableWorker"
+      [data]="workerList"
+      class="tablaTrabajadores"
+    >
+    </app-ui-table>
   </ng-template>
 </div>
