@@ -47,6 +47,7 @@ import { SelectOption } from '../../interfaces/select-option';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
 import { EditFaenaDto } from '../../interfaces/faena-edit-dto';
 import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
+import { RegisterApiService } from '../../services/register-api.service';
 
 interface FaenaResponse {
   resultado: {
@@ -105,13 +106,14 @@ export class GestionComponent implements OnInit {
   });
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
-  
+
   constructor(
     private dialog: MatDialog,
     private faenasService: EnpointsService,
     private dialogService: DialogService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private registerService: RegisterApiService
+  ) { }
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -177,10 +179,10 @@ export class GestionComponent implements OnInit {
     ];
   }
 
-  trabajadores(faena: Faena ) {
+  trabajadores(faena: Faena) {
     this.router.navigate(['trabajadores', faena.idFaena])
-    console.log("faena id: ",faena.idFaena)
-   }
+    console.log("faena id: ", faena.idFaena)
+  }
 
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
@@ -253,6 +255,7 @@ export class GestionComponent implements OnInit {
       });
       return;
     }
+
     const faenaDataDto: FaenaDto = {
       nombreFaena: this.formGroup.value.nombreFaena,
       fechaInicio: this.formGroup.value.fechaInicio,
@@ -305,17 +308,52 @@ export class GestionComponent implements OnInit {
     } else {
       this.faenasService.createFaena(faenaDataDto).subscribe({
         next: (response) => {
-          console.log('Respuesta de creación:', response)
-          Swal.fire({
-            icon: 'success',
-            title: 'Faena guardada exitosamente',
-            text: 'La faena ha sido guardada correctamente',
-            confirmButtonText: 'OK',
+          console.log('Respuesta de creación:', response); // Verificar la estructura
+
+          // Si la respuesta es un string que contiene JSON, necesitas parsearlo
+          let parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
+
+          // Ahora puedes acceder al idFaena
+          const idFaena = parsedResponse.resultado.idFaena;
+          console.log('ID Faena:', idFaena);
+
+          // Llamar al servicio getTrabajadores para obtener la lista
+          this.registerService.getTrabajadores().subscribe({
+            next: (trabajadoresResponse) => {
+              // Guardar la lista de trabajadores en una variable
+              const trabajadoresList = trabajadoresResponse.resultado; // Asegúrate de que "resultado" sea la lista
+              console.log('Lista de trabajadores:', trabajadoresList);
+
+              if (Array.isArray(trabajadoresList)) {
+                trabajadoresList.forEach((trabajador: any) => {
+                  const run = trabajador.run;
+                  console.log(`Run del trabajador: ${run}`);
+                });
+              } else {
+                console.error('El resultado no es un array:', trabajadoresList);
+              }
+
+              Swal.fire({
+                icon: 'success',
+                title: 'Faena guardada exitosamente',
+                text: 'La faena ha sido guardada correctamente',
+                confirmButtonText: 'OK',
+              });
+              this.formGroup.reset();
+              this.getFaenas();
+              this.matDialogRef.close();
+              console.log('faena creada: ', faenaDataDto);
+            },
+            error: (err) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo guardar la faena',
+                confirmButtonText: 'OK',
+              });
+              console.error('Error al guardar la faena:', err);
+            },
           });
-          this.formGroup.reset();
-          this.getFaenas();
-          this.matDialogRef.close();
-          console.log('faena creada: ', faenaDataDto)
         },
         error: (err) => {
           Swal.fire({
@@ -329,6 +367,8 @@ export class GestionComponent implements OnInit {
       });
     }
   }
+
+
 
   onEditFaenas(faena: Faena, template: TemplateRef<any>) {
     this.titleEditAndCreateDialog = 'Editar Faena';

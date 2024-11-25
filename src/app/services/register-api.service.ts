@@ -19,22 +19,22 @@ export class RegisterApiService {
   readonly API_URL = 'http://3.90.157.39:8081/trabajadores';
 
   createTrabajador(
-    trabajador: CrearTrabajadorDTO, 
+    trabajador: CrearTrabajadorDTO,
     image: string
   ): Observable<any> {
-    const request  = {
+    const request = {
       worker: this._http
-      .post<BaseResponse<any>>(`${this.API_URL}/${'crear'}`, trabajador)
-      .pipe(
-        catchError((error) => {
-          console.error('Error creating faena:', error);
-          return throwError(() => new Error('Error creating faena'));
-        })
-      ),
-      imageRegister:this.savePictureRegister(trabajador.run, image),
+        .post<BaseResponse<any>>(`${this.API_URL}/${'crear'}`, trabajador)
+        .pipe(
+          catchError((error) => {
+            console.error('Error creating faena:', error);
+            return throwError(() => new Error('Error creating faena'));
+          })
+        ),
+      imageRegister: this.savePictureRegister(trabajador.run, image),
       imageRegisterLocal: this.savePictureRegisterLocal(trabajador.run, image)
-    };  
-      return forkJoin(request)
+    };
+    return forkJoin(request)
   }
 
   getTipoCargo(): Observable<BaseResponse<Cargo[]>> {
@@ -61,13 +61,13 @@ export class RegisterApiService {
 
   createAsistencia(registro: RegistroAsistencia) {
     return this._http.post('http://3.90.157.39:8083/registroasistencia/crear', registro)
-    .pipe(
-      catchError((error) => {
-        console.error('Error fetching data:', error);
-        return throwError(() => 'Error fetching data');
-      })
-    );
-  } 
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching data:', error);
+          return throwError(() => 'Error fetching data');
+        })
+      );
+  }
 
   identifyPicture(pictureImg: string): Observable<any> {
     const formData = new FormData();
@@ -109,6 +109,19 @@ export class RegisterApiService {
     return this._http
       .get<BaseResponse<CrearTrabajadorDTO>>(
         `${this.API_URL}/traer/run/{run}?run=${rut}`
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Error Fetching data: ', error);
+          return throwError(() => 'Error fetching data');
+        })
+      );
+  }
+
+  getTrabajadores(): Observable<BaseResponse<CrearTrabajadorDTO>> {
+    return this._http
+      .get<BaseResponse<CrearTrabajadorDTO>>(
+        `${this.API_URL}/traer`
       )
       .pipe(
         catchError((error) => {
