@@ -179,6 +179,7 @@ export class GestionComponent implements OnInit {
 
   trabajadores(faena: Faena ) {
     this.router.navigate(['trabajadores', faena.idFaena])
+    console.log("faena id: ",faena.idFaena)
    }
 
   openDialogWithTemplate(template: TemplateRef<any>) {

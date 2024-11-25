@@ -112,6 +112,7 @@ export class TrabajadoresComponent implements OnInit {
   onShowWorker() {
     this.loading = true;
     const idFaena = this.activedRoute.snapshot.paramMap.get('idFaena');
+    console.log('faena:', idFaena)
     this.attendanceService.getWorkerByFaenaId(Number(idFaena)).subscribe({
       next: (res) => {
         console.log('res: ', res);
