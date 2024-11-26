@@ -10,6 +10,9 @@ import { Cargo } from '../interfaces/cargo';
 import { TipoRegistro } from '../interfaces/tipoRegistro';
 import { RegistroAsistencia } from '../interfaces/registro-asistencia';
 import { CumplimientoDTO } from '../interfaces/cumplimiento-dto';
+import { RegistroDTO } from '../interfaces/registro-dto';
+import { TipoCumplimiento } from '../interfaces/tipo-cumplimiento';
+import { Customer } from '../pages/verificacion/verificacion.component';
 
 @Injectable({
   providedIn: 'root',
@@ -79,6 +82,26 @@ export class RegisterApiService {
           return throwError(() => 'Error fetching data');
         })
       )
+  }
+
+  getCumplimiento(): Observable<BaseResponse<TipoCumplimiento[]>> {
+    return this._http.get<BaseResponse<TipoCumplimiento[]>>('http://3.90.157.39:8081/tipocumplimiento/traer')
+    .pipe(
+      catchError((error) => {
+        console.error('Error fetching data:', error);
+        return throwError(() => 'Error fetching data')
+      })
+    )
+  }
+
+  getRegistro(registro: RegistroDTO) {
+    return this._http.post<Customer[]>('http://3.90.157.39:8081/api/registros/registro/traer', registro)
+    .pipe(
+      catchError((error) => {
+        console.error('Error fetching data: ', error);
+        return throwError(() => 'Error fetching data');
+      })
+    )
   }
 
   identifyPicture(pictureImg: string): Observable<any> {

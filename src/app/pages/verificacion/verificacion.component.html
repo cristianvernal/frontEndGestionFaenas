@@ -3,16 +3,36 @@
       <h2 class="text-3xl font-bold">Verificación</h2>
     </div>
     <mat-divider></mat-divider>
-    <div class="form-container">
+    <div class="form-container" [formGroup]="formGroupFilter">
       <mat-form-field>
-        <mat-label>Estado</mat-label>
-        <mat-select>
-          @for(estado of estados; track estado) {
-            <mat-option [value]="estado.value">{{ estado.viewValue }}</mat-option>
+        <mat-label>Rut</mat-label>
+        <input matInput formControlName="rut" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Faenas</mat-label>
+        <mat-select formControlName="faena">
+          @for(tipoFaena of tipoFaenas; track tipoFaena) {
+            <mat-option [value]="tipoFaena.value">{{ tipoFaena.viewValue }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button color="primary">Buscar</button>
+      <mat-form-field>
+        <mat-label>Cargo</mat-label>
+        <mat-select formControlName="cargo">
+          @for(tipoCargo of tipoCargos; track tipoCargo) {
+            <mat-option [value]="tipoCargo.value">{{ tipoCargo.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="tipoCumplimiento">
+          @for(tipoCumplimiento of tipoCumplimientos; track tipoCumplimiento) {
+            <mat-option [value]="tipoCumplimiento.value">{{ tipoCumplimiento.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="onSearch()">Buscar</button>
     </div>
     <app-ui-table [data]="verificacion" [columns]="tableColumns"/>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   tableColumn,
   UiTableComponent,
@@ -6,18 +6,23 @@ import {
 import { timer } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { SelectOption } from '../../interfaces/select-option';
+import { RegisterApiService } from '../../services/register-api.service';
+import { RegistroDTO } from '../../interfaces/registro-dto';
+import { EnpointsService } from '../../services/enpoints.service';
 
-interface Customer {
-  nombre: string;
-  apellido: string;
+export interface Customer {
+  primerNombre: string;
+  primerApellido: string;
   email: string;
+  run: string;
   nombreCargo: string;
-  nombreCumplimineto: string;
+  nombreCumplimiento: string;
   nombreFaena: string;
 }
 
@@ -42,31 +47,35 @@ interface Estado {
     FormsModule,
     MatButtonModule,
     MatDividerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    ReactiveFormsModule
   ],
   templateUrl: './verificacion.component.html',
   styleUrl: './verificacion.component.css',
 })
 export class VerificacionComponent implements OnInit {
+  registeApiService = inject(RegisterApiService);
+  enpointService = inject(EnpointsService);
   verificacion: Customer[] = [];
   tableColumns: tableColumn<Customer>[] = [];
+  tipoCumplimientos: SelectOption<number>[] = [];
+  tipoCargos: SelectOption<number>[] = [];
+  tipoFaenas: SelectOption<number>[] = [];
 
-
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Mensaje 1' },
-    { value: 'pizza-1', viewValue: 'Mensaje 2' },
-    { value: 'tacos-2', viewValue: 'Mensaje 3' },
-  ];
-
-  estados: Estado[] = [
-    { value: 'disponible-0,', viewValue: 'Disponible' },
-    { value: 'no disponible-1,', viewValue: 'No Disponible' },
-  ];
+  formGroupFilter = new FormGroup({
+    tipoCumplimiento: new FormControl(),
+    cargo: new FormControl(),
+    rut: new FormControl(),
+    faena: new FormControl(),
+  }) 
+  
 
 
   ngOnInit(): void {
-    this.getCustomers();
     this.setTableColumns();
+    this.getTipoCargos();
+    this.getTipoFaena();
+    this.getTipoCumplimiento();
   }
 
   setTableColumns() {
@@ -79,13 +88,18 @@ export class VerificacionComponent implements OnInit {
       {
         label: 'Nombre',
         def: 'Nombre',
-        content: (row) => row.nombre,
+        content: (row) => row.primerNombre,
       },
       {
         label: 'Apellido',
         def: 'Apellido',
-        content: (row) => row.apellido,
+        content: (row) => row.primerApellido,
         isSortable: true,
+      },
+      {
+        label: 'Rut',
+        def: 'run',
+        content: (row) => row.run,
       },
       {
         label: 'Email',
@@ -100,51 +114,77 @@ export class VerificacionComponent implements OnInit {
       {
         label: 'Estado',
         def: 'nombreCumplimiento',
-        content: (row) => row.nombreCumplimineto,
+        content: (row) => row.nombreCumplimiento,
       },
     ];
   }
 
-  getCustomers() {
-    timer(100).subscribe(() => {
-      this.verificacion = [
-        {
-          nombreFaena:'Enero',
-          nombre: 'Cristian',
-          apellido: 'Vernal',
-          email: '18782428-4',
-          nombreCargo: '34',
-          nombreCumplimineto: 'Soldador',
-          
-        },
-        {
-          nombreFaena:'Enero',
-          nombre: 'Leonel',
-          apellido: 'Aranda',
-          email: '18782428-4',
-          nombreCargo: '34',
-          nombreCumplimineto: 'Soldador',
-          
-        },
-        {
-          nombreFaena:'Enero',
-          nombre: 'Leonel',
-          apellido: 'Aranda',
-          email: '18782428-4',
-          nombreCargo: '34',
-          nombreCumplimineto: 'Soldador',
-          
-        },
-        {
-          nombreFaena:'Enero',
-          nombre: 'Leonel',
-          apellido: 'Aranda',
-          email: '18782428-4',
-          nombreCargo: '34',
-          nombreCumplimineto: 'Soldador',
-          
-        },
-      ];
-    });
+
+getTipoCargos() {
+  this.registeApiService.getTipoCargo().subscribe({
+    next: (res) => {
+      this.tipoCargos = res.resultado.map(tipoCargo => ({
+        value: tipoCargo.id,
+        viewValue: tipoCargo.nombre
+      }))
+    } 
   }
+  )
+}
+
+getTipoFaena() {
+  this.enpointService.getFaenas().subscribe({
+    next: (res) => {
+      this.tipoFaenas = res.resultado.map(tipoFaena => ({
+        value: tipoFaena.idFaena,
+        viewValue: tipoFaena.nombreFaena,
+      }))
+    } 
+  }
+  )
+}
+
+getTipoCumplimiento() {
+  this.registeApiService.getCumplimiento().subscribe({
+    next: (res) => {
+      this.tipoCumplimientos = res.resultado.map(tipoCumplimiento => ({
+        value: tipoCumplimiento.tipoCumplimiento,
+        viewValue: tipoCumplimiento.nombreCumplimiento,
+      }))
+    } 
+  }
+  )
+}
+
+onSearch() {
+  const filters: any = {}
+  Object.entries(this.formGroupFilter.value).forEach(filter => {
+    if(filter[1] !== null) {
+      filters[filter[0]] = filter[1]
+    }
+  })
+  console.log('filtros: ', filters)
+  this.registeApiService.getRegistro(filters).subscribe({
+    next: (res) => {
+      console.log('respuesta:', res);
+      this.verificacion = res
+
+    },
+    error: (err) => {
+      console.log('Error: ', err);
+    }
+  })
+}
+  // createListFaenaWorkes(registro: RegistroDTO) {
+  //   this.registeApiService.createRegistro(registro).subscribe({
+  //     next: (data) => {
+  //      console.log('Data fetched', data)
+  //      this.tipoCumplimientos = this.tipoCumplimientos.map<SelectOption<number>>(
+  //       (tipoCumplimiento) => ({
+  //         value: tipoCumplimiento.
+  //       })
+  //      )
+  //     }
+  //   })
+  // }
 }
