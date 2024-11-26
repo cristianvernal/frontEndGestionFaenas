@@ -123,4 +123,13 @@ export class TrabajadoresComponent implements OnInit {
       },
     });
   }
+
+  openDialogWithTemplate(template: TemplateRef<any>) {
+    this.matDialogRef = this.dialogService.openDialogWithTemplate({
+      template,
+    });
+    this.matDialogRef.afterClosed().subscribe((res) => {
+      console.log('Dialog with template close', res);
+    });
+  }
 }

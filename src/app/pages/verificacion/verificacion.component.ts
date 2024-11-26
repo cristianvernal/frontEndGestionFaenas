@@ -6,7 +6,12 @@ import {
 import { timer } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,26 +20,7 @@ import { SelectOption } from '../../interfaces/select-option';
 import { RegisterApiService } from '../../services/register-api.service';
 import { RegistroDTO } from '../../interfaces/registro-dto';
 import { EnpointsService } from '../../services/enpoints.service';
-
-export interface Customer {
-  primerNombre: string;
-  primerApellido: string;
-  email: string;
-  run: string;
-  nombreCargo: string;
-  nombreCumplimiento: string;
-  nombreFaena: string;
-}
-
-interface Food {
-  value: string;
-  viewValue: string;
-}
-
-interface Estado {
-  value: string;
-  viewValue: string;
-}
+import { Workers } from '../../interfaces/workers-dto';
 
 @Component({
   selector: 'app-verificacion',
@@ -48,7 +34,7 @@ interface Estado {
     MatButtonModule,
     MatDividerModule,
     MatPaginatorModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './verificacion.component.html',
   styleUrl: './verificacion.component.css',
@@ -56,20 +42,19 @@ interface Estado {
 export class VerificacionComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
   enpointService = inject(EnpointsService);
-  verificacion: Customer[] = [];
-  tableColumns: tableColumn<Customer>[] = [];
+  verificacion: Workers[] = [];
+  tableColumns: tableColumn<Workers>[] = [];
   tipoCumplimientos: SelectOption<number>[] = [];
   tipoCargos: SelectOption<number>[] = [];
   tipoFaenas: SelectOption<number>[] = [];
+  
 
   formGroupFilter = new FormGroup({
     tipoCumplimiento: new FormControl(),
     cargo: new FormControl(),
     rut: new FormControl(),
     faena: new FormControl(),
-  }) 
-  
-
+  });
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -83,7 +68,7 @@ export class VerificacionComponent implements OnInit {
       {
         label: 'Faena',
         def: 'nombreFaena',
-        content: (row) => row.nombreFaena
+        content: (row) => row.nombreFaena,
       },
       {
         label: 'Nombre',
@@ -119,72 +104,59 @@ export class VerificacionComponent implements OnInit {
     ];
   }
 
-
-getTipoCargos() {
-  this.registeApiService.getTipoCargo().subscribe({
-    next: (res) => {
-      this.tipoCargos = res.resultado.map(tipoCargo => ({
-        value: tipoCargo.id,
-        viewValue: tipoCargo.nombre
-      }))
-    } 
+  getTipoCargos() {
+    this.registeApiService.getTipoCargo().subscribe({
+      next: (res) => {
+        this.tipoCargos = res.resultado.map((tipoCargo) => ({
+          value: tipoCargo.id,
+          viewValue: tipoCargo.nombre,
+        }));
+      },
+    });
   }
-  )
-}
 
-getTipoFaena() {
-  this.enpointService.getFaenas().subscribe({
-    next: (res) => {
-      this.tipoFaenas = res.resultado.map(tipoFaena => ({
-        value: tipoFaena.idFaena,
-        viewValue: tipoFaena.nombreFaena,
-      }))
-    } 
+  getTipoFaena() {
+    this.enpointService.getFaenas().subscribe({
+      next: (res) => {
+        this.tipoFaenas = res.resultado.map((tipoFaena) => ({
+          value: tipoFaena.idFaena,
+          viewValue: tipoFaena.nombreFaena,
+        }));
+      },
+    });
   }
-  )
-}
 
-getTipoCumplimiento() {
-  this.registeApiService.getCumplimiento().subscribe({
-    next: (res) => {
-      this.tipoCumplimientos = res.resultado.map(tipoCumplimiento => ({
-        value: tipoCumplimiento.tipoCumplimiento,
-        viewValue: tipoCumplimiento.nombreCumplimiento,
-      }))
-    } 
+  getTipoCumplimiento() {
+    this.registeApiService.getCumplimiento().subscribe({
+      next: (res) => {
+        this.tipoCumplimientos = res.resultado.map((tipoCumplimiento) => ({
+          value: tipoCumplimiento.tipoCumplimiento,
+          viewValue: tipoCumplimiento.nombreCumplimiento,
+        }));
+      },
+    });
   }
-  )
-}
 
-onSearch() {
-  const filters: any = {}
-  Object.entries(this.formGroupFilter.value).forEach(filter => {
-    if(filter[1] !== null) {
-      filters[filter[0]] = filter[1]
-    }
-  })
-  console.log('filtros: ', filters)
-  this.registeApiService.getRegistro(filters).subscribe({
-    next: (res) => {
-      console.log('respuesta:', res);
-      this.verificacion = res
+  onSearch() {
+    const filters: any = {};
+    Object.entries(this.formGroupFilter.value).forEach((filter) => {
+      if (filter[1] !== null) {
+        filters[filter[0]] = filter[1];
+      }
+    });
+    console.log('filtros: ', filters);
+    this.registeApiService.getRegistro(filters).subscribe({
+      next: (res) => {
+        console.log('respuesta:', res);
+        this.verificacion = res;
+      },
+      error: (err) => {
+        console.log('Error: ', err);
+      },
+    });
+  }
 
-    },
-    error: (err) => {
-      console.log('Error: ', err);
-    }
-  })
-}
-  // createListFaenaWorkes(registro: RegistroDTO) {
-  //   this.registeApiService.createRegistro(registro).subscribe({
-  //     next: (data) => {
-  //      console.log('Data fetched', data)
-  //      this.tipoCumplimientos = this.tipoCumplimientos.map<SelectOption<number>>(
-  //       (tipoCumplimiento) => ({
-  //         value: tipoCumplimiento.
-  //       })
-  //      )
-  //     }
-  //   })
-  // }
+  clean() {
+    this.formGroupFilter.reset(); 
+  }
 }

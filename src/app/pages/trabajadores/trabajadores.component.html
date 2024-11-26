@@ -17,8 +17,14 @@
         <button
         mat-icon-button
         matTooltip="Ver"
+        (click)="openDialogWithTemplate(picture)"
       >
         <mat-icon>remove_red_eye</mat-icon>
       </button>
       </ng-template>
+
+      <ng-template #picture >
+        <h3>Imagen Trabajador</h3>
+      </ng-template>
+      
 </div>

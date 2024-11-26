@@ -32,7 +32,10 @@
           }
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="onSearch()">Buscar</button>
+      <div>
+        <button mat-raised-button color="primary" (click)="onSearch()">Buscar</button>
+        <button mat-raised-button color="primary" (click)="clean()">Limpiar</button>
+      </div>
     </div>
     <app-ui-table [data]="verificacion" [columns]="tableColumns"/>
   </div>
