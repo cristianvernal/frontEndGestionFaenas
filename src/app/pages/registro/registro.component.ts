@@ -9,10 +9,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,6 +46,10 @@ import { WebcamComponent } from '../../components/webcam/webcam.component';
 import { Subject } from 'rxjs';
 import { EnpointsService } from '../../services/enpoints.service';
 import { TransporteEndpointsService } from '../../services/transporte-endpoints.service';
+import { rutValidator } from '../../components/rut/rut-validador';
+
+
+
 
 @Component({
   selector: 'app-registro',
@@ -81,7 +87,6 @@ export class RegistroComponent implements OnInit {
   triggerSource = new Subject<void>();
   webcam = viewChild.required(WebcamComponent)
   scanFail = false
- 
 
   get trigger() {
     return this.triggerSource.asObservable();
@@ -115,7 +120,7 @@ export class RegistroComponent implements OnInit {
     ]),
     rut: new FormControl('', [
       Validators.required,
-      Validators.pattern('^[0-9]+-[0-9kK]{1}$'),
+      Validators.pattern('^[0-9]+-[0-9kK]{1}$'),rutValidator,
     ]),
     fechaNacimiento: new FormControl('', Validators.required),
     direccion: new FormControl('', [
@@ -130,6 +135,8 @@ export class RegistroComponent implements OnInit {
     ]),
     email: new FormControl('', [Validators.required, Validators.email]),
   });
+
+
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 

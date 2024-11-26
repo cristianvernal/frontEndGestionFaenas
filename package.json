@@ -24,6 +24,7 @@
     "@azure/msal-browser": "^3.26.1",
     "front-end3": "file:",
     "ngx-webcam": "^0.4.1",
+    "rut.js": "^2.1.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.5",
     "tslib": "^2.3.0",

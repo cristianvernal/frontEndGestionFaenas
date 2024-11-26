@@ -79,16 +79,27 @@
         <mat-form-field>
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="nombre" />
+          <mat-hint *ngIf="formGroup.get('nombre')?.hasError('required') && formGroup.get('nombre')?.touched">Nombre olbigatorio</mat-hint>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Apellido</mat-label>
           <input matInput formControlName="apellido" />
+          <mat-hint *ngIf="formGroup.get('apellido')?.hasError('required') && formGroup.get('apellido')?.touched">Apellido olbigatorio</mat-hint>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>RUT</mat-label>
-          <input matInput formControlName="rut" />
+          <input matInput formControlName="rut"/>
+          <mat-hint *ngIf="formGroup.get('rut')?.hasError('required') && formGroup.get('rut')?.touched">
+            El RUT es obligatorio.
+          </mat-hint>
+          <mat-hint *ngIf="formGroup.get('rut')?.hasError('pattern') && formGroup.get('rut')?.touched">
+            El formato debe ser 12345678-9.
+          </mat-hint>
+          <mat-hint *ngIf="formGroup.get('rut')?.hasError('invalidRut') && formGroup.get('rut')?.touched">
+            Rut invalido.
+          </mat-hint>
         </mat-form-field>
 
         <mat-form-field>
