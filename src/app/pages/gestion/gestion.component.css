@@ -21,6 +21,10 @@
     margin-bottom: 50px;
   }
 
+  mat-hint {
+    color: red;
+  }
+
   .spinner-container {
     display: flex;
     justify-content: center;

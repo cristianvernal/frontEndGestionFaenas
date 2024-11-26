@@ -41,6 +41,13 @@ mat-divider {
   margin-bottom: 24px;
 }
 
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
 @media (max-width: 768px) {
   .form-container {
     flex-direction: column; /* Cambia la dirección para apilarlos verticalmente */

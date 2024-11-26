@@ -1,41 +1,54 @@
 <div class="container">
-    <div class="header">
-      <h2 class="text-3xl font-bold">Verificación</h2>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="form-container" [formGroup]="formGroupFilter">
-      <mat-form-field>
-        <mat-label>Rut</mat-label>
-        <input matInput formControlName="rut" />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Faenas</mat-label>
-        <mat-select formControlName="faena">
-          @for(tipoFaena of tipoFaenas; track tipoFaena) {
-            <mat-option [value]="tipoFaena.value">{{ tipoFaena.viewValue }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Cargo</mat-label>
-        <mat-select formControlName="cargo">
-          @for(tipoCargo of tipoCargos; track tipoCargo) {
-            <mat-option [value]="tipoCargo.value">{{ tipoCargo.viewValue }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Estado</mat-label>
-        <mat-select formControlName="tipoCumplimiento">
-          @for(tipoCumplimiento of tipoCumplimientos; track tipoCumplimiento) {
-            <mat-option [value]="tipoCumplimiento.value">{{ tipoCumplimiento.viewValue }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <div>
-        <button mat-raised-button color="primary" (click)="onSearch()">Buscar</button>
-        <button mat-raised-button color="primary" (click)="clean()">Limpiar</button>
-      </div>
-    </div>
-    <app-ui-table [data]="verificacion" [columns]="tableColumns"/>
+  <div class="header">
+    <h2 class="text-3xl font-bold">Verificación</h2>
   </div>
+  <mat-divider></mat-divider>
+  <div class="form-container" [formGroup]="formGroupFilter">
+    <mat-form-field>
+      <mat-label>Rut</mat-label>
+      <input matInput formControlName="rut" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Faenas</mat-label>
+      <mat-select formControlName="faena">
+        @for(tipoFaena of tipoFaenas; track tipoFaena) {
+        <mat-option [value]="tipoFaena.value">{{
+          tipoFaena.viewValue
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cargo</mat-label>
+      <mat-select formControlName="cargo">
+        @for(tipoCargo of tipoCargos; track tipoCargo) {
+        <mat-option [value]="tipoCargo.value">{{
+          tipoCargo.viewValue
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="tipoCumplimiento">
+        @for(tipoCumplimiento of tipoCumplimientos; track tipoCumplimiento) {
+        <mat-option [value]="tipoCumplimiento.value">{{
+          tipoCumplimiento.viewValue
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        Buscar
+      </button>
+      <button mat-raised-button color="primary" (click)="clean()">
+        Limpiar
+      </button>
+    </div>
+  </div>
+  <div *ngIf="loading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+  <app-ui-table [data]="verificacion" [columns]="tableColumns" *ngIf="!loading"/>
+</div>

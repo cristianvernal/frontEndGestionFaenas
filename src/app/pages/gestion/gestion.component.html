@@ -53,6 +53,7 @@
         <mat-form-field>
           <mat-label>Nombre Faena</mat-label>
           <input matInput formControlName="nombreFaena" />
+          <mat-hint *ngIf="formGroup.get('nombreFaena')?.hasError('required') && formGroup.get('nombreFaena')?.touched">Nombre olbigatorio</mat-hint>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Fecha de Inicio</mat-label>
@@ -61,7 +62,7 @@
             [matDatepicker]="pickerInicio"
             formControlName="fechaInicio"
           />
-          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-hint *ngIf="formGroup.get('fechaInicio')?.hasError('required') && formGroup.get('fechaInicio')?.touched">Fecha de inicio olbigatoria</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
             [for]="pickerInicio"
@@ -75,7 +76,7 @@
             [matDatepicker]="pickerTermino"
             formControlName="fechaTermino"
           />
-          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-hint *ngIf="formGroup.get('fechaTermino')?.hasError('required') && formGroup.get('fechaTermino')?.touched">Fecha de termino olbigatoria</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
             [for]="pickerTermino"
@@ -85,6 +86,7 @@
         <mat-form-field>
           <mat-label>Encargado</mat-label>
           <input matInput formControlName="encargado" />
+          <mat-hint *ngIf="formGroup.get('encargado')?.hasError('required') && formGroup.get('encargado')?.touched">Encargado olbigatorio</mat-hint>
         </mat-form-field>
       </form>
       <div class="button">

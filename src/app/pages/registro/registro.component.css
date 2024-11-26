@@ -3,6 +3,10 @@
     margin: 0 auto; /* Centra el contenido */
   }
 
+  mat-hint {
+    color: red;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;

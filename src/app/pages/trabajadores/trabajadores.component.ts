@@ -9,7 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Faena } from '../../interfaces/faenas';
 import { AttendanceEndpointService } from '../../services/attendance-endpoint.service';
 import { CrearTrabajadorDTO } from '../../interfaces/crearTrabajadorDTO';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { DialogWithTemplateComponent } from '../../components/dialog-with-template/dialog-with-template.component';
 import { DialogService } from '../../services/dialog.service';
 import {
@@ -35,6 +35,7 @@ import { FooterComponent } from "../../components/footer/footer.component";
     MatProgressSpinnerModule,
     CommonModule,
     MatTooltipModule,
+    MatDialogClose,
 ],
   templateUrl: './trabajadores.component.html',
   styleUrl: './trabajadores.component.css',

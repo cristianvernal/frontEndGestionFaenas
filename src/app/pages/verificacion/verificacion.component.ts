@@ -21,11 +21,14 @@ import { RegisterApiService } from '../../services/register-api.service';
 import { RegistroDTO } from '../../interfaces/registro-dto';
 import { EnpointsService } from '../../services/enpoints.service';
 import { Workers } from '../../interfaces/workers-dto';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-verificacion',
   standalone: true,
   imports: [
+    CommonModule,
     UiTableComponent,
     MatFormFieldModule,
     MatSelectModule,
@@ -35,6 +38,7 @@ import { Workers } from '../../interfaces/workers-dto';
     MatDividerModule,
     MatPaginatorModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './verificacion.component.html',
   styleUrl: './verificacion.component.css',
@@ -47,6 +51,7 @@ export class VerificacionComponent implements OnInit {
   tipoCumplimientos: SelectOption<number>[] = [];
   tipoCargos: SelectOption<number>[] = [];
   tipoFaenas: SelectOption<number>[] = [];
+  loading: boolean = false;
   
 
   formGroupFilter = new FormGroup({
@@ -138,6 +143,7 @@ export class VerificacionComponent implements OnInit {
   }
 
   onSearch() {
+    this.loading = true;
     const filters: any = {};
     Object.entries(this.formGroupFilter.value).forEach((filter) => {
       if (filter[1] !== null) {
@@ -153,6 +159,9 @@ export class VerificacionComponent implements OnInit {
       error: (err) => {
         console.log('Error: ', err);
       },
+      complete: () => {
+        this.loading = false
+      }
     });
   }
 
