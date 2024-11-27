@@ -13,16 +13,9 @@ mat-icon {
     margin: 0 auto;
 }
 
-.footer {
-    max-width: 1600px; /* Asegura que la tabla no se estire demasiado */
-    margin: 0 auto; /* Centra el contenido */
-    display: flex;
-    justify-content: center;
-}
 
 mat-sidenav-container {
     height: calc(100vh - 64px);
-    max-width: auto; /* Asegura que la tabla no se estire demasiado */
 }
 
 

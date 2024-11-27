@@ -22,7 +22,7 @@ export class TransporteEndpointsService {
       )
     }
 
-    getClima(ciudad: string): Observable<any> {
+    getClima(): Observable<any> {
      return this._http.get(`https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=${this.apiKey}`).pipe(
       catchError(error => {
         console.error('Error fetching data: ', error);

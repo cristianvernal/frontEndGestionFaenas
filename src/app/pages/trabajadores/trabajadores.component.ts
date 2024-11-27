@@ -23,6 +23,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FooterComponent } from "../../components/footer/footer.component";
+import { RegisterApiService } from '../../services/register-api.service';
 
 @Component({
   selector: 'app-trabajadores',
@@ -42,6 +43,7 @@ import { FooterComponent } from "../../components/footer/footer.component";
 })
 export class TrabajadoresComponent implements OnInit {
   attendanceService = inject(AttendanceEndpointService);
+  registerService = inject(RegisterApiService);
   faenas: Faena[] = [];
   workerList: CrearTrabajadorDTO[] = [];
   tableWorker: tableColumn<CrearTrabajadorDTO>[] = [];
@@ -132,5 +134,24 @@ export class TrabajadoresComponent implements OnInit {
     this.matDialogRef.afterClosed().subscribe((res) => {
       console.log('Dialog with template close', res);
     });
+  }
+
+  getWorkersPhoto(rut: CrearTrabajadorDTO) {
+    this.registerService.getTrabajadorByPhoto(rut.run).subscribe({
+      next: (data: any) => {
+        console.log('Data fetched: ', data);
+        if(data && data.resultado && Array.isArray(data.resultado)) {
+          this.workerList = data.resultado;
+        }else {
+          console.error('Unexpected data format: ', data);
+          this.workerList = [];
+        }
+        console.log(data)
+      },
+      error: (error) => {
+        console.error('Error fetching workerList:', error);
+        this.workerList = [];
+      }
+    })
   }
 }

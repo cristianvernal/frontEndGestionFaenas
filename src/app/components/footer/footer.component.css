@@ -1,9 +1,11 @@
 .custom-class {
     color: black;
-    margin-top: 10px;
     text-align: right;
     align-items: end;
     font-size: larger;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
