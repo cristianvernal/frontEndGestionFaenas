@@ -57,12 +57,12 @@ export class TrabajadoresComponent implements OnInit {
   attendanceService = inject(AttendanceEndpointService);
   registerService = inject(RegisterApiService);
   faenas: Faena[] = [];
-  workerList: CrearTrabajadorDTO[] = [];
-  tableWorker: tableColumn<CrearTrabajadorDTO>[] = [];
+  workerList: Workers[] = [];
+  tableWorker: tableColumn<Workers>[] = [];
   colActions = viewChild.required('colActions', { read: TemplateRef });
   loading: boolean = false;
   tipoCargos: SelectOption<number>[] = [];
-  verificacion: Workers[] = [];
+  
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 
@@ -80,8 +80,8 @@ export class TrabajadoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.setTableDialog();
-    this.onShowWorker();
     this.getTipoCargos();
+    this.onSearch();
   }
 
   setTableDialog() {
@@ -102,29 +102,14 @@ export class TrabajadoresComponent implements OnInit {
         content: (row) => row.run,
       },
       {
-        label: 'Fecha de Nacimiento',
-        def: 'fechaNacimiento',
-        content: (row) => new Date(row.fechaNacimiento).toLocaleDateString('es-CL'),
-      },
-      {
-        label: 'Fecha de Contratación',
-        def: 'fechaContratacion',
-        content: (row) => new Date(row.fechaContratacion).toLocaleDateString('es-CL'),
-      },
-      {
         label: 'Correo',
         def: 'Correo',
         content: (row) => row.email,
       },
       {
-        label: 'Telefono',
-        def: 'telefono',
-        content: (row) => row.telefono,
-      },
-      {
         label: 'Cargo',
         def: 'cargo',
-        content: (row) => row.cargos.nombre,
+        content: (row) => row.nombreCargo
       },
       {
         label: 'Acciones',
@@ -134,16 +119,7 @@ export class TrabajadoresComponent implements OnInit {
     ];
   }
 
-  onShowWorker() {
-    const idFaena = this.activedRoute.snapshot.paramMap.get('idFaena');
-    console.log('faena:', idFaena)
-    this.attendanceService.getWorkerByFaenaId(Number(idFaena)).subscribe({
-      next: (res) => {
-        console.log('res: ', res);
-        this.workerList = res;
-      },
-    });
-  }
+
 
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
@@ -166,6 +142,7 @@ export class TrabajadoresComponent implements OnInit {
   }
 
   onSearch() {
+    const idFaena = this.activedRoute.snapshot.paramMap.get('idFaena')
     this.loading = true;
     const filters: any = {};
     Object.entries(this.formGroupFilter.value).forEach((filter) => {
@@ -174,10 +151,11 @@ export class TrabajadoresComponent implements OnInit {
       }
     });
     console.log('filtros: ', filters);
+    filters['faena'] = idFaena
     this.registerService.getRegistroAprobados(filters).subscribe({
       next: (res) => {
         console.log('respuesta:', res);
-        this.verificacion = res;
+        this.workerList = res;
       },
       error: (err) => {
         console.log('Error: ', err);
@@ -189,7 +167,8 @@ export class TrabajadoresComponent implements OnInit {
   }
 
   clean() {
-    this.formGroupFilter.reset(); 
+    this.formGroupFilter.reset();
+    this.onSearch(); 
   }
 
   getWorkersPhoto(rut: CrearTrabajadorDTO) {

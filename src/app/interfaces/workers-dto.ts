@@ -6,4 +6,5 @@ export interface Workers {
     nombreCargo: string;
     nombreCumplimiento: string;
     nombreFaena: string;
+    idFaena?: number;
   }

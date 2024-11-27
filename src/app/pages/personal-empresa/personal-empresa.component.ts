@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-personal-empresa',
@@ -125,5 +126,32 @@ export class PersonalEmpresaComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  onDeleteTrabajador(trabajador: CrearTrabajadorDTO) {
+    Swal.fire({
+      title: '¿Está seguro de eliminar la faena?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if(result.isConfirmed) {
+        this.registerService.deleteTrabajadores(trabajador).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Faena eliminada',
+              text: 'La faena ha sido eliminada correctamente.',
+              confirmButtonText: 'OK',
+            });
+            this.trabajadores = this.trabajadores.filter((currentTrabajador) => currentTrabajador.idTrabajador !== trabajador.idTrabajador);
+          }
+        })
+      }
+    })
   }
 }

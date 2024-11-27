@@ -16,11 +16,11 @@ export class EnpointsService {
 
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = "https://faenas.sistemagf.cl/faena"
+  readonly API_URL = "http://3.90.157.39:8080"
   
 
   getFaenas(): Observable<BaseResponse<Faena[]>> {
-    return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/${'traer'}`).pipe(
+    return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/faena/${'traer'}`).pipe(
       catchError(error => {
         console.error('Error fetching data:', error);
         return throwError(() => new Error('Error fetching data'));
@@ -29,7 +29,7 @@ export class EnpointsService {
   }
 
   getTipoFaena(): Observable<BaseResponse<TipoFaena[]>> {
-      return this._http.get<BaseResponse<TipoFaena[]>>("https://faenas.sistemagf.cl/tipofaena/traer").pipe(
+      return this._http.get<BaseResponse<TipoFaena[]>>(`${this.API_URL}/tipofaena/traer`).pipe(
         catchError(error => {
           console.error('Error fetching data:', error);
           return throwError(() => 'Error fetching data')
@@ -38,7 +38,7 @@ export class EnpointsService {
   }
 
   createFaena(faena: FaenaDto): Observable<string> {
-    return this._http.post<string>(`${this.API_URL}/crear`, faena).pipe(
+    return this._http.post<string>(`${this.API_URL}/faena/crear`, faena).pipe(
       catchError(error => {
         console.error('Error creating faena:', error);
         return throwError(() => new Error('Error creating faena'));
@@ -47,7 +47,7 @@ export class EnpointsService {
   }
   
   updateFaena(faena: EditFaenaDto): Observable<Faena> {
-    return this._http.put<Faena>(`${this.API_URL}/editar`, faena).pipe(
+    return this._http.put<Faena>(`${this.API_URL}/faena/editar`, faena).pipe(
       catchError(error => {
         console.error('Error updating faena:', error);
         return throwError(() => new Error('Error updating faena'));
@@ -56,7 +56,7 @@ export class EnpointsService {
   }
 
   deleteFaena(faena: Faena): Observable<BaseResponse<any>> {
-    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/borrar/${faena.idFaena}`).pipe(
+    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/faena/borrar/${faena.idFaena}`).pipe(
       catchError(error => {
         console.error('Error deleting faena:', error);
         return throwError(() => new Error('Error deleting faena'));

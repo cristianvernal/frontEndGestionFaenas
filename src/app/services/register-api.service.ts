@@ -25,7 +25,8 @@ import { Workers } from '../interfaces/workers-dto';
 export class RegisterApiService {
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = 'https://3.90.157.39:8081/trabajadores';
+  readonly API_URL = 'http://3.90.157.39:8081';
+  readonly API_URL_REGISTER = 'https://3.90.157.39:8083';
 
   createTrabajador(
     trabajador: CrearTrabajadorDTO,
@@ -33,7 +34,7 @@ export class RegisterApiService {
   ): Observable<any> {
     const request = {
       worker: this._http
-        .post<BaseResponse<any>>(`${this.API_URL}/${'crear'}`, trabajador)
+        .post<BaseResponse<any>>(`${this.API_URL}/trabajadores/crear`, trabajador)
         .pipe(
           catchError((error) => {
             console.error('Error creating faena:', error);
@@ -48,7 +49,7 @@ export class RegisterApiService {
 
   getTipoCargo(): Observable<BaseResponse<Cargo[]>> {
     return this._http
-      .get<BaseResponse<Cargo[]>>('https://3.90.157.39:8081/cargos/traer')
+      .get<BaseResponse<Cargo[]>>(`${this.API_URL}/cargos/traer`)
       .pipe(
         catchError((error) => {
           console.error('Error fetching data:', error);
@@ -108,7 +109,7 @@ export class RegisterApiService {
   getRegistro(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        'https://3.90.157.39:8081/api/registros/registro/traer',
+        'http://3.90.157.39:8081/api/registros/registro/traer',
         registro
       )
       .pipe(
@@ -122,7 +123,7 @@ export class RegisterApiService {
   getRegistroAprobados(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        `https://3.90.157.39:8081/api/registros/registro/traerAprobados/${registro.faena}`,
+        `http://3.90.157.39:8081/api/registros/registro/traerAprobados/{idFaena}?idFaena=${registro.faena}`,
         registro
       )
       .pipe(
@@ -192,12 +193,21 @@ export class RegisterApiService {
       );
   }
 
+  deleteTrabajadores(trabajador: CrearTrabajadorDTO): Observable<BaseResponse<any>> {
+    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/borrar/${trabajador.idTrabajador}`).pipe(
+      catchError(error => {
+        console.error('Error deleting Trabajador: ', error)
+        return throwError(() => new Error('Error deleting trabajador'))
+      })
+    )
+  }
+
   getTrabajadorByPhoto(
     rut: string
   ): Observable<BaseResponse<CrearTrabajadorDTO>> {
     return this._http
       .get<BaseResponse<CrearTrabajadorDTO>>(
-        `https://3.90.157.39:8083/images/${rut}.jpg`
+        `http://3.90.157.39:8083/images/${rut}.jpg`
       )
       .pipe(
         catchError((error) => {
