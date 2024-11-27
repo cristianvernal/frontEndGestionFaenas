@@ -12,3 +12,10 @@
   mat-divider {
     margin-bottom: 50px;
   }
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }
