@@ -25,7 +25,7 @@ import { Workers } from '../interfaces/workers-dto';
 export class RegisterApiService {
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = 'http://3.90.157.39:8081/trabajadores';
+  readonly API_URL = 'https://3.90.157.39:8081/trabajadores';
 
   createTrabajador(
     trabajador: CrearTrabajadorDTO,
@@ -48,7 +48,7 @@ export class RegisterApiService {
 
   getTipoCargo(): Observable<BaseResponse<Cargo[]>> {
     return this._http
-      .get<BaseResponse<Cargo[]>>('http://3.90.157.39:8081/cargos/traer')
+      .get<BaseResponse<Cargo[]>>('https://3.90.157.39:8081/cargos/traer')
       .pipe(
         catchError((error) => {
           console.error('Error fetching data:', error);
@@ -60,7 +60,7 @@ export class RegisterApiService {
   getTipoRegistro(): Observable<BaseResponse<TipoRegistro[]>> {
     return this._http
       .get<BaseResponse<TipoRegistro[]>>(
-        'http://3.90.157.39:8083/tiporegistro/traer'
+        'https://3.90.157.39:8083/tiporegistro/traer'
       )
       .pipe(
         catchError((error) => {
@@ -72,7 +72,7 @@ export class RegisterApiService {
 
   createAsistencia(registro: RegistroAsistencia) {
     return this._http
-      .post('http://3.90.157.39:8083/registroasistencia/crear', registro)
+      .post('https://3.90.157.39:8083/registroasistencia/crear', registro)
       .pipe(
         catchError((error) => {
           console.error('Error fetching data:', error);
@@ -83,7 +83,7 @@ export class RegisterApiService {
 
   createCumplimiento(cumplimento: CumplimientoDTO) {
     return this._http
-      .post('http://3.90.157.39:8081/registro/crear', cumplimento)
+      .post('https://3.90.157.39:8081/registro/crear', cumplimento)
       .pipe(
         catchError((error) => {
           console.error('Error fetching data: ', error);
@@ -95,7 +95,7 @@ export class RegisterApiService {
   getCumplimiento(): Observable<BaseResponse<TipoCumplimiento[]>> {
     return this._http
       .get<BaseResponse<TipoCumplimiento[]>>(
-        'http://3.90.157.39:8081/tipocumplimiento/traer'
+        'https://3.90.157.39:8081/tipocumplimiento/traer'
       )
       .pipe(
         catchError((error) => {
@@ -108,7 +108,21 @@ export class RegisterApiService {
   getRegistro(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        'http://3.90.157.39:8081/api/registros/registro/traer',
+        'https://3.90.157.39:8081/api/registros/registro/traer',
+        registro
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching data: ', error);
+          return throwError(() => 'Error fetching data');
+        })
+      );
+  }
+
+  getRegistroAprobados(registro: RegistroDTO) {
+    return this._http
+      .post<Workers[]>(
+        `https://3.90.157.39:8081/api/registros/registro/traerAprobados/${registro.faena}`,
         registro
       )
       .pipe(
@@ -123,7 +137,7 @@ export class RegisterApiService {
     const formData = new FormData();
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
-      .post('http://3.90.157.39:8083/api/rekognition/identify', formData, {
+      .post('https://3.90.157.39:8083/api/rekognition/identify', formData, {
         observe: 'response',
         responseType: 'text',
       })
@@ -183,7 +197,7 @@ export class RegisterApiService {
   ): Observable<BaseResponse<CrearTrabajadorDTO>> {
     return this._http
       .get<BaseResponse<CrearTrabajadorDTO>>(
-        `http://3.90.157.39:8083/images/${rut}.jpg`
+        `https://3.90.157.39:8083/images/${rut}.jpg`
       )
       .pipe(
         catchError((error) => {
@@ -198,7 +212,7 @@ export class RegisterApiService {
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
       .post(
-        `http://3.90.157.39:8083/api/rekognition/register?workerId=${workerId}`,
+        `https://3.90.157.39:8083/api/rekognition/register?workerId=${workerId}`,
         formData,
         { observe: 'response', responseType: 'text' }
       )
@@ -221,7 +235,7 @@ export class RegisterApiService {
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
       .post(
-        `http://3.90.157.39:8083/api/rekognition/register-local?workerId=${workerId}`,
+        `https://3.90.157.39:8083/api/rekognition/register-local?workerId=${workerId}`,
         formData,
         { observe: 'response', responseType: 'text' }
       )

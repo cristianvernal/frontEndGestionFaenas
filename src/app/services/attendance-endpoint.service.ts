@@ -12,12 +12,12 @@ export class AttendanceEndpointService {
 
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = 'http://3.90.157.39:8081/trabajadores';
+  readonly API_URL = 'https://3.90.157.39:8081/trabajadores';
 
   getWorkerByFaenaId(idFaena: number): Observable<CrearTrabajadorDTO[]> {
     return this._http
       .get<BaseResponse<RegistroAsistencia[]>>(
-        `http://3.90.157.39:8083/registroasistencia/traerPorFaena/{idFaena}?idFaena=${idFaena}`
+        `https://3.90.157.39:8083/registroasistencia/traerPorFaena/{idFaena}?idFaena=${idFaena}`
       )
       .pipe(
         switchMap((res) => {

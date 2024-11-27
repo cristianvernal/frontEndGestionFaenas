@@ -10,7 +10,7 @@ import { MenuItemComponent } from '../menu-item/menu-item.component';
 export type MenuItem = {
   icon: string;
   label: string;
-  route?: string;
+  route: string;
   subItems?: MenuItem[];
 };
 
@@ -62,11 +62,16 @@ export class CustomSidenavComponent {
       label: 'Salida Faena',
       route: 'salida',
     },
-    // {
-    //   icon: 'assignment',
-    //   label: 'Reportes',
-    //   route: 'reportes',
-    // },
+    {
+      icon: 'assignment',
+      label: 'Reportes',
+      route: 'reportes',
+    },
+    {
+      icon: 'person_pin',
+      label: 'Trabajadores',
+      route: 'personal',
+    },
   ]);
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '30' : '100'));

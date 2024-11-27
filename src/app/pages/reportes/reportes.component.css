@@ -4,7 +4,27 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  }
+
+  .form-container {
     display: flex;
-    justify-content: space-between;
-    padding-top: 16px; /* Espaciado alrededor del encabezado */
+    align-items: end;
+    gap: 40px; /* Controla el espacio entre los elementos */
+    justify-content: center;
+  }
+  mat-form-field {
+    max-width: 200px; /* Ajusta el ancho según tus necesidades */
+  }
+
+  button {
+    margin-left: 16px; /* Espaciado adicional opcional */
+    margin-bottom: 25px;
+  }
+
+  mat-divider {
+    margin-bottom: 24px;
   }

@@ -19,3 +19,16 @@
   mat-divider {
     margin-bottom: 50px;
   }
+
+  .form-container {
+    display: flex;
+    align-items: end;
+    gap: 40px; /* Controla el espacio entre los elementos */
+    justify-content: center;
+  }
+
+  button {
+    margin-left: 16px; /* Espaciado adicional opcional */
+    margin-bottom: 25px;
+  }
+  
