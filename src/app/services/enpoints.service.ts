@@ -17,6 +17,7 @@ export class EnpointsService {
   private readonly _http = inject(HttpClient);
 
   readonly API_URL = "https://faenas.sistemagf.cl/faena"
+  
 
   getFaenas(): Observable<BaseResponse<Faena[]>> {
     return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/${'traer'}`).pipe(
