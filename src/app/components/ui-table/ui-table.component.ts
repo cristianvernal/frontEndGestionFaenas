@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   Component,
   computed,
+  EventEmitter,
   input,
   OnChanges,
+  Output,
   SimpleChanges,
   TemplateRef,
   viewChild,
@@ -63,14 +65,22 @@ export class UiTableComponent<T> implements OnChanges, AfterViewInit {
     return numSelected === numRows;
   }
 
+  @Output() select: EventEmitter<any> = new EventEmitter()
+
+  onSelect() {
+    this.select.emit(this.selection.selected)
+  }
+
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
+      this.onSelect();
       return;
     }
 
     this.selection.select(...this.dataSource.data);
+    this.onSelect()
   }
 
   /** The label for the checkbox on the passed row */

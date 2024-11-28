@@ -176,4 +176,8 @@ export class VerificacionComponent implements OnInit {
   clean() {
     this.formGroupFilter.reset(); 
   }
+
+  onSelect(data: any) {
+    console.log(data)
+  }
 }

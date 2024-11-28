@@ -54,6 +54,7 @@
     [data]="verificacion"
     [columns]="tableColumns"
     *ngIf="!loading"
+    (select)="onSelect($event)"
   />
   <ng-template #colActions let-correo>
     <button
