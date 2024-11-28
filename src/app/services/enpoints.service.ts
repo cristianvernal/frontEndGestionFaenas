@@ -16,11 +16,11 @@ export class EnpointsService {
 
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = "http://3.90.157.39:8080"
+  readonly API_URL = "https://faenas.sistemagf.cl"
   
 
   getFaenas(): Observable<BaseResponse<Faena[]>> {
-    return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/faena/${'traer'}`).pipe(
+    return this._http.get<BaseResponse<Faena[]>>(`${this.API_URL}/faena/traer`).pipe(
       catchError(error => {
         console.error('Error fetching data:', error);
         return throwError(() => new Error('Error fetching data'));

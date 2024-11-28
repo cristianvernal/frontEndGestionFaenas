@@ -11,6 +11,8 @@ import { TrabajadoresComponent } from './pages/trabajadores/trabajadores.compone
 import { IngresoComponent } from './pages/ingreso/ingreso.component';
 import { SalidaComponent } from './pages/salida/salida.component';
 import { PersonalEmpresaComponent } from './pages/personal-empresa/personal-empresa.component';
+import { SucessComponent } from './components/email/sucess/sucess.component';
+import { FailComponent } from './components/email/fail/fail.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +23,14 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'aceptado',
+    component: SucessComponent,
+  },
+  {
+    path: 'rechazado',
+    component: FailComponent,
   },
   {
     path: '',

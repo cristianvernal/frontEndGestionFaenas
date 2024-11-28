@@ -64,7 +64,7 @@ export class CustomSidenavComponent {
     },
     {
       icon: 'assignment',
-      label: 'Reportes',
+      label: 'Asistencia',
       route: 'reportes',
     },
     {
