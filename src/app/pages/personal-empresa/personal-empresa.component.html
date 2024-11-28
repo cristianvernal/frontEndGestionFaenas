@@ -3,6 +3,20 @@
     <h2>Trabajadores</h2>
   </div>
   <mat-divider></mat-divider>
+  <div class="form-container" [formGroup]="formGroupFilter">
+    <mat-form-field>
+      <mat-label>Rut</mat-label>
+      <input matInput formControlName="rut" />
+    </mat-form-field>
+    <div>
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        Buscar
+      </button>
+      <button mat-raised-button color="primary" (click)="clean()">
+        Limpiar
+      </button>
+    </div>
+  </div>
   <div *ngIf="loading" class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>

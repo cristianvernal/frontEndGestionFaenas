@@ -20,6 +20,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Workers } from '../../interfaces/workers-dto';
 
 @Component({
   selector: 'app-personal-empresa',
@@ -33,7 +36,8 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatButtonModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule
   ],
   templateUrl: './personal-empresa.component.html',
   styleUrl: './personal-empresa.component.css',
@@ -44,6 +48,13 @@ export class PersonalEmpresaComponent implements OnInit {
   colActions = viewChild.required('colActions', { read: TemplateRef });
   registerService = inject(RegisterApiService);
   loading: boolean = false;
+  workerList: Workers[] = [];
+
+  formGroupFilter = new FormGroup({
+    rut: new FormControl(),
+  });
+
+  constructor(private readonly activedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -162,5 +173,34 @@ export class PersonalEmpresaComponent implements OnInit {
         })
       }
     })
+  }
+
+  onSearch() {
+    
+    this.loading = true;
+    const filters: any = {};
+    Object.entries(this.formGroupFilter.value).forEach((filter) => {
+      if (filter[1] !== null) {
+        filters[filter[0]] = filter[1];
+      }
+    });
+    console.log('filtros: ', filters);
+    
+    this.registerService.getTrabajadorRut(filters).subscribe({
+      next: (res) => {
+        console.log('respuesta:', res);
+        // this.trabajadores = res;
+      },
+      error: (err) => {
+        console.log('Error: ', err);
+      },
+      complete: () => {
+        this.loading = false
+      }
+    });
+  }
+
+  clean() {
+    this.formGroupFilter.reset();
   }
 }

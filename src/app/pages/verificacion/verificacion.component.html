@@ -50,5 +50,20 @@
   <div *ngIf="loading" class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
-  <app-ui-table [data]="verificacion" [columns]="tableColumns" *ngIf="!loading"/>
+  <app-ui-table
+    [data]="verificacion"
+    [columns]="tableColumns"
+    *ngIf="!loading"
+  />
+  <ng-template #colActions let-correo>
+    <button
+      mat-icon-button
+      matTooltip="Correo"
+      class="boton"
+    >
+      <mat-icon>email</mat-icon>
+    </button>
+
+
+  </ng-template>
 </div>

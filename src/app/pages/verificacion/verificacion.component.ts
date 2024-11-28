@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, viewChild } from '@angular/core';
 import {
   tableColumn,
   UiTableComponent,
@@ -23,6 +23,7 @@ import { EnpointsService } from '../../services/enpoints.service';
 import { Workers } from '../../interfaces/workers-dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-verificacion',
@@ -39,6 +40,7 @@ import { CommonModule } from '@angular/common';
     MatPaginatorModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
+    MatIconModule
   ],
   templateUrl: './verificacion.component.html',
   styleUrl: './verificacion.component.css',
@@ -52,6 +54,7 @@ export class VerificacionComponent implements OnInit {
   tipoCargos: SelectOption<number>[] = [];
   tipoFaenas: SelectOption<number>[] = [];
   loading: boolean = false;
+  colActions = viewChild.required('colActions', { read: TemplateRef });
   
 
   formGroupFilter = new FormGroup({
@@ -105,6 +108,11 @@ export class VerificacionComponent implements OnInit {
         label: 'Estado',
         def: 'nombreCumplimiento',
         content: (row) => row.nombreCumplimiento,
+      },
+      {
+        label: 'Acciones',
+        def: 'acciones',
+        template: this.colActions(),
       },
     ];
   }
