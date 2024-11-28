@@ -14,7 +14,7 @@ export class TransporteEndpointsService {
   readonly apiKey = "11be8d1c0d1bbcb93c9e68f87bbce43b"
 
     getTipoTransporte(): Observable<BaseResponse<Transporte[]>> {
-      return this._http.get<BaseResponse<Transporte[]>>('https://3.90.157.39:8082/tipotransporte/traer').pipe(
+      return this._http.get<BaseResponse<Transporte[]>>('https://traslado.sistemagf.cl/tipotransporte/traer').pipe(
         catchError(error => {
           console.error('Error fetching data:', error);
           return throwError(() => 'Error fetching data')

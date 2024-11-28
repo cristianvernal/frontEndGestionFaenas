@@ -25,7 +25,7 @@ import { Workers } from '../interfaces/workers-dto';
 export class RegisterApiService {
   private readonly _http = inject(HttpClient);
 
-  readonly API_URL = 'http://3.90.157.39:8081';
+  readonly API_URL = 'https://trabajadores.sistemagf.cl';
   readonly API_URL_REGISTER = 'https://3.90.157.39:8083';
 
   createTrabajador(
@@ -61,7 +61,7 @@ export class RegisterApiService {
   getTipoRegistro(): Observable<BaseResponse<TipoRegistro[]>> {
     return this._http
       .get<BaseResponse<TipoRegistro[]>>(
-        'https://3.90.157.39:8083/tiporegistro/traer'
+        'https://asistencia.sistemagf.cl/tiporegistro/traer'
       )
       .pipe(
         catchError((error) => {
@@ -73,7 +73,7 @@ export class RegisterApiService {
 
   createAsistencia(registro: RegistroAsistencia) {
     return this._http
-      .post('https://3.90.157.39:8083/registroasistencia/crear', registro)
+      .post('https://asistencia.sistemagf.cl/registroasistencia/crear', registro)
       .pipe(
         catchError((error) => {
           console.error('Error fetching data:', error);
@@ -84,7 +84,7 @@ export class RegisterApiService {
 
   createCumplimiento(cumplimento: CumplimientoDTO) {
     return this._http
-      .post('https://3.90.157.39:8081/registro/crear', cumplimento)
+      .post('https://trabajadores.sistemagf.cl/registro/crear', cumplimento)
       .pipe(
         catchError((error) => {
           console.error('Error fetching data: ', error);
@@ -96,7 +96,7 @@ export class RegisterApiService {
   getCumplimiento(): Observable<BaseResponse<TipoCumplimiento[]>> {
     return this._http
       .get<BaseResponse<TipoCumplimiento[]>>(
-        'https://3.90.157.39:8081/tipocumplimiento/traer'
+        'https://trabajadores.sistemagf.cl/tipocumplimiento/traer'
       )
       .pipe(
         catchError((error) => {
@@ -109,7 +109,7 @@ export class RegisterApiService {
   getRegistro(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        'http://3.90.157.39:8081/api/registros/registro/traer',
+        'https://trabajadores.sistemagf.cl/api/registros/registro/traer',
         registro
       )
       .pipe(
@@ -123,7 +123,7 @@ export class RegisterApiService {
   getRegistroAprobados(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        `http://3.90.157.39:8081/api/registros/registro/traerAprobados/{idFaena}?idFaena=${registro.faena}`,
+        `https://trabajadores.sistemagf.cl/api/registros/registro/traerAprobados/{idFaena}?idFaena=${registro.faena}`,
         registro
       )
       .pipe(
@@ -138,7 +138,7 @@ export class RegisterApiService {
     const formData = new FormData();
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
-      .post('https://3.90.157.39:8083/api/rekognition/identify', formData, {
+      .post('https://asistencia.sistemagf.cl/api/rekognition/identify', formData, {
         observe: 'response',
         responseType: 'text',
       })
@@ -172,7 +172,7 @@ export class RegisterApiService {
   getTrabajadorRut(rut: string): Observable<BaseResponse<CrearTrabajadorDTO>> {
     return this._http
       .get<BaseResponse<CrearTrabajadorDTO>>(
-        `${this.API_URL}/traer/run/{run}?run=${rut}`
+        `${this.API_URL}/trabajadores/traer/run/{run}?run=${rut}`
       )
       .pipe(
         catchError((error) => {
@@ -184,7 +184,7 @@ export class RegisterApiService {
 
   getTrabajadores(): Observable<BaseResponse<CrearTrabajadorDTO>> {
     return this._http
-      .get<BaseResponse<CrearTrabajadorDTO>>(`${this.API_URL}/traer`)
+      .get<BaseResponse<CrearTrabajadorDTO>>(`${this.API_URL}/trabajadores/traer`)
       .pipe(
         catchError((error) => {
           console.error('Error Fetching data: ', error);
@@ -207,7 +207,7 @@ export class RegisterApiService {
   ): Observable<BaseResponse<CrearTrabajadorDTO>> {
     return this._http
       .get<BaseResponse<CrearTrabajadorDTO>>(
-        `http://3.90.157.39:8083/images/${rut}.jpg`
+        `https://asistencia.sistemagf.cl/images/${rut}.jpg`
       )
       .pipe(
         catchError((error) => {
@@ -222,7 +222,7 @@ export class RegisterApiService {
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
       .post(
-        `https://3.90.157.39:8083/api/rekognition/register?workerId=${workerId}`,
+        `https://asistencia.sistemagf.cl/api/rekognition/register?workerId=${workerId}`,
         formData,
         { observe: 'response', responseType: 'text' }
       )
@@ -245,7 +245,7 @@ export class RegisterApiService {
     formData.append('file', this.convertImageBase64ToBlob(pictureImg));
     return this._http
       .post(
-        `https://3.90.157.39:8083/api/rekognition/register-local?workerId=${workerId}`,
+        `https://asistencia.sistemagf.cl/api/rekognition/register-local?workerId=${workerId}`,
         formData,
         { observe: 'response', responseType: 'text' }
       )

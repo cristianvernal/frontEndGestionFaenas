@@ -359,8 +359,8 @@ export class GestionComponent implements OnInit {
                 // Mostrar mensaje de éxito una vez que el foreach termina
                 Swal.fire({
                   icon: 'success',
-                  title: 'Faena y cumplimientos registrados',
-                  text: 'La faena y los cumplimientos se guardaron correctamente.',
+                  title: 'Faena Registrada',
+                  text: 'La faena se guardo correctamente.',
                   confirmButtonText: 'OK',
                 });
 
