@@ -194,7 +194,7 @@ export class RegisterApiService {
   }
 
   deleteTrabajadores(trabajador: CrearTrabajadorDTO): Observable<BaseResponse<any>> {
-    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/borrar/${trabajador.idTrabajador}`).pipe(
+    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/trabajadores/borrar/${trabajador.idTrabajador}`).pipe(
       catchError(error => {
         console.error('Error deleting Trabajador: ', error)
         return throwError(() => new Error('Error deleting trabajador'))

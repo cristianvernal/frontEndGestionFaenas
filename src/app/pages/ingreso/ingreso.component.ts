@@ -1,5 +1,10 @@
 import { Component, inject, OnInit, viewChild } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,16 +18,24 @@ import { TipoRegistro } from '../../interfaces/tipoRegistro';
 import { Faena } from '../../interfaces/faenas';
 import Swal from 'sweetalert2';
 import { RegistroAsistencia } from '../../interfaces/registro-asistencia';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ingreso',
   standalone: true,
-  imports: [MatDividerModule, FormsModule, MatSelectModule, MatButtonModule,WebcamComponent, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatDividerModule,
+    FormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    WebcamComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './ingreso.component.html',
-  styleUrl: './ingreso.component.css'
+  styleUrl: './ingreso.component.css',
 })
-export class IngresoComponent implements OnInit{
+export class IngresoComponent implements OnInit {
   faenaService = inject(EnpointsService);
   registeApiService = inject(RegisterApiService);
   scanFail = false;
@@ -31,8 +44,12 @@ export class IngresoComponent implements OnInit{
   triggerSource = new Subject<void>();
   tipoRegistroList: SelectOption<TipoRegistro>[] = [];
   faenas: SelectOption<Faena>[] = [];
-  tipoRegistro = new FormControl<TipoRegistro | null>(null, Validators.required)
-  tipoFaena = new FormControl<Faena | null>(null, Validators.required)
+  tipoRegistro = new FormControl<TipoRegistro | null>(
+    null,
+    Validators.required
+  );
+  tipoFaena = new FormControl<Faena | null>(null, Validators.required);
+  selectedOption: string = '';
 
   ngOnInit(): void {
     this.getNombreFaena();
@@ -48,42 +65,42 @@ export class IngresoComponent implements OnInit{
   }
 
   ingresarFaena() {
-    if(this.trabajador == undefined) {
-      return
-    } 
-    if(this.tipoRegistro.invalid){
-      return
+    if (this.trabajador == undefined) {
+      return;
     }
-    if(this.tipoFaena.invalid) {
-      return
+    if (this.tipoRegistro.invalid) {
+      return;
+    }
+    if (this.tipoFaena.invalid) {
+      return;
     }
     const registroAsistencia: RegistroAsistencia = {
       runTrabajador: this.trabajador?.run as string,
       fechaHora: new Date(),
       tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
-      idFaena: this.tipoFaena.value?.idFaena as number
-    }
-    console.log('Registro asistencia: ', registroAsistencia)
+      idFaena: this.tipoFaena.value?.idFaena as number,
+    };
+    console.log('Registro asistencia: ', registroAsistencia);
     this.registeApiService.createAsistencia(registroAsistencia).subscribe({
       next: (data: any) => {
         if (data) {
           Swal.fire({
             icon: 'success',
             text: 'Trabajador Ingresado',
-            confirmButtonText: 'OK'
-          })
+            confirmButtonText: 'OK',
+          });
         }
       },
       error: (error) => {
         Swal.fire({
           icon: 'error',
           text: 'Trabajador no Ingresado',
-          confirmButtonText: 'Ok'
-        })
-      }
-    })
-    this.webcam().onCleanImage()
-    this.trabajador = undefined
+          confirmButtonText: 'Ok',
+        });
+      },
+    });
+    this.webcam().onCleanImage();
+    this.trabajador = undefined;
     // this.tipoRegistro.setValue(null)
     // this.tipoFaena.setValue(null)
   }
@@ -124,13 +141,13 @@ export class IngresoComponent implements OnInit{
             text: 'Trabajador no registrado',
             confirmButtonText: 'OK',
           });
-          this.webcam().onCleanImage()
-        }else {
+          this.webcam().onCleanImage();
+        } else {
           Swal.fire({
             icon: 'success',
             text: 'Trabajador Identificado',
-            confirmButtonText: 'OK'
-          })
+            confirmButtonText: 'OK',
+          });
         }
       },
       error: (err) => {
@@ -150,12 +167,12 @@ export class IngresoComponent implements OnInit{
       next: (data) => {
         console.log('Data fetched', data);
         if (data && data.resultado && Array.isArray(data.resultado)) {
-          this.tipoRegistroList = data.resultado.map<SelectOption<TipoRegistro>>(
-            (tipoRegistro) => ({
-              value: tipoRegistro,
-              viewValue: tipoRegistro.tipoRegistro,
-            })
-          );
+          this.tipoRegistroList = data.resultado.map<
+            SelectOption<TipoRegistro>
+          >((tipoRegistro) => ({
+            value: tipoRegistro,
+            viewValue: tipoRegistro.tipoRegistro,
+          }));
         } else {
           console.error('unexpected data format:', data);
           this.tipoRegistroList = [];
@@ -167,5 +184,4 @@ export class IngresoComponent implements OnInit{
       },
     });
   }
-
 }

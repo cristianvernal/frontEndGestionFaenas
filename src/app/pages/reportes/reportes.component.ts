@@ -15,6 +15,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EnpointsService } from '../../services/enpoints.service';
 
 @Component({
   selector: 'app-reportes',
@@ -35,9 +36,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class ReportesComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
+  enpointService = inject(EnpointsService)
   tipoCargos: SelectOption<number>[] = [];
   tableColumns: tableColumn<Workers>[] = [];
   verificacion: Workers[] = [];
+  tipoFaenas: SelectOption<number>[] = [];
 
   formGroupFilter = new FormGroup({
     tipoCumplimiento: new FormControl(),
@@ -49,6 +52,7 @@ export class ReportesComponent implements OnInit {
   ngOnInit(): void {
     this.setTableColumns();
     this.getTipoCargos();
+    this.getTipoFaena();
   }
 
   setTableColumns() {
@@ -92,6 +96,17 @@ export class ReportesComponent implements OnInit {
         this.tipoCargos = res.resultado.map((tipoCargo) => ({
           value: tipoCargo.id,
           viewValue: tipoCargo.nombre,
+        }));
+      },
+    });
+  }
+
+  getTipoFaena() {
+    this.enpointService.getFaenas().subscribe({
+      next: (res) => {
+        this.tipoFaenas = res.resultado.map((tipoFaena) => ({
+          value: tipoFaena.idFaena,
+          viewValue: tipoFaena.nombreFaena,
         }));
       },
     });

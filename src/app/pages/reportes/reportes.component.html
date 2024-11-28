@@ -9,11 +9,11 @@
       <input matInput formControlName="rut" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Cargo</mat-label>
+      <mat-label>Faena</mat-label>
       <mat-select formControlName="cargo">
-        @for(tipoCargo of tipoCargos; track tipoCargo) {
-        <mat-option [value]="tipoCargo.value">{{
-          tipoCargo.viewValue
+        @for(tipofaena of tipoFaenas; track tipofaena) {
+        <mat-option [value]="tipofaena.value">{{
+          tipofaena.viewValue
         }}</mat-option>
         }
       </mat-select>

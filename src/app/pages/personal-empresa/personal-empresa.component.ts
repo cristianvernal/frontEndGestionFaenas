@@ -149,6 +149,15 @@ export class PersonalEmpresaComponent implements OnInit {
               confirmButtonText: 'OK',
             });
             this.trabajadores = this.trabajadores.filter((currentTrabajador) => currentTrabajador.idTrabajador !== trabajador.idTrabajador);
+          },
+          error: (err) => {
+            console.error('Error eliminando Trabajador: ', err)
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ocurrio un problema al eliminar el trabajador',
+              confirmButtonText: 'OK',
+            })
           }
         })
       }
