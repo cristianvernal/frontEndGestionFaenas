@@ -61,7 +61,7 @@ export class VerificacionComponent implements OnInit {
     tipoCumplimiento: new FormControl(),
     cargo: new FormControl(),
     rut: new FormControl(),
-    faena: new FormControl(),
+    faena: new FormControl(), 
   });
 
   ngOnInit(): void {
