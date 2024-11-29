@@ -9,9 +9,10 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
+  ViewChild,
   viewChild,
 } from '@angular/core';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -46,8 +47,11 @@ export class UiTableComponent<T> implements OnChanges, AfterViewInit {
   matSort = viewChild.required(MatSort);
   selection = new SelectionModel<any>(true, []);
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   ngAfterViewInit(): void {
     this.dataSource.sort = this.matSort();
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,6 +59,7 @@ export class UiTableComponent<T> implements OnChanges, AfterViewInit {
       this.setData();
     }
   }
+
   private setData() {
     this.dataSource.data = this.data();
   }

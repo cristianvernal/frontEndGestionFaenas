@@ -46,6 +46,12 @@
         Limpiar
       </button>
     </div>
+    <div>
+      <button mat-raised-button color="primary">
+        <mat-icon>email</mat-icon>
+        Enviar Correos
+      </button>
+    </div>
   </div>
   <div *ngIf="loading" class="spinner-container">
     <mat-spinner></mat-spinner>
@@ -57,14 +63,8 @@
     (select)="onSelect($event)"
   />
   <ng-template #colActions let-correo>
-    <button
-      mat-icon-button
-      matTooltip="Correo"
-      class="boton"
-    >
+    <button mat-icon-button matTooltip="Enviar Correo" class="boton">
       <mat-icon>email</mat-icon>
     </button>
-
-
   </ng-template>
 </div>

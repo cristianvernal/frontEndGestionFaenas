@@ -7,27 +7,34 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { CustomSidenavComponent } from '../custom-sidenav/custom-sidenav.component';
 import { MsalService } from '@azure/msal-angular';
-import { FooterComponent } from "../footer/footer.component";
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, CustomSidenavComponent, FooterComponent],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    CustomSidenavComponent,
+    FooterComponent,
+  ],
   templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.css'
+  styleUrl: './sidenav.component.css',
 })
 export class SidenavComponent {
+  constructor(private authService: MsalService) {}
 
-  constructor( private authService: MsalService) {}
+  collapsed = signal(false);
 
-  collapsed = signal(false)
-
-  sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px')
+  sidenavWidth = computed(() => (this.collapsed() ? '65px' : '250px'));
 
   logout() {
     this.authService.logoutPopup({
       mainWindowRedirectUri: 'login',
     });
   }
-
 }

@@ -24,6 +24,7 @@ import { Workers } from '../../interfaces/workers-dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-verificacion',
@@ -40,7 +41,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatPaginatorModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './verificacion.component.html',
   styleUrl: './verificacion.component.css',
