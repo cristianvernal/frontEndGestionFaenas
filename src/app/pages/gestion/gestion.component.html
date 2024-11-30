@@ -17,6 +17,7 @@
     *ngIf="!loading"
     [data]="faenas"
     [columns]="tableColumns"
+    (select)="onSelect($event)"
   ></app-ui-table>
 
   <ng-template #colActions let-faena>

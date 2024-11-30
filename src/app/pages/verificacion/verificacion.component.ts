@@ -1,9 +1,15 @@
-import { Component, inject, OnInit, TemplateRef, viewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import {
   tableColumn,
   UiTableComponent,
 } from '../../components/ui-table/ui-table.component';
-import { timer } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import {
@@ -18,13 +24,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SelectOption } from '../../interfaces/select-option';
 import { RegisterApiService } from '../../services/register-api.service';
-import { RegistroDTO } from '../../interfaces/registro-dto';
 import { EnpointsService } from '../../services/enpoints.service';
 import { Workers } from '../../interfaces/workers-dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { EmailDTO } from '../../interfaces/email-dto';
+import { EmailService } from '../../services/email.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-verificacion',
@@ -50,6 +58,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class VerificacionComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
   enpointService = inject(EnpointsService);
+  emailService = inject(EmailService);
   verificacion: Workers[] = [];
   tableColumns: tableColumn<Workers>[] = [];
   tipoCumplimientos: SelectOption<number>[] = [];
@@ -57,13 +66,13 @@ export class VerificacionComponent implements OnInit {
   tipoFaenas: SelectOption<number>[] = [];
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
-  
+  wokersSelected: Workers[] = []
 
   formGroupFilter = new FormGroup({
     tipoCumplimiento: new FormControl(),
     cargo: new FormControl(),
     rut: new FormControl(),
-    faena: new FormControl(), 
+    faena: new FormControl(),
   });
 
   ngOnInit(): void {
@@ -170,16 +179,66 @@ export class VerificacionComponent implements OnInit {
         console.log('Error: ', err);
       },
       complete: () => {
-        this.loading = false
-      }
+        this.loading = false;
+      },
     });
   }
 
   clean() {
-    this.formGroupFilter.reset(); 
+    this.formGroupFilter.reset();
   }
 
-  onSelect(data: any) {
-    console.log(data)
+  onSelect(data: Workers[]) {
+    this.wokersSelected = data;
+    console.log(data);
+  }
+
+  sendSingularEmail(row: Workers) {
+    const email: EmailDTO[] = [
+      {
+        email: row.email,
+        run: row.run,
+      }
+    ]
+    this.emailService.sendEmail(email).subscribe({
+      next: (data: any) => {
+        console.log('Response: ', data);
+        Swal.fire({
+          icon: 'success',
+          title: 'Email enviado',
+          text: 'El correo ha sido enviado correctamente al trabajador: ' + row.primerNombre + ' ' + row.primerApellido,
+          confirmButtonText: 'OK',
+        });
+        this.onSearch();
+      },
+      error: (error) => {
+        console.error('Error sending email: ', error);
+      }
+    })
+  }
+
+  sendBulkMails() {
+    if(this.wokersSelected.length == 0) {
+      return
+    }
+   const email: EmailDTO[] = this.wokersSelected.map(worker => ({
+    email: worker.email,
+    run: worker.run,
+   })) 
+   this.emailService.sendEmail(email).subscribe({
+    next: (data: any) => {
+      console.log('Response: ', data);
+      Swal.fire({
+        icon: 'success',
+        title: 'Correos enviados',
+        text: 'Los correos han sido enviado correctamente',
+        confirmButtonText: 'OK',
+      });
+      this.onSearch();
+    },
+    error: (error) => {
+      console.error('Error sending email: ', error);
+    }
+   }) 
   }
 }

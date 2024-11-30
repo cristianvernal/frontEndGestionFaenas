@@ -48,12 +48,14 @@ export class UiTableComponent<T> implements OnChanges, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
+  @Output() select: EventEmitter<any> = new EventEmitter()
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.matSort();
     this.dataSource.paginator = this.paginator;
   }
-
+  
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'].currentValue) {
       this.setData();
@@ -70,7 +72,6 @@ export class UiTableComponent<T> implements OnChanges, AfterViewInit {
     return numSelected === numRows;
   }
 
-  @Output() select: EventEmitter<any> = new EventEmitter()
 
   onSelect() {
     this.select.emit(this.selection.selected)

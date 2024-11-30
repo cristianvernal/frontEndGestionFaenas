@@ -2,6 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
   catchError,
+  combineLatest,
   forkJoin,
   map,
   Observable,
@@ -26,6 +27,7 @@ export class RegisterApiService {
   private readonly _http = inject(HttpClient);
 
   readonly API_URL = 'https://trabajadores.sistemagf.cl';
+  readonly API_URL_IMAGE = 'https://asistencia.sistemagf.cl';
   readonly API_URL_REGISTER = 'https://3.90.157.39:8083';
 
   createTrabajador(
@@ -169,9 +171,9 @@ export class RegisterApiService {
     return new Blob([ab], { type: 'image/png' });
   }
 
-  getTrabajadorRut(rut: string): Observable<BaseResponse<CrearTrabajadorDTO>> {
+  getTrabajadorRut(rut: string): Observable<CrearTrabajadorDTO> {
     return this._http
-      .get<BaseResponse<CrearTrabajadorDTO>>(
+      .get<CrearTrabajadorDTO>(
         `${this.API_URL}/trabajadores/traer/run/{run}?run=${rut}`
       )
       .pipe(
@@ -193,14 +195,45 @@ export class RegisterApiService {
       );
   }
 
-  deleteTrabajadores(trabajador: CrearTrabajadorDTO): Observable<BaseResponse<any>> {
-    return this._http.delete<BaseResponse<any>>(`${this.API_URL}/trabajadores/borrar/${trabajador.idTrabajador}`).pipe(
+  deleteTrabajadores(trabajador: CrearTrabajadorDTO): Observable<any> {
+    const request = {
+      deleteWorker: this._http.delete<BaseResponse<any>>(`${this.API_URL}/trabajadores/borrar/${trabajador.idTrabajador}`).pipe(
+        catchError(error => {
+          console.error('Error deleting Trabajador: ', error)
+          return throwError(() => new Error('Error deleting trabajador'))
+        })
+      ),
+      deleteLocalImage: this.deleteLocalImage(trabajador),
+      deleteRekognitionImage: this.deleteRekognitionImage(trabajador),
+    }
+    return combineLatest(request)
+
+  }
+
+
+  deleteLocalImage(trabajador: CrearTrabajadorDTO): Observable<any> {
+    return this._http.delete(`${this.API_URL_IMAGE}/api/rekognition/workers/delete-local/${trabajador.run}.jpg.jpg`,
+      {responseType: 'text'}
+    ).pipe(
       catchError(error => {
         console.error('Error deleting Trabajador: ', error)
         return throwError(() => new Error('Error deleting trabajador'))
       })
     )
   }
+
+  deleteRekognitionImage(trabajador: CrearTrabajadorDTO): Observable<any> {
+    return this._http.delete(`${this.API_URL_IMAGE}/api/rekognition/delete-worker-image/${trabajador.run}`,
+      {responseType: 'text'}
+    ).pipe(
+      catchError(error => {
+        console.error('Error deleting Trabajador: ', error)
+        return throwError(() => new Error('Error deleting trabajador'))
+      })
+    )
+  }
+
+
 
   getTrabajadorByPhoto(
     rut: string

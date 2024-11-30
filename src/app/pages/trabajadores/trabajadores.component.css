@@ -31,4 +31,37 @@
     margin-left: 16px; /* Espaciado adicional opcional */
     margin-bottom: 25px;
   }
+
+  .main {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos uno debajo del otro */
+    align-items: center; /* Centra los elementos horizontalmente */
+    text-align: center; /* Alinea el texto en el centro */
+    gap: 16px; /* Espaciado uniforme entre los elementos */
+    padding: 16px; /* Espacio alrededor de los elementos */
+  }
   
+  .picture-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centra la imagen horizontalmente */
+  }
+
+  .title {
+    text-align: center;
+  }
+  
+  .picture {
+    max-width: 90%; /* Ajusta el tamaño máximo de la imagen */
+    width: 90%; /* Asegura que la imagen no supere el contenedor */
+    height: auto; /* Mantiene las proporciones de la imagen */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para diseño */
+  }
+  
+  .picture-button {
+    width: 60%; /* Ajusta el tamaño del botón automáticamente */
+    margin-top: 20px;
+    margin-left: 120px;
+    align-items: center;
+  }

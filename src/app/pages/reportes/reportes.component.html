@@ -19,13 +19,15 @@
       </mat-select>
     </mat-form-field>
     <div>
-      <button mat-raised-button color="primary">
-        Buscar
-      </button>
+      <button mat-raised-button color="primary">Buscar</button>
       <button mat-raised-button color="primary" (click)="clean()">
         Limpiar
       </button>
     </div>
   </div>
-  <app-ui-table [data]="verificacion" [columns]="tableColumns"/>
-  </div>
+  <app-ui-table
+    [data]="verificacion"
+    [columns]="tableColumns"
+    (select)="onSelect($event)"
+  />
+</div>

@@ -47,7 +47,7 @@
       </button>
     </div>
     <div>
-      <button mat-raised-button color="primary">
+      <button mat-raised-button color="primary" (click)="sendBulkMails()">
         <mat-icon>email</mat-icon>
         Enviar Correos
       </button>
@@ -61,10 +61,13 @@
     [columns]="tableColumns"
     *ngIf="!loading"
     (select)="onSelect($event)"
+    
   />
-  <ng-template #colActions let-correo>
-    <button mat-icon-button matTooltip="Enviar Correo" class="boton">
-      <mat-icon>email</mat-icon>
-    </button>
+  <ng-template #colActions let-row>
+    @if(row.nombreCumplimiento === "No informado") {
+      <button mat-icon-button matTooltip="Enviar Correo" class="boton" (click)="sendSingularEmail(row)">
+        <mat-icon>email</mat-icon>
+      </button>
+    }
   </ng-template>
 </div>

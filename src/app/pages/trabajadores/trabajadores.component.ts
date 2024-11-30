@@ -62,6 +62,7 @@ export class TrabajadoresComponent implements OnInit {
   colActions = viewChild.required('colActions', { read: TemplateRef });
   loading: boolean = false;
   tipoCargos: SelectOption<number>[] = [];
+  currentWorker: Workers | undefined
   
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
@@ -121,7 +122,8 @@ export class TrabajadoresComponent implements OnInit {
 
 
 
-  openDialogWithTemplate(template: TemplateRef<any>) {
+  openWorker(template: TemplateRef<any>, row: Workers) {
+    this.currentWorker = row
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
     });
@@ -188,5 +190,9 @@ export class TrabajadoresComponent implements OnInit {
         this.workerList = [];
       }
     })
+  }
+
+  onSelect(data: any) {
+    console.log(data)
   }
 }

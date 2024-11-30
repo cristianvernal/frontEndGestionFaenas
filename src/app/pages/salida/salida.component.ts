@@ -58,9 +58,14 @@ export class SalidaComponent implements OnInit {
     }
     const registroAsistencia: RegistroAsistencia = {
       runTrabajador: this.trabajador?.run as string,
-      fechaHora: new Date(),
+      fecha: new Date(),
+      hora: new Date(),
       tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
-      idFaena: this.tipoFaena.value?.idFaena as number
+      idFaena: this.tipoFaena.value?.idFaena as number,
+      tipoMarcaje: {
+        idTipoRegistro: 4,
+        tipoRegistro: "Salida faena.",
+      }
     }
     console.log('Registro asistencia: ', registroAsistencia)
     this.registeApiService.createAsistencia(registroAsistencia).subscribe({

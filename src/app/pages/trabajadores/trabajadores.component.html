@@ -35,24 +35,33 @@
       [columns]="tableWorker"
       [data]="workerList"
       class="tablaTrabajadores"
+      (select)="onSelect($event)"
     >
     </app-ui-table>
-    <ng-template #colActions>
+    <ng-template #colActions let-row>
         <button
         mat-icon-button
         matTooltip="Ver"
-        (click)="openDialogWithTemplate(picture)"
+        (click)="openWorker(picture, row)"
       >
         <mat-icon>remove_red_eye</mat-icon>
       </button>
       </ng-template>
 
-      <ng-template #picture >
-        <h3>Imagen Trabajador</h3>
-        <img src="https://t3.ftcdn.net/jpg/02/43/12/34/240_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg" alt="">
-        <button mat-raised-button mat-dialog-close color="primary">
-          Cerrar
-        </button>
-      </ng-template>
+      <ng-template #picture class="main">
+        <h3 class="title">Imagen Trabajador</h3>
+        <div class="picture-container">
+          <img
+            [src]="'https://3.90.157.39:8083/images/'+currentWorker?.run +'.jpg'" 
+            alt="Imagen Trabajador"
+            class="picture"
+          />
+        </div>
+        <div class="picture-button">
+          <button mat-raised-button mat-dialog-close color="primary">
+            Cerrar
+          </button>
+        </div>
+        </ng-template>
       
 </div>

@@ -25,149 +25,149 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './asistencia.component.css',
 })
 export class AsistenciaComponent  {
-  // faenaService = inject(EnpointsService);
-  // registeApiService = inject(RegisterApiService);
-  // scanFail = false;
-  // trabajador: CrearTrabajadorDTO | undefined;
-  // webcam = viewChild.required(WebcamComponent);
-  // triggerSource = new Subject<void>();
-  // tipoRegistroList: SelectOption<TipoRegistro>[] = [];
-  // faenas: SelectOption<Faena>[] = [];
-  // tipoRegistro = new FormControl<TipoRegistro | null>(null, Validators.required)
-  // tipoFaena = new FormControl<Faena | null>(null, Validators.required)
+  faenaService = inject(EnpointsService);
+  registeApiService = inject(RegisterApiService);
+  scanFail = false;
+  trabajador: CrearTrabajadorDTO | undefined;
+  webcam = viewChild.required(WebcamComponent);
+  triggerSource = new Subject<void>();
+  tipoRegistroList: SelectOption<TipoRegistro>[] = [];
+  faenas: SelectOption<Faena>[] = [];
+  tipoRegistro = new FormControl<TipoRegistro | null>(null, Validators.required)
+  tipoFaena = new FormControl<Faena | null>(null, Validators.required)
 
 
-  // ngOnInit(): void {
-  //   this.getNombreFaena();
-  //   this.getTipoRegistro();
-  // }
+  ngOnInit(): void {
+    this.getNombreFaena();
+    this.getTipoRegistro();
+  }
 
-  // get trigger() {
-  //   return this.triggerSource.asObservable();
-  // }
+  get trigger() {
+    return this.triggerSource.asObservable();
+  }
 
-  // onScanWorker() {
-  //   this.triggerSource.next();
-  // }
+  onScanWorker() {
+    this.triggerSource.next();
+  }
 
-  // ingresarFaena() {
-  //   if(this.trabajador == undefined) {
-  //     return
-  //   } 
-  //   if(this.tipoRegistro.invalid){
-  //     return
-  //   }
-  //   if(this.tipoFaena.invalid) {
-  //     return
-  //   }
-  //   const registroAsistencia: RegistroAsistencia = {
-  //     runTrabajador: this.trabajador?.run as string,
-  //     fechaHora: new Date(),
-  //     tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
-  //     idFaena: this.tipoFaena.value?.idFaena as number
-  //   }
-  //   console.log('Registro asistencia: ', registroAsistencia)
-  //   this.registeApiService.createAsistencia(registroAsistencia).subscribe({
-  //     next: (data: any) => {
-  //       if (data) {
-  //         Swal.fire({
-  //           icon: 'success',
-  //           text: 'Trabajador Ingresado',
-  //           confirmButtonText: 'OK'
-  //         })
-  //       }
-  //     },
-  //     error: (error) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         text: 'Trabajador no Ingresado',
-  //         confirmButtonText: 'Ok'
-  //       })
-  //     }
-  //   })
-  //   this.webcam().onCleanImage()
-  //   this.trabajador = undefined
-  //   // this.tipoRegistro.setValue(null)
-  //   // this.tipoFaena.setValue(null)
-  // }
+  ingresarFaena() {
+    if(this.trabajador == undefined) {
+      return
+    } 
+    if(this.tipoRegistro.invalid){
+      return
+    }
+    if(this.tipoFaena.invalid) {
+      return
+    }
+    const registroAsistencia: RegistroAsistencia = {
+      runTrabajador: this.trabajador?.run as string,
+      fechaHora: new Date(),
+      tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
+      idFaena: this.tipoFaena.value?.idFaena as number
+    }
+    console.log('Registro asistencia: ', registroAsistencia)
+    this.registeApiService.createAsistencia(registroAsistencia).subscribe({
+      next: (data: any) => {
+        if (data) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Trabajador Ingresado',
+            confirmButtonText: 'OK'
+          })
+        }
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          text: 'Trabajador no Ingresado',
+          confirmButtonText: 'Ok'
+        })
+      }
+    })
+    this.webcam().onCleanImage()
+    this.trabajador = undefined
+    // this.tipoRegistro.setValue(null)
+    // this.tipoFaena.setValue(null)
+  }
 
-  // getNombreFaena() {
-  //   this.faenaService.getFaenas().subscribe({
-  //     next: (data) => {
-  //       console.log('Data fetched', data);
-  //       if (data && data.resultado && Array.isArray(data.resultado)) {
-  //         this.faenas = data.resultado.map<SelectOption<Faena>>(
-  //           (nombreFaena) => ({
-  //             value: nombreFaena,
-  //             viewValue: nombreFaena.nombreFaena,
-  //           })
-  //         );
-  //       } else {
-  //         console.error('unexpected data format:', data);
-  //         this.faenas = [];
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching nombre faenas', error);
-  //       this.faenas = [];
-  //     },
-  //   });
-  // }
+  getNombreFaena() {
+    this.faenaService.getFaenas().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.faenas = data.resultado.map<SelectOption<Faena>>(
+            (nombreFaena) => ({
+              value: nombreFaena,
+              viewValue: nombreFaena.nombreFaena,
+            })
+          );
+        } else {
+          console.error('unexpected data format:', data);
+          this.faenas = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching nombre faenas', error);
+        this.faenas = [];
+      },
+    });
+  }
 
-  // onCapture(image: string) {
-  //   this.registeApiService.identifyPicture(image).subscribe({
-  //     next: (res) => {
-  //       console.log('Data fetched', res);
-  //       this.scanFail = !!res;
-  //       this.trabajador = res;
-  //       if (this.trabajador == undefined) {
-  //         Swal.fire({
-  //           icon: 'info',
-  //           title: 'Sin registrar',
-  //           text: 'Trabajador no registrado',
-  //           confirmButtonText: 'OK',
-  //         });
-  //         this.webcam().onCleanImage()
-  //       }else {
-  //         Swal.fire({
-  //           icon: 'success',
-  //           text: 'Trabajador Identificado',
-  //           confirmButtonText: 'OK'
-  //         })
-  //       }
-  //     },
-  //     error: (err) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'No se pudo guardar el trabajador',
-  //         confirmButtonText: 'OK',
-  //       });
-  //       console.error('Error al guardar trabajador:', err);
-  //     },
-  //   });
-  // }
+  onCapture(image: string) {
+    this.registeApiService.identifyPicture(image).subscribe({
+      next: (res) => {
+        console.log('Data fetched', res);
+        this.scanFail = !!res;
+        this.trabajador = res;
+        if (this.trabajador == undefined) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin registrar',
+            text: 'Trabajador no registrado',
+            confirmButtonText: 'OK',
+          });
+          this.webcam().onCleanImage()
+        }else {
+          Swal.fire({
+            icon: 'success',
+            text: 'Trabajador Identificado',
+            confirmButtonText: 'OK'
+          })
+        }
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo guardar el trabajador',
+          confirmButtonText: 'OK',
+        });
+        console.error('Error al guardar trabajador:', err);
+      },
+    });
+  }
 
-  // getTipoRegistro() {
-  //   this.registeApiService.getTipoRegistro().subscribe({
-  //     next: (data) => {
-  //       console.log('Data fetched', data);
-  //       if (data && data.resultado && Array.isArray(data.resultado)) {
-  //         this.tipoRegistroList = data.resultado.map<SelectOption<TipoRegistro>>(
-  //           (tipoRegistro) => ({
-  //             value: tipoRegistro,
-  //             viewValue: tipoRegistro.tipoRegistro,
-  //           })
-  //         );
-  //       } else {
-  //         console.error('unexpected data format:', data);
-  //         this.tipoRegistroList = [];
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching faenas:', error);
-  //       this.tipoRegistroList = [];
-  //     },
-  //   });
-  // }
+  getTipoRegistro() {
+    this.registeApiService.getTipoRegistro().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.tipoRegistroList = data.resultado.map<SelectOption<TipoRegistro>>(
+            (tipoRegistro) => ({
+              value: tipoRegistro,
+              viewValue: tipoRegistro.tipoRegistro,
+            })
+          );
+        } else {
+          console.error('unexpected data format:', data);
+          this.tipoRegistroList = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching faenas:', error);
+        this.tipoRegistroList = [];
+      },
+    });
+  }
 }

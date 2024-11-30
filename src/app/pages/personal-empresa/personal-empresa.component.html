@@ -20,12 +20,22 @@
   <div *ngIf="loading" class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
-  <app-ui-table [columns]="tableColumns" [data]="trabajadores" *ngIf="!loading"></app-ui-table>
+  <app-ui-table
+    [columns]="tableColumns"
+    [data]="trabajadores"
+    *ngIf="!loading"
+    (select)="onSelect($event)"
+  ></app-ui-table>
   <ng-template #colActions let-trabajadores>
     <button mat-icon-button matTooltip="Editar" class="boton">
       <mat-icon>edit</mat-icon>
     </button>
-    <button mat-icon-button matTooltip="Eliminar" class="boton" (click)="onDeleteTrabajador(trabajadores)">
+    <button
+      mat-icon-button
+      matTooltip="Eliminar"
+      class="boton"
+      (click)="onDeleteTrabajador(trabajadores)"
+    >
       <mat-icon>delete</mat-icon>
     </button>
   </ng-template>

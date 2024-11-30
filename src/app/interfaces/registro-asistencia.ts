@@ -5,7 +5,11 @@ export interface RegistroAsistencia {
     idRegistro?: number;
     idFaena: number;
     runTrabajador: string;
-    fechaHora: Date;
-    // asistencia: boolean;
+    fecha: Date;
+    hora: Date;
     tipoRegistroJoin: TipoRegistro;
+    tipoMarcaje: {
+    idTipoRegistro: number;
+    tipoRegistro: string;
+  }
 }

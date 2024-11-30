@@ -451,4 +451,8 @@ export class GestionComponent implements OnInit {
       }
     });
   }
+
+  onSelect(data: any) {
+    console.log(data)
+  }
 }

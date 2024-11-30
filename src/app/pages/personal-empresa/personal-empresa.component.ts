@@ -155,8 +155,8 @@ export class PersonalEmpresaComponent implements OnInit {
           next: () => {
             Swal.fire({
               icon: 'success',
-              title: 'Faena eliminada',
-              text: 'La faena ha sido eliminada correctamente.',
+              title: 'Trabajador Eliminado',
+              text: 'El trabajador a sido eliminado correctamente.',
               confirmButtonText: 'OK',
             });
             this.trabajadores = this.trabajadores.filter((currentTrabajador) => currentTrabajador.idTrabajador !== trabajador.idTrabajador);
@@ -178,18 +178,10 @@ export class PersonalEmpresaComponent implements OnInit {
   onSearch() {
     
     this.loading = true;
-    const filters: any = {};
-    Object.entries(this.formGroupFilter.value).forEach((filter) => {
-      if (filter[1] !== null) {
-        filters[filter[0]] = filter[1];
-      }
-    });
-    console.log('filtros: ', filters);
-    
-    this.registerService.getTrabajadorRut(filters).subscribe({
+    this.registerService.getTrabajadorRut(this.formGroupFilter.value.rut).subscribe({
       next: (res) => {
         console.log('respuesta:', res);
-        // this.trabajadores = res;
+         this.trabajadores = [res];
       },
       error: (err) => {
         console.log('Error: ', err);
@@ -202,5 +194,9 @@ export class PersonalEmpresaComponent implements OnInit {
 
   clean() {
     this.formGroupFilter.reset();
+  }
+
+  onSelect(data: any) {
+    console.log(data)
   }
 }

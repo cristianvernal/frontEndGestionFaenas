@@ -6,7 +6,6 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MsalGuard } from '@azure/msal-angular';
-import { AsistenciaComponent } from './pages/asistencia/asistencia.component';
 import { TrabajadoresComponent } from './pages/trabajadores/trabajadores.component';
 import { IngresoComponent } from './pages/ingreso/ingreso.component';
 import { SalidaComponent } from './pages/salida/salida.component';
@@ -75,7 +74,6 @@ export const routes: Routes = [
         path: 'salida',
         component: SalidaComponent,
       },
-
       {
         path: 'trabajadores/:idFaena',
         component: TrabajadoresComponent,
