@@ -20,9 +20,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Workers } from '../../interfaces/workers-dto';
+import { DialogService } from '../../services/dialog.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DialogWithTemplateComponent } from '../../components/dialog-with-template/dialog-with-template.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { rutValidator } from '../../components/rut/rut-validador';
+import { SelectOption } from '../../interfaces/select-option';
 
 @Component({
   selector: 'app-personal-empresa',
@@ -37,7 +44,9 @@ import { Workers } from '../../interfaces/workers-dto';
     MatButtonModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatSelectModule,
   ],
   templateUrl: './personal-empresa.component.html',
   styleUrl: './personal-empresa.component.css',
@@ -49,12 +58,60 @@ export class PersonalEmpresaComponent implements OnInit {
   registerService = inject(RegisterApiService);
   loading: boolean = false;
   workerList: Workers[] = [];
+  titleEditAndCreateDialog = '';
+  cargos: SelectOption<number>[] = [];
+  
+ 
 
   formGroupFilter = new FormGroup({
     rut: new FormControl(),
+    nombre: new FormControl(),
+    apellido: new FormControl(),
+    cargo: new FormControl(),
+    fechaNacimiento: new FormControl(),
+    fechaContratacion: new FormControl(),
+    correo: new FormControl(),
+    direccion: new FormControl(),
+    Telefono: new FormControl(),
   });
 
-  constructor(private readonly activedRoute: ActivatedRoute) {}
+  formGroup: FormGroup = new FormGroup<{
+    nombre: FormControl;
+    apellido: FormControl;
+    rut: FormControl;
+    fechaNacimiento: FormControl;
+    direccion: FormControl;
+    fechaContratacion: FormControl;
+    cargos: FormControl;
+    telefono: FormControl;
+    email: FormControl;
+  }>({
+    nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    apellido: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    rut: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]+-[0-9kK]{1}$'),rutValidator,
+    ]),
+    fechaNacimiento: new FormControl('', Validators.required),
+    direccion: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+    ]),
+    fechaContratacion: new FormControl('', Validators.required),
+    cargos: new FormControl(null, Validators.required),
+    telefono: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]{9,15}$'),
+    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
+
+  private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
+
+  constructor(private readonly activedRoute: ActivatedRoute, private dialogService: DialogService,) {}
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -116,6 +173,12 @@ export class PersonalEmpresaComponent implements OnInit {
     ];
   }
 
+  openDialogWithTemplate(template: TemplateRef<any>) {
+    this.matDialogRef = this.dialogService.openDialogWithTemplate({
+      template,
+    });
+  }
+
   getTrabajadores() {
     this.loading = true;
     this.registerService.getTrabajadores().subscribe({
@@ -139,9 +202,28 @@ export class PersonalEmpresaComponent implements OnInit {
     });
   }
 
+  onEditTrabajador(trabajador: CrearTrabajadorDTO, template: TemplateRef<any>) {
+    this.titleEditAndCreateDialog = 'Editar Trabajador';
+    this.formGroupFilter.reset({
+      nombre: trabajador.primerNombre,
+      apellido: trabajador.primerApellido,
+      rut: trabajador.run,
+      cargo: trabajador.cargos.nombre,
+      fechaNacimiento: trabajador.fechaNacimiento,
+      fechaContratacion: trabajador.fechaContratacion,
+      correo: trabajador.email,
+      direccion: trabajador.direccion,
+      Telefono: trabajador.telefono,
+    });
+    this.openDialogWithTemplate(template);
+    this.matDialogRef.afterClosed().subscribe(() => {
+      this.formGroupFilter.reset();
+    });
+  }
+
   onDeleteTrabajador(trabajador: CrearTrabajadorDTO) {
     Swal.fire({
-      title: '¿Está seguro de eliminar la faena?',
+      title: '¿Está seguro de eliminar el trabajador?',
       text: 'Esta acción no se puede deshacer.',
       icon: 'warning',
       showCancelButton: true,
