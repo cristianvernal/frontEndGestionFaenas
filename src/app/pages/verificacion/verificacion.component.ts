@@ -209,6 +209,7 @@ export class VerificacionComponent implements OnInit {
       {
         email: row.email,
         run: row.run,
+        idFaena: row.idFaena,
       },
     ];
     this.emailService.sendEmail(email).subscribe({
@@ -240,6 +241,7 @@ export class VerificacionComponent implements OnInit {
     const email: EmailDTO[] = this.wokersSelected.map((worker) => ({
       email: worker.email,
       run: worker.run,
+      idFaena: worker.idFaena,
     }));
     this.wokersSelected.forEach((workerSelected) => { this.updateCumplimiento(workerSelected, 1 ); });
     this.emailService.sendEmail(email).subscribe({
