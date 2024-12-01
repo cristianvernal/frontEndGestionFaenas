@@ -276,6 +276,7 @@ export class PersonalEmpresaComponent implements OnInit {
 
   clean() {
     this.formGroupFilter.reset();
+    this.getTrabajadores();
   }
 
   onSelect(data: any) {

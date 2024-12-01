@@ -1,12 +1,11 @@
-import { Faena } from "./faenas"
 import { TipoRegistro } from "./tipoRegistro"
 
 export interface RegistroAsistencia {
     idRegistro?: number;
-    idFaena: number;
     runTrabajador: string;
-    fecha: Date;
-    hora: Date;
+    fecha: string;
+    hora: string;
+    idFaena: number;
     tipoRegistroJoin: TipoRegistro;
     tipoMarcaje: {
     idTipoRegistro: number;

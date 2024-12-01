@@ -10,13 +10,19 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Faena</mat-label>
-      <mat-select formControlName="cargo">
+      <mat-select formControlName="faena">
         @for(tipofaena of tipoFaenas; track tipofaena) {
         <mat-option [value]="tipofaena.value">{{
           tipofaena.viewValue
         }}</mat-option>
         }
       </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Elegir fecha</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <div>
       <button mat-raised-button color="primary">Buscar</button>

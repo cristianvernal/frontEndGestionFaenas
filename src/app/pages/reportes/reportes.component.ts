@@ -16,11 +16,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EnpointsService } from '../../services/enpoints.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { CommonModule } from '@angular/common';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-reportes',
   standalone: true,
   imports: [
+    CommonModule,
     MatDividerModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -29,7 +33,10 @@ import { EnpointsService } from '../../services/enpoints.service';
     MatButtonModule,
     FormsModule,
     MatProgressSpinnerModule,
-    UiTableComponent
+    UiTableComponent,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatNativeDateModule
   ],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.css',
@@ -43,11 +50,10 @@ export class ReportesComponent implements OnInit {
   tipoFaenas: SelectOption<number>[] = [];
 
   formGroupFilter = new FormGroup({
-    tipoCumplimiento: new FormControl(),
-    cargo: new FormControl(),
-    rut: new FormControl(),
+    rut:  new FormControl(),
     faena: new FormControl(),
-  });
+    fecha: new FormControl(),
+  })
 
   ngOnInit(): void {
     this.setTableColumns();

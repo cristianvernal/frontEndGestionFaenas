@@ -33,6 +33,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { EmailDTO } from '../../interfaces/email-dto';
 import { EmailService } from '../../services/email.service';
 import Swal from 'sweetalert2';
+import { RegistroDTO } from '../../interfaces/registro-dto';
+import { ACtualizarEstado } from '../../interfaces/nuevo-cumplimiento';
 
 @Component({
   selector: 'app-verificacion',
@@ -66,7 +68,8 @@ export class VerificacionComponent implements OnInit {
   tipoFaenas: SelectOption<number>[] = [];
   loading: boolean = false;
   colActions = viewChild.required('colActions', { read: TemplateRef });
-  wokersSelected: Workers[] = []
+  wokersSelected: Workers[] = [];
+  actualizarCumplimiento: ACtualizarEstado[] = [];
 
   formGroupFilter = new FormGroup({
     tipoCumplimiento: new FormControl(),
@@ -161,6 +164,14 @@ export class VerificacionComponent implements OnInit {
     });
   }
 
+  updateCumplimiento(row: Workers, id: number) {
+      this.registeApiService.updateNewRegister(row, id ).subscribe({
+        next: (res) => {
+          console.log('actualizado: ', res)
+        }
+      });
+  }
+
   onSearch() {
     this.loading = true;
     const filters: any = {};
@@ -198,47 +209,53 @@ export class VerificacionComponent implements OnInit {
       {
         email: row.email,
         run: row.run,
-      }
-    ]
+      },
+    ];
     this.emailService.sendEmail(email).subscribe({
       next: (data: any) => {
         console.log('Response: ', data);
         Swal.fire({
           icon: 'success',
           title: 'Email enviado',
-          text: 'El correo ha sido enviado correctamente al trabajador: ' + row.primerNombre + ' ' + row.primerApellido,
+          text:
+            'El correo ha sido enviado correctamente al trabajador: ' +
+            row.primerNombre +
+            ' ' +
+            row.primerApellido,
           confirmButtonText: 'OK',
         });
         this.onSearch();
       },
       error: (error) => {
         console.error('Error sending email: ', error);
-      }
-    })
+      },
+    });
+    this.updateCumplimiento(row, 1);
   }
 
   sendBulkMails() {
-    if(this.wokersSelected.length == 0) {
-      return
+    if (this.wokersSelected.length == 0) {
+      return;
     }
-   const email: EmailDTO[] = this.wokersSelected.map(worker => ({
-    email: worker.email,
-    run: worker.run,
-   })) 
-   this.emailService.sendEmail(email).subscribe({
-    next: (data: any) => {
-      console.log('Response: ', data);
-      Swal.fire({
-        icon: 'success',
-        title: 'Correos enviados',
-        text: 'Los correos han sido enviado correctamente',
-        confirmButtonText: 'OK',
-      });
-      this.onSearch();
-    },
-    error: (error) => {
-      console.error('Error sending email: ', error);
-    }
-   }) 
+    const email: EmailDTO[] = this.wokersSelected.map((worker) => ({
+      email: worker.email,
+      run: worker.run,
+    }));
+    this.wokersSelected.forEach((workerSelected) => { this.updateCumplimiento(workerSelected, 1 ); });
+    this.emailService.sendEmail(email).subscribe({
+      next: (data: any) => {
+        console.log('Response: ', data);
+        Swal.fire({
+          icon: 'success',
+          title: 'Correos enviados',
+          text: 'Los correos han sido enviado correctamente',
+          confirmButtonText: 'OK',
+        });
+        this.onSearch();
+      },
+      error: (error) => {
+        console.error('Error sending email: ', error);
+      },
+    });
   }
 }

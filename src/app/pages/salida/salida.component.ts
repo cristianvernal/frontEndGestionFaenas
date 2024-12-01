@@ -1,5 +1,10 @@
 import { Component, inject, OnInit, viewChild } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,9 +22,16 @@ import { RegistroAsistencia } from '../../interfaces/registro-asistencia';
 @Component({
   selector: 'app-salida',
   standalone: true,
-  imports: [MatDividerModule, FormsModule, MatSelectModule, MatButtonModule, WebcamComponent, ReactiveFormsModule],
+  imports: [
+    MatDividerModule,
+    FormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    WebcamComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './salida.component.html',
-  styleUrl: './salida.component.css'
+  styleUrl: './salida.component.css',
 })
 export class SalidaComponent implements OnInit {
   faenaService = inject(EnpointsService);
@@ -30,8 +42,11 @@ export class SalidaComponent implements OnInit {
   triggerSource = new Subject<void>();
   tipoRegistroList: SelectOption<TipoRegistro>[] = [];
   faenas: SelectOption<Faena>[] = [];
-  tipoRegistro = new FormControl<TipoRegistro | null>(null, Validators.required)
-  tipoFaena = new FormControl<Faena | null>(null, Validators.required)
+  tipoRegistro = new FormControl<TipoRegistro | null>(
+    null,
+    Validators.required
+  );
+  tipoFaena = new FormControl<Faena | null>(null, Validators.required);
 
   ngOnInit(): void {
     this.getNombreFaena();
@@ -47,47 +62,53 @@ export class SalidaComponent implements OnInit {
   }
 
   ingresarFaena() {
-    if(this.trabajador == undefined) {
-      return
-    } 
-    if(this.tipoRegistro.invalid){
-      return
+    if (this.trabajador == undefined) {
+      return;
     }
-    if(this.tipoFaena.invalid) {
-      return
+    if (this.tipoRegistro.invalid) {
+      return;
     }
+    if (this.tipoFaena.invalid) {
+      return;
+    }
+    const now = new Date();
     const registroAsistencia: RegistroAsistencia = {
       runTrabajador: this.trabajador?.run as string,
-      fecha: new Date(),
-      hora: new Date(),
+      fecha: `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
+      hora: `${now.getHours().toString().padStart(2, '0')}:${now
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`,
       tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
       idFaena: this.tipoFaena.value?.idFaena as number,
       tipoMarcaje: {
         idTipoRegistro: 4,
-        tipoRegistro: "Salida faena.",
-      }
-    }
-    console.log('Registro asistencia: ', registroAsistencia)
+        tipoRegistro: 'Salida faena.',
+      },
+    };
+    console.log('Registro asistencia: ', registroAsistencia);
     this.registeApiService.createAsistencia(registroAsistencia).subscribe({
       next: (data: any) => {
         if (data) {
           Swal.fire({
             icon: 'success',
-            text: 'Trabajador Ingresado',
-            confirmButtonText: 'OK'
-          })
+            text: 'Fuera de turno',
+            confirmButtonText: 'OK',
+          });
         }
       },
       error: (error) => {
         Swal.fire({
           icon: 'error',
           text: 'Trabajador no Ingresado',
-          confirmButtonText: 'Ok'
-        })
-      }
-    })
-    this.webcam().onCleanImage()
-    this.trabajador = undefined
+          confirmButtonText: 'Ok',
+        });
+      },
+    });
+    this.webcam().onCleanImage();
+    this.trabajador = undefined;
     // this.tipoRegistro.setValue(null)
     // this.tipoFaena.setValue(null)
   }
@@ -128,13 +149,13 @@ export class SalidaComponent implements OnInit {
             text: 'Trabajador no registrado',
             confirmButtonText: 'OK',
           });
-          this.webcam().onCleanImage()
-        }else {
+          this.webcam().onCleanImage();
+        } else {
           Swal.fire({
             icon: 'success',
             text: 'Trabajador Identificado',
-            confirmButtonText: 'OK'
-          })
+            confirmButtonText: 'OK',
+          });
         }
       },
       error: (err) => {
@@ -154,12 +175,12 @@ export class SalidaComponent implements OnInit {
       next: (data) => {
         console.log('Data fetched', data);
         if (data && data.resultado && Array.isArray(data.resultado)) {
-          this.tipoRegistroList = data.resultado.map<SelectOption<TipoRegistro>>(
-            (tipoRegistro) => ({
-              value: tipoRegistro,
-              viewValue: tipoRegistro.tipoRegistro,
-            })
-          );
+          this.tipoRegistroList = data.resultado.map<
+            SelectOption<TipoRegistro>
+          >((tipoRegistro) => ({
+            value: tipoRegistro,
+            viewValue: tipoRegistro.tipoRegistro,
+          }));
         } else {
           console.error('unexpected data format:', data);
           this.tipoRegistroList = [];
@@ -171,5 +192,4 @@ export class SalidaComponent implements OnInit {
       },
     });
   }
-
 }

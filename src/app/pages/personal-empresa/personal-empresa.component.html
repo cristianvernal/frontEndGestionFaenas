@@ -27,7 +27,7 @@
     (select)="onSelect($event)"
   ></app-ui-table>
   <ng-template #colActions let-trabajadores>
-    <button mat-icon-button matTooltip="Editar" class="boton">
+    <button mat-icon-button matTooltip="Editar" class="boton" (click)="onEditTrabajador(trabajadores, template1)">
       <mat-icon>edit</mat-icon>
     </button>
     <button

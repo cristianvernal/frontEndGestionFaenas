@@ -57,11 +57,12 @@
     height: auto; /* Mantiene las proporciones de la imagen */
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para diseño */
+    margin-top: 20px;
   }
   
   .picture-button {
-    width: 60%; /* Ajusta el tamaño del botón automáticamente */
+    width: auto; /* Ajusta el tamaño del botón automáticamente */
+    align-self: center;
     margin-top: 20px;
-    margin-left: 120px;
     align-items: center;
   }

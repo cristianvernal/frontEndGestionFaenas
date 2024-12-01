@@ -74,16 +74,22 @@ export class IngresoComponent implements OnInit {
     if (this.tipoFaena.invalid) {
       return;
     }
+    const now = new Date();
     const registroAsistencia: RegistroAsistencia = {
       runTrabajador: this.trabajador?.run as string,
-      fecha: new Date(),
-      hora: new Date(),
+      fecha: `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
+      hora: `${now.getHours().toString().padStart(2, '0')}:${now
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`,
       tipoRegistroJoin: this.tipoRegistro.value as TipoRegistro,
       idFaena: this.tipoFaena.value?.idFaena as number,
       tipoMarcaje: {
         idTipoRegistro: 1,
-        tipoRegistro: "Entrada faena",
-      }
+        tipoRegistro: 'Entrada faena',
+      },
     };
     console.log('Registro asistencia: ', registroAsistencia);
     this.registeApiService.createAsistencia(registroAsistencia).subscribe({
@@ -91,7 +97,7 @@ export class IngresoComponent implements OnInit {
         if (data) {
           Swal.fire({
             icon: 'success',
-            text: 'Trabajador Ingresado',
+            text: 'Ingreso a turno',
             confirmButtonText: 'OK',
           });
         }

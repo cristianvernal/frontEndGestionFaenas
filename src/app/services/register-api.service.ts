@@ -19,6 +19,7 @@ import { CumplimientoDTO } from '../interfaces/cumplimiento-dto';
 import { RegistroDTO } from '../interfaces/registro-dto';
 import { TipoCumplimiento } from '../interfaces/tipo-cumplimiento';
 import { Workers } from '../interfaces/workers-dto';
+import { ACtualizarEstado } from '../interfaces/nuevo-cumplimiento';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +85,15 @@ export class RegisterApiService {
       );
   }
 
+  getAsistencia(): Observable<BaseResponse<RegistroAsistencia[]>> {
+    return this._http.get<BaseResponse<RegistroAsistencia[]>>('https://asistencia.sistemagf.cl/registroasistencia/traer').pipe(
+      catchError((error) => {
+        console.error('Error fetching asistencia: ', error);
+        return throwError(() => 'Error fetching asistencia');
+      })
+    )
+  }
+
   createCumplimiento(cumplimento: CumplimientoDTO) {
     return this._http
       .post('https://trabajadores.sistemagf.cl/registro/crear', cumplimento)
@@ -106,6 +116,15 @@ export class RegisterApiService {
           return throwError(() => 'Error fetching data');
         })
       );
+  }
+
+  updateNewRegister(registro: Workers, idCumplimiento: number) {
+    return this._http.put(`${this.API_URL}/api/registros/actualizar/${registro.run}/${registro.idFaena}/${idCumplimiento}`, registro).pipe(
+      catchError((error) => {
+        console.error('Error fetching new register state: ', error);
+        return throwError(() => 'Error fetching new register state');
+      })
+    )
   }
 
   getRegistro(registro: RegistroDTO) {
