@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   catchError,
   combineLatest,
+  filter,
   forkJoin,
   map,
   Observable,
@@ -20,6 +21,8 @@ import { RegistroDTO } from '../interfaces/registro-dto';
 import { TipoCumplimiento } from '../interfaces/tipo-cumplimiento';
 import { Workers } from '../interfaces/workers-dto';
 import { ACtualizarEstado } from '../interfaces/nuevo-cumplimiento';
+import { AttendanceTableDTO } from '../interfaces/attendance-table';
+import { combineLatestInit } from 'rxjs/internal/observable/combineLatest';
 
 @Injectable({
   providedIn: 'root',
@@ -85,8 +88,62 @@ export class RegisterApiService {
       );
   }
 
-  getAsistencia(): Observable<BaseResponse<RegistroAsistencia[]>> {
+  getAsistencia(termsSearch: {rut?: string, faena?: number, fecha?: Date }): Observable<AttendanceTableDTO[]> {
     return this._http.get<BaseResponse<RegistroAsistencia[]>>('https://asistencia.sistemagf.cl/registroasistencia/traer').pipe(
+      switchMap((res) => {
+        console.log('attendaceListResponse: ', res);
+        const request: Observable<any>[] = []
+        res.resultado.forEach(attendance => {
+          request.push(this.getTrabajadorRut(attendance.runTrabajador).pipe(map(worker => {
+            const attendanceTable: AttendanceTableDTO = {
+              nombre: worker?.primerNombre,
+              apellido: worker?.primerApellido,
+              rut: attendance.runTrabajador,
+              fecha: attendance.fecha,
+              hora: attendance.hora,
+              tipoMarcaje: attendance.tipoMarcaje,
+              idFaena: attendance.idFaena,
+              idRegistro: attendance.idRegistro as number,
+              fechaEntrada: '',
+              fechaSalida: '',
+            }
+            return attendanceTable
+          })))
+        })  
+        return combineLatest<AttendanceTableDTO[]>(request)
+      }),
+      switchMap(attendanceTable => {
+        const grouped: Record<string, AttendanceTableDTO> = {}
+        attendanceTable.forEach(attendance => {
+          const key = attendance.fecha + '-' + attendance.rut
+          const fecha = attendance.fecha.split('T')[0] + ' ' + attendance.hora
+          console.log('Key: ', key) 
+          if(!grouped[key]) {
+            grouped[key] = attendance
+          }
+          if(attendance.tipoMarcaje.tipoRegistro == 'Entrada faena') {
+            grouped[key].fechaEntrada = fecha
+          } else {
+            grouped[key].fechaSalida = fecha
+          }           
+        })
+        console.log('grouped: ', grouped)
+        const list = Object.values(grouped)
+        return of(list)
+      }),
+      switchMap(attendaceTable => {
+        let newList = attendaceTable
+        if(termsSearch.rut) {
+          newList = newList.filter(attendance => attendance.rut == termsSearch.rut)
+        } 
+        if(termsSearch.faena) {
+          newList = newList.filter(attendance => attendance.idFaena == termsSearch.faena)
+        }
+        if(termsSearch.fecha) {
+           newList = newList.filter(attendance => attendance.fecha.split('T')[0] == termsSearch.fecha?.toISOString().split('T')[0])
+        }
+        return of(newList)
+      }), 
       catchError((error) => {
         console.error('Error fetching asistencia: ', error);
         return throwError(() => 'Error fetching asistencia');
@@ -212,6 +269,15 @@ export class RegisterApiService {
           return throwError(() => 'Error fetching data');
         })
       );
+  }
+
+  updateTrabajadores(worker: CrearTrabajadorDTO) {
+    return this._http.put(`${this.API_URL}/trabajadores/editar/`, worker).pipe(
+      catchError(error => {
+        console.error('Error updating worker: ', error)
+        return throwError(() => 'Error updating worker');
+      })
+    )
   }
 
   deleteTrabajadores(trabajador: CrearTrabajadorDTO): Observable<any> {

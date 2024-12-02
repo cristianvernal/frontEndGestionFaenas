@@ -38,7 +38,7 @@
   }
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns()" class="row"></tr>
   <tr *matNoDataRow>
     <td class="noData" [attr.colspan]="displayedColumns().length">Sin Datos</td>
   </tr>

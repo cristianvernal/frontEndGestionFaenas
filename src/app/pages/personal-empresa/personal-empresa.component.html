@@ -27,7 +27,12 @@
     (select)="onSelect($event)"
   ></app-ui-table>
   <ng-template #colActions let-trabajadores>
-    <button mat-icon-button matTooltip="Editar" class="boton" (click)="onEditTrabajador(trabajadores, template1)">
+    <button
+      mat-icon-button
+      matTooltip="Editar"
+      class="boton"
+      (click)="onEditTrabajador(trabajadores, template1)"
+    >
       <mat-icon>edit</mat-icon>
     </button>
     <button
@@ -47,23 +52,50 @@
         <mat-form-field>
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="nombre" />
-          <mat-hint *ngIf="formGroup.get('nombre')?.hasError('required') && formGroup.get('nombre')?.touched">Nombre olbigatorio</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('nombre')?.hasError('required') &&
+              formGroup.get('nombre')?.touched
+            "
+            >Nombre olbigatorio</mat-hint
+          >
         </mat-form-field>
         <mat-form-field>
           <mat-label>Apellido</mat-label>
           <input matInput formControlName="apellido" />
-          <mat-hint *ngIf="formGroup.get('apellido')?.hasError('required') && formGroup.get('apellido')?.touched">Apellido olbigatorio</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('apellido')?.hasError('required') &&
+              formGroup.get('apellido')?.touched
+            "
+            >Apellido olbigatorio</mat-hint
+          >
         </mat-form-field>
         <mat-form-field>
           <mat-label>RUT</mat-label>
-          <input matInput formControlName="rut"/>
-          <mat-hint *ngIf="formGroup.get('rut')?.hasError('required') && formGroup.get('rut')?.touched">
+          <input matInput formControlName="rut" />
+          <mat-hint
+            *ngIf="
+              formGroup.get('rut')?.hasError('required') &&
+              formGroup.get('rut')?.touched
+            "
+          >
             Rut obligatorio.
           </mat-hint>
-          <mat-hint *ngIf="formGroup.get('rut')?.hasError('pattern') && formGroup.get('rut')?.touched">
+          <mat-hint
+            *ngIf="
+              formGroup.get('rut')?.hasError('pattern') &&
+              formGroup.get('rut')?.touched
+            "
+          >
             El formato debe ser 12345678-9.
           </mat-hint>
-          <mat-hint *ngIf="formGroup.get('rut')?.hasError('invalidRut') && formGroup.get('rut')?.touched">
+          <mat-hint
+            *ngIf="
+              formGroup.get('rut')?.hasError('invalidRut') &&
+              formGroup.get('rut')?.touched
+            "
+          >
             Rut invalido.
           </mat-hint>
         </mat-form-field>
@@ -74,7 +106,13 @@
             [matDatepicker]="pickerNacimiento"
             formControlName="fechaNacimiento"
           />
-          <mat-hint *ngIf="formGroup.get('fechaNacimiento')?.hasError('required') && formGroup.get('fechaNacimiento')?.touched">Fecha obligatoria</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('fechaNacimiento')?.hasError('required') &&
+              formGroup.get('fechaNacimiento')?.touched
+            "
+            >Fecha obligatoria</mat-hint
+          >
           <mat-datepicker-toggle
             matIconSuffix
             [for]="pickerNacimiento"
@@ -84,7 +122,13 @@
         <mat-form-field>
           <mat-label>Dirección</mat-label>
           <input matInput formControlName="direccion" />
-          <mat-hint *ngIf="formGroup.get('direccion')?.hasError('required') && formGroup.get('direccion')?.touched">direcciión obligatoria</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('direccion')?.hasError('required') &&
+              formGroup.get('direccion')?.touched
+            "
+            >direcciión obligatoria</mat-hint
+          >
         </mat-form-field>
 
         <mat-form-field>
@@ -94,7 +138,13 @@
             [matDatepicker]="pickerContratacion"
             formControlName="fechaContratacion"
           />
-          <mat-hint *ngIf="formGroup.get('fechaContratacion')?.hasError('required') && formGroup.get('fechaContratacion')?.touched">Fecha contratación obligatoria</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('fechaContratacion')?.hasError('required') &&
+              formGroup.get('fechaContratacion')?.touched
+            "
+            >Fecha contratación obligatoria</mat-hint
+          >
           <mat-datepicker-toggle
             matIconSuffix
             [for]="pickerContratacion"
@@ -108,18 +158,36 @@
             <mat-option [value]="cargo.value">{{ cargo.viewValue }}</mat-option>
             }
           </mat-select>
-          <mat-hint *ngIf="formGroup.get('cargos')?.hasError('required') && formGroup.get('cargos')?.touched">Cargo obligatorio</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('cargos')?.hasError('required') &&
+              formGroup.get('cargos')?.touched
+            "
+            >Cargo obligatorio</mat-hint
+          >
         </mat-form-field>
         <mat-form-field>
           <mat-label>Teléfono</mat-label>
           <input matInput formControlName="telefono" type="tel" />
-          <mat-hint *ngIf="formGroup.get('telefono')?.hasError('required') && formGroup.get('telefono')?.touched">Telefono obligatorio</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('telefono')?.hasError('required') &&
+              formGroup.get('telefono')?.touched
+            "
+            >Telefono obligatorio</mat-hint
+          >
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" type="email" />
-          <mat-hint *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched">Correo obligatorio</mat-hint>
+          <mat-hint
+            *ngIf="
+              formGroup.get('email')?.hasError('required') &&
+              formGroup.get('email')?.touched
+            "
+            >Correo obligatorio</mat-hint
+          >
         </mat-form-field>
       </form>
 
@@ -131,6 +199,7 @@
           mat-raised-button
           color="primary"
           [disabled]="formGroup.invalid"
+          (click)="onSaveWorker()"
         >
           Guardar
         </button>

@@ -28,3 +28,10 @@
   mat-divider {
     margin-bottom: 24px;
   }
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }

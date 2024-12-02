@@ -50,20 +50,4 @@
     cursor: pointer;
   }
 
-  .tablaTrabajadores {
-    margin: 0 auto;
-    margin-bottom: 40px;
-    padding-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    max-width: 90%; /* Ajusta el ancho máximo del diálogo */
-    max-height: 90%; /* Ajusta el alto máximo del diálogo */
-    width: 600px; /* Establece un ancho fijo opcional */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    overflow: auto; /* Asegura que el contenido sea desplazable si excede el tamaño */
-  }
-  
+ 

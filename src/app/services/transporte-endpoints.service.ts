@@ -3,6 +3,8 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { BaseResponse } from '../interfaces/baseResponse';
 import { Transporte } from '../interfaces/transporte';
 import { HttpClient } from '@angular/common/http';
+import { HotelDTO } from '../interfaces/hotel-dto';
+import { HabitacionesDTO } from '../interfaces/habitaciones-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +31,23 @@ export class TransporteEndpointsService {
         return throwError(() => 'Errorfetching data')
       })
      )
+    }
+
+    getHotel(): Observable<BaseResponse<HotelDTO[]>> {
+      return this._http.get<BaseResponse<HotelDTO[]>>('https://alojamiento.sistemagf.cl/hotel/traer').pipe(
+        catchError(error => {
+          console.error('Error fetching Hotel: ', error);
+          return throwError(() => 'Error Fetching hotel')
+        })
+      )
+    } 
+
+    getHabitaciones(idHotel: number): Observable<BaseResponse<HabitacionesDTO>> {
+      return this._http.get<BaseResponse<HabitacionesDTO>>(`https://alojamiento.sistemagf.cl/habitacion/traer/${idHotel}`, ).pipe(
+        catchError(error => {
+          console.error('Error fetching habitaciones: ', error);
+          return throwError(() => 'Error fetching habitaciones')
+        })
+      )
     }
 }

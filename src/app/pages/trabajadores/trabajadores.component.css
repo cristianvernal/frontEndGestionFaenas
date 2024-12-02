@@ -66,3 +66,20 @@
     margin-top: 20px;
     align-items: center;
   }
+
+  .form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+    gap: 16px; /* Espaciado entre los elementos */
+    width: 100%;
+  }
+  .button {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 10px; /* Espaciado entre los botones */
+    margin-top: 16px; /* Espaciado superior para separar los botones del formulario */
+  }
+
+  mat-hint {
+    color: red;
+  }

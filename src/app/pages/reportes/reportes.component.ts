@@ -19,6 +19,7 @@ import { EnpointsService } from '../../services/enpoints.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AttendanceTableDTO } from '../../interfaces/attendance-table';
 
 @Component({
   selector: 'app-reportes',
@@ -32,11 +33,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    MatProgressSpinnerModule,
     UiTableComponent,
     MatDatepickerModule,
     MatSelectModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.css',
@@ -45,9 +46,10 @@ export class ReportesComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
   enpointService = inject(EnpointsService)
   tipoCargos: SelectOption<number>[] = [];
-  tableColumns: tableColumn<Workers>[] = [];
-  verificacion: Workers[] = [];
+  tableColumns: tableColumn<AttendanceTableDTO>[] = [];
+  attendace: AttendanceTableDTO[] = [];
   tipoFaenas: SelectOption<number>[] = [];
+  loading: boolean = false;
 
   formGroupFilter = new FormGroup({
     rut:  new FormControl(),
@@ -66,32 +68,27 @@ export class ReportesComponent implements OnInit {
       {
         label: 'Nombre',
         def: 'primerNombre',
-        content: (row) => row.primerNombre,
+        content: (row) => row.nombre,
       },
       {
         label: 'Apellido',
         def: 'primerApellido',
-        content: (row) => row.primerApellido,
+        content: (row) => row.apellido,
       },
       {
         label: 'Rut',
         def: 'run',
-        content: (row) => row.run,
-      },
-      {
-        label: 'Cargo',
-        def: 'nombreCargo',
-        content: (row) => row.nombreCargo,
+        content: (row) => row.rut,
       },
       {
         label: 'Hora Entrada',
         def: 'horaEntrada',
-        content: (row) => row.nombreCumplimiento,
+        content: (row) => row.fechaEntrada,
       },
       {
         label: 'Hora Salida',
         def: 'horaSalida',
-        content: (row) => row.nombreCumplimiento,
+        content: (row) => row.fechaSalida,
       },
     ];
   }
@@ -116,6 +113,20 @@ export class ReportesComponent implements OnInit {
         }));
       },
     });
+  }
+
+  searchAttendance() {
+    this.loading = true;
+    const termsSearch = this.formGroupFilter.value
+    this.registeApiService.getAsistencia(termsSearch).subscribe({
+      next: (data) => {
+        console.log("Fetching attendace: ", data);
+        this.attendace = data
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    })
   }
 
   clean() {

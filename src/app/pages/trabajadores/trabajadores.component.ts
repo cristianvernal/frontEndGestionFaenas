@@ -26,10 +26,12 @@ import { FooterComponent } from "../../components/footer/footer.component";
 import { RegisterApiService } from '../../services/register-api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SelectOption } from '../../interfaces/select-option';
 import { Workers } from '../../interfaces/workers-dto';
 import { MatInputModule } from '@angular/material/input';
+import { TransporteEndpointsService } from '../../services/transporte-endpoints.service';
+import { HabitacionesDTO } from '../../interfaces/habitaciones-dto';
 
 @Component({
   selector: 'app-trabajadores',
@@ -49,6 +51,8 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
+    MatDialogContent,
+    MatDialogTitle
 ],
   templateUrl: './trabajadores.component.html',
   styleUrl: './trabajadores.component.css',
@@ -56,13 +60,18 @@ import { MatInputModule } from '@angular/material/input';
 export class TrabajadoresComponent implements OnInit {
   attendanceService = inject(AttendanceEndpointService);
   registerService = inject(RegisterApiService);
+  transporteService = inject(TransporteEndpointsService);
   faenas: Faena[] = [];
   workerList: Workers[] = [];
   tableWorker: tableColumn<Workers>[] = [];
   colActions = viewChild.required('colActions', { read: TemplateRef });
   loading: boolean = false;
   tipoCargos: SelectOption<number>[] = [];
-  currentWorker: Workers | undefined
+  transportes: SelectOption<number>[] = [];
+  hoteles: SelectOption<number>[] = [];
+  currentWorker: Workers | undefined;
+  habitaciones: SelectOption<number>[] = [];
+  selectedHotel: number | null = null;
   
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
@@ -78,6 +87,16 @@ export class TrabajadoresComponent implements OnInit {
     rut: new FormControl(),
     faena: new FormControl(),
   });
+
+  formGroupLogistic: FormGroup = new FormGroup<{
+    transporte: FormControl,
+    hotel: FormControl,
+  }>({
+    transporte: new FormControl(null, Validators.required),
+    hotel: new FormControl(null, Validators.required),
+  })
+
+
 
   ngOnInit(): void {
     this.setTableDialog();
@@ -130,6 +149,72 @@ export class TrabajadoresComponent implements OnInit {
     this.matDialogRef.afterClosed().subscribe((res) => {
       console.log('Dialog with template close', res);
     });
+  }
+
+  openLogistic(template: TemplateRef<any>){
+    this.getTransporte();
+    this.getHotels();
+    this.matDialogRef = this.dialogService.openDialogWithTemplate({
+      template,
+    });
+    this.matDialogRef.afterClosed().subscribe((res) => {
+      console.log('Dialog with template close', res);
+    });
+  }
+
+  getTransporte() {
+    this.transporteService.getTipoTransporte().subscribe({
+      next: (data) => {
+        console.log('Data fetched', data);
+        if (data && data.resultado && Array.isArray(data.resultado)) {
+          this.transportes = data.resultado.map<SelectOption<number>>(
+            (transporte) => ({
+              value: transporte.idTransporte,
+              viewValue: transporte.tipoTransporte,
+            })
+          );
+        } else {
+          console.error('unexpected data format:', data);
+          this.transportes = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching nombre faenas', error);
+        this.transportes = [];
+      },
+    });
+  }
+
+  getHotels() {
+    this.transporteService.getHotel().subscribe({
+      next:(data) => {
+        console.log('Hotel fetched: ', data);
+        if(data && data.resultado && Array.isArray(data.resultado)) {
+          this.hoteles = data.resultado.map<SelectOption<number>>(
+            (hotel) => ({
+              value: hotel.idHotel,
+              viewValue: hotel.nombreHotel,
+            })
+          );
+        } else {
+          console.error('Unexpecte data format: ', data);
+          this.hoteles = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching hoteles: ', error);
+        this.hoteles = [];
+      }
+    })
+  }
+
+  getHabitacionByHotel(hotelId: number) {
+    this.selectedHotel = hotelId;
+    this.transporteService.getHabitaciones(hotelId).subscribe({
+      next: (data) => {
+        console.log('Habitacion fetched: ', data);
+      }
+    })
   }
 
   getTipoCargos() {

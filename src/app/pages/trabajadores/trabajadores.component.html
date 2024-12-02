@@ -41,17 +41,24 @@
     <ng-template #colActions let-row>
         <button
         mat-icon-button
-        matTooltip="Ver"
+        matTooltip="Imagen"
         (click)="openWorker(picture, row)"
       >
         <mat-icon>remove_red_eye</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Logistica"
+        (click)="openLogistic(logistic)"
+      >
+        <mat-icon>business</mat-icon>
       </button>
       </ng-template>
 
       <ng-template #picture class="main">
         <div class="picture-container">
           <img
-            [src]="'https://3.90.157.39:8083/images/'+currentWorker?.run +'.jpg'" 
+            [src]="'https://asistencia.sistemagf.cl/images/'+ currentWorker?.run +'.jpg'" 
             alt="Imagen Trabajador"
             class="picture"
           />
@@ -60,6 +67,45 @@
           <button mat-raised-button mat-dialog-close color="primary">
             Cerrar
           </button>
+        </div>
+        </ng-template>
+
+        <ng-template #logistic>
+          <h2 mat-dialog-title>Logistica</h2>
+          <div mat-dialog-content>
+            <form [formGroup]="formGroupLogistic" class="form">
+
+              <mat-form-field>
+                <mat-label>Transporte</mat-label>
+            <mat-select formControlName="transporte">
+              @for(transporte of transportes; track transporte) {
+                <mat-option [value]="transporte.value">{{
+                  transporte.viewValue
+                }}</mat-option>
+              }
+            </mat-select>
+            <mat-hint *ngIf="formGroupLogistic.get('transporte')?.hasError('required') && formGroupLogistic.get('transporte')?.touched">Cargo obligatorio</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Hoteles</mat-label>
+            <mat-select formControlName="hotel">
+              @for(hotel of hoteles; track hotel){
+                <mat-option [value]="hotel.value">
+                  {{hotel.viewValue}}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-hint *ngIf="formGroupLogistic.get('hotel')?.hasError('required') && formGroupLogistic.get('hotel')?.touched">Hotel obligatorio</mat-hint>
+          </mat-form-field>
+        </form>
+        <div class="button">
+          <button mat-raised-button mat-dialog-close color="primary">
+            Cerrar
+          </button>
+          <button mat-raised-button color="primary">
+            Guardar
+          </button>
+        </div>
         </div>
         </ng-template>
       

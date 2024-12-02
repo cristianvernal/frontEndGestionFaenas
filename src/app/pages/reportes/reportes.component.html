@@ -25,14 +25,20 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <div>
-      <button mat-raised-button color="primary">Buscar</button>
+      <button mat-raised-button color="primary" (click)="searchAttendance()">Buscar</button>
       <button mat-raised-button color="primary" (click)="clean()">
         Limpiar
       </button>
     </div>
   </div>
+  @if (loading) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
   <app-ui-table
-    [data]="verificacion"
+    *ngIf="!loading"
+    [data]="attendace"
     [columns]="tableColumns"
     (select)="onSelect($event)"
   />
