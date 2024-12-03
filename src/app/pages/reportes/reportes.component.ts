@@ -141,7 +141,7 @@ export class ReportesComponent implements OnInit {
         this.attendace = data
       },
       complete: () => {
-        this.loading = false;
+        this.loading = false; 
       },
     })
   }
