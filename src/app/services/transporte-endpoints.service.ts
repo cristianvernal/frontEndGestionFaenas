@@ -42,8 +42,8 @@ export class TransporteEndpointsService {
       )
     } 
 
-    getHabitaciones(idHotel: number): Observable<BaseResponse<HabitacionesDTO>> {
-      return this._http.get<BaseResponse<HabitacionesDTO>>(`https://alojamiento.sistemagf.cl/habitacion/traer/${idHotel}`, ).pipe(
+    getHabitaciones(): Observable<BaseResponse<HabitacionesDTO[]>> {
+      return this._http.get<BaseResponse<HabitacionesDTO[]>>('https://alojamiento.sistemagf.cl/habitacion/traer', ).pipe(
         catchError(error => {
           console.error('Error fetching habitaciones: ', error);
           return throwError(() => 'Error fetching habitaciones')

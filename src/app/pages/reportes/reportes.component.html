@@ -3,42 +3,47 @@
     <h2>Asistencia</h2>
   </div>
   <mat-divider></mat-divider>
-  <div class="form-container" [formGroup]="formGroupFilter">
+  <div class="form-container" [formGroup]="formGroupFilter2">
     <mat-form-field>
       <mat-label>Rut</mat-label>
-      <input matInput formControlName="rut" />
+      <input matInput formControlName="run" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Faena</mat-label>
-      <mat-select formControlName="faena">
-        @for(tipofaena of tipoFaenas; track tipofaena) {
-        <mat-option [value]="tipofaena.value">{{
-          tipofaena.viewValue
+      <mat-label>Cargos</mat-label>
+      <mat-select formControlName="cargo">
+        @for(cargo of tipoCargos; track cargo) {
+        <mat-option [value]="cargo.value">{{
+          cargo.viewValue
         }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Elegir fecha</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="fecha">
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="picker" formControlName="fecha" />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <div>
-      <button mat-raised-button color="primary" (click)="searchAttendance()">Buscar</button>
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        Buscar
+      </button>
       <button mat-raised-button color="primary" (click)="clean()">
         Limpiar
       </button>
     </div>
   </div>
   @if (loading) {
-    <div class="spinner-container">
-      <mat-spinner></mat-spinner>
-    </div>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
   }
   <app-ui-table
     *ngIf="!loading"
-    [data]="attendace"
+    [data]="asistencia"
     [columns]="tableColumns"
     (select)="onSelect($event)"
   />

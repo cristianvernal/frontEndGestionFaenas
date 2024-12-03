@@ -201,7 +201,7 @@ export class RegisterApiService {
   getRegistroAprobados(registro: RegistroDTO) {
     return this._http
       .post<Workers[]>(
-        `https://trabajadores.sistemagf.cl/api/registros/registro/traerAprobados/{idFaena}?idFaena=${registro.faena}`,
+        `https://trabajadores.sistemagf.cl/api/registros/registro/traerAprobados2/{idFaena}?idFaena=${registro.faena}`,
         registro
       )
       .pipe(

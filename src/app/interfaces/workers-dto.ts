@@ -7,4 +7,7 @@ export interface Workers {
     nombreCumplimiento: string;
     nombreFaena: string;
     idFaena?: number;
+    transporte: string;
+    hotel: string;
+    habitacion: number;  
   }

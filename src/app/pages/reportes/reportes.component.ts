@@ -20,6 +20,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AttendanceTableDTO } from '../../interfaces/attendance-table';
+import { ShiftsService } from '../../services/shifts.service';
+import { AttendanceByDay } from '../../interfaces/attendance-by-day';
+import { AsistenciaResponse } from '../../interfaces/asistencia-response';
+import { filter } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-reportes',
@@ -44,17 +50,28 @@ import { AttendanceTableDTO } from '../../interfaces/attendance-table';
 })
 export class ReportesComponent implements OnInit {
   registeApiService = inject(RegisterApiService);
+  shiftService = inject(ShiftsService);
   enpointService = inject(EnpointsService)
   tipoCargos: SelectOption<number>[] = [];
-  tableColumns: tableColumn<AttendanceTableDTO>[] = [];
+  tableColumns: tableColumn<AsistenciaResponse>[] = [];
+  asistencia: AsistenciaResponse[] = [];
   attendace: AttendanceTableDTO[] = [];
   tipoFaenas: SelectOption<number>[] = [];
   loading: boolean = false;
+  verificacion: AttendanceByDay[] = []
+  
 
   formGroupFilter = new FormGroup({
     rut:  new FormControl(),
     faena: new FormControl(),
     fecha: new FormControl(),
+  })
+
+  formGroupFilter2 = new FormGroup({
+    run:  new FormControl(),
+    faena: new FormControl(),
+    fecha: new FormControl(),
+    cargo: new FormControl(),
   })
 
   ngOnInit(): void {
@@ -68,27 +85,27 @@ export class ReportesComponent implements OnInit {
       {
         label: 'Nombre',
         def: 'primerNombre',
-        content: (row) => row.nombre,
+        content: (row) => row.nombreCompleto,
       },
       {
         label: 'Apellido',
         def: 'primerApellido',
-        content: (row) => row.apellido,
+        content: (row) => row.runTrabajador,
       },
       {
         label: 'Rut',
         def: 'run',
-        content: (row) => row.rut,
+        content: (row) => row.cargo,
       },
       {
         label: 'Hora Entrada',
         def: 'horaEntrada',
-        content: (row) => row.fechaEntrada,
+        content: (row) => row.horaEntrada,
       },
       {
         label: 'Hora Salida',
         def: 'horaSalida',
-        content: (row) => row.fechaSalida,
+        content: (row) => row.horaSalida,
       },
     ];
   }
@@ -129,11 +146,39 @@ export class ReportesComponent implements OnInit {
     })
   }
 
+  onSearch() {
+    this.loading = true;
+    const filters: any = {}
+    Object.entries(this.formGroupFilter2.value).forEach((filter) => {
+      if (filter[1] !== null) {
+        filters[filter[0]] = filter[1];
+      }
+    });
+    console.log('filtros: ', filters);
+    // const attendanceSearch = this.formGroupFilter2.value
+    this.shiftService.attendanceByDay(filters).subscribe({
+      next: (data) => {
+        console.log('Respuesta de la API:', data);
+        this.asistencia = data
+      },
+      error: (err) => {
+        console.error('Error al obtener los datos:', err);
+        this.asistencia = []; 
+      },
+      complete: () => {
+        this.loading = false; 
+      }
+    });
+  }
+
   clean() {
-    this.formGroupFilter.reset();
+    this.formGroupFilter2.reset();
   }
 
   onSelect(data: any) {
     console.log(data)
   }
+
+
+
 }

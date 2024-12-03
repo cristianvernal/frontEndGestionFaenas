@@ -69,8 +69,8 @@ export class TrabajadoresComponent implements OnInit {
   tipoCargos: SelectOption<number>[] = [];
   transportes: SelectOption<number>[] = [];
   hoteles: SelectOption<number>[] = [];
-  currentWorker: Workers | undefined;
   habitaciones: SelectOption<number>[] = [];
+  currentWorker: Workers | undefined;
   selectedHotel: number | null = null;
   
 
@@ -91,9 +91,11 @@ export class TrabajadoresComponent implements OnInit {
   formGroupLogistic: FormGroup = new FormGroup<{
     transporte: FormControl,
     hotel: FormControl,
+    habitacion: FormControl,
   }>({
     transporte: new FormControl(null, Validators.required),
     hotel: new FormControl(null, Validators.required),
+    habitacion: new FormControl(null, Validators.required),
   })
 
 
@@ -132,6 +134,21 @@ export class TrabajadoresComponent implements OnInit {
         content: (row) => row.nombreCargo
       },
       {
+        label: 'Transporte',
+        def: 'transporte',
+        content: (row) => row.transporte
+      },
+      {
+        label: 'Hotel',
+        def: 'hotel',
+        content: (row) => row.hotel
+      },
+      {
+        label: 'Habitacion',
+        def: 'habitacion',
+        content: (row) => row.habitacion.toString()
+      },
+      {
         label: 'Acciones',
         def: 'acciones',
         template: this.colActions(),
@@ -154,6 +171,7 @@ export class TrabajadoresComponent implements OnInit {
   openLogistic(template: TemplateRef<any>){
     this.getTransporte();
     this.getHotels();
+    this.getHabitacionByHotel();
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
     });
@@ -208,11 +226,18 @@ export class TrabajadoresComponent implements OnInit {
     })
   }
 
-  getHabitacionByHotel(hotelId: number) {
-    this.selectedHotel = hotelId;
-    this.transporteService.getHabitaciones(hotelId).subscribe({
+  getHabitacionByHotel() {
+    this.transporteService.getHabitaciones().subscribe({
       next: (data) => {
         console.log('Habitacion fetched: ', data);
+        if(data && data.resultado && Array.isArray(data.resultado)) {
+          this.habitaciones = data.resultado.map<SelectOption<number>>(
+            (habitacion) => ({
+              value: habitacion.idHabitacion,
+              viewValue: habitacion.numeroHabitacion.toString(),
+            })
+          )
+        }
       }
     })
   }
