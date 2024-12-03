@@ -46,13 +46,15 @@
       >
         <mat-icon>remove_red_eye</mat-icon>
       </button>
-      <button
+      @if(row.hotel == null) {
+        <button
         mat-icon-button
         matTooltip="Logistica"
-        (click)="openLogistic(logistic)"
-      >
+        (click)="openLogistic(logistic, row)"
+        >
         <mat-icon>business</mat-icon>
       </button>
+    }
       </ng-template>
 
       <ng-template #picture class="main">
@@ -110,10 +112,10 @@
           </mat-form-field>
         </form>
         <div class="button">
-          <button mat-raised-button mat-dialog-close color="primary">
+          <button mat-raised-button color="primary" (click)="onClose()">
             Cerrar
           </button>
-          <button mat-raised-button color="primary">
+          <button mat-raised-button color="primary" [disabled]="formGroupLogistic.invalid" (click)="onSave()">
             Guardar
           </button>
         </div>

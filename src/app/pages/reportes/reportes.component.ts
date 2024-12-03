@@ -24,6 +24,7 @@ import { ShiftsService } from '../../services/shifts.service';
 import { AttendanceByDay } from '../../interfaces/attendance-by-day';
 import { AsistenciaResponse } from '../../interfaces/asistencia-response';
 import { filter } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -64,13 +65,10 @@ export class ReportesComponent implements OnInit {
   formGroupFilter = new FormGroup({
     rut:  new FormControl(),
     faena: new FormControl(),
-    fecha: new FormControl(),
   })
 
   formGroupFilter2 = new FormGroup({
     run:  new FormControl(),
-    faena: new FormControl(),
-    fecha: new FormControl(),
     cargo: new FormControl(),
   })
 
@@ -79,6 +77,8 @@ export class ReportesComponent implements OnInit {
     this.getTipoCargos();
     this.getTipoFaena();
   }
+
+  constructor(private readonly activedRoute: ActivatedRoute) {}
 
   setTableColumns() {
     this.tableColumns = [
@@ -155,7 +155,6 @@ export class ReportesComponent implements OnInit {
       }
     });
     console.log('filtros: ', filters);
-    // const attendanceSearch = this.formGroupFilter2.value
     this.shiftService.attendanceByDay(filters).subscribe({
       next: (data) => {
         console.log('Respuesta de la API:', data);

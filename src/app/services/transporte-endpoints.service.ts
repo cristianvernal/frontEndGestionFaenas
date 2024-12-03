@@ -5,6 +5,7 @@ import { Transporte } from '../interfaces/transporte';
 import { HttpClient } from '@angular/common/http';
 import { HotelDTO } from '../interfaces/hotel-dto';
 import { HabitacionesDTO } from '../interfaces/habitaciones-dto';
+import { LogisticaDTO } from '../interfaces/logistica-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,11 +43,29 @@ export class TransporteEndpointsService {
       )
     } 
 
-    getHabitaciones(): Observable<BaseResponse<HabitacionesDTO[]>> {
-      return this._http.get<BaseResponse<HabitacionesDTO[]>>('https://alojamiento.sistemagf.cl/habitacion/traer', ).pipe(
+    getHabitaciones(idHotel: number): Observable<BaseResponse<HabitacionesDTO[]>> {
+      return this._http.get<BaseResponse<HabitacionesDTO[]>>(`https://alojamiento.sistemagf.cl/habitacion/traerporhotel/${idHotel}`, ).pipe(
         catchError(error => {
           console.error('Error fetching habitaciones: ', error);
           return throwError(() => 'Error fetching habitaciones')
+        })
+      )
+    }
+
+    getLogistic(logistica: LogisticaDTO) {
+      return this._http.post(`https://trabajadores.sistemagf.cl/api/registros/registro/Alojamientotransporte`, logistica).pipe(
+        catchError(error => {
+          console.error('Error fetching logistic: ', error);
+          return throwError(() => 'Error fetching logistic')
+        })
+      )
+    }
+
+    updateRoomState(idHabitacion: number, idEstado: number) {
+      return this._http.patch(`https://alojamiento.sistemagf.cl/${idHabitacion}/estado/${idEstado}`, null).pipe(
+        catchError(error => {
+          console.error('Error fetching room state: ', error);
+          return throwError(() => 'Error fetching room state')
         })
       )
     }

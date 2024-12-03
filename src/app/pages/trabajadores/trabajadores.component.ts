@@ -32,6 +32,9 @@ import { Workers } from '../../interfaces/workers-dto';
 import { MatInputModule } from '@angular/material/input';
 import { TransporteEndpointsService } from '../../services/transporte-endpoints.service';
 import { HabitacionesDTO } from '../../interfaces/habitaciones-dto';
+import { HotelDTO } from '../../interfaces/hotel-dto';
+import Swal from 'sweetalert2';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-trabajadores',
@@ -67,11 +70,12 @@ export class TrabajadoresComponent implements OnInit {
   colActions = viewChild.required('colActions', { read: TemplateRef });
   loading: boolean = false;
   tipoCargos: SelectOption<number>[] = [];
-  transportes: SelectOption<number>[] = [];
-  hoteles: SelectOption<number>[] = [];
-  habitaciones: SelectOption<number>[] = [];
+  transportes: SelectOption<string>[] = [];
+  hoteles: SelectOption<HotelDTO>[] = [];
+  habitaciones: SelectOption<HabitacionesDTO>[] = [];
   currentWorker: Workers | undefined;
   selectedHotel: number | null = null;
+
   
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
@@ -104,6 +108,9 @@ export class TrabajadoresComponent implements OnInit {
     this.setTableDialog();
     this.getTipoCargos();
     this.onSearch();
+    this.getTransporte();
+    this.getHotels();
+    this.onListeningHotel();
   }
 
   setTableDialog() {
@@ -168,10 +175,9 @@ export class TrabajadoresComponent implements OnInit {
     });
   }
 
-  openLogistic(template: TemplateRef<any>){
-    this.getTransporte();
-    this.getHotels();
-    this.getHabitacionByHotel();
+  openLogistic(template: TemplateRef<any>, row: Workers){
+    this.currentWorker = row
+    console.log('current worker: ', this.currentWorker)
     this.matDialogRef = this.dialogService.openDialogWithTemplate({
       template,
     });
@@ -185,9 +191,9 @@ export class TrabajadoresComponent implements OnInit {
       next: (data) => {
         console.log('Data fetched', data);
         if (data && data.resultado && Array.isArray(data.resultado)) {
-          this.transportes = data.resultado.map<SelectOption<number>>(
+          this.transportes = data.resultado.map<SelectOption<string>>(
             (transporte) => ({
-              value: transporte.idTransporte,
+              value: transporte.tipoTransporte,
               viewValue: transporte.tipoTransporte,
             })
           );
@@ -208,9 +214,9 @@ export class TrabajadoresComponent implements OnInit {
       next:(data) => {
         console.log('Hotel fetched: ', data);
         if(data && data.resultado && Array.isArray(data.resultado)) {
-          this.hoteles = data.resultado.map<SelectOption<number>>(
+          this.hoteles = data.resultado.map<SelectOption<HotelDTO>>(
             (hotel) => ({
-              value: hotel.idHotel,
+              value: hotel,
               viewValue: hotel.nombreHotel,
             })
           );
@@ -226,18 +232,26 @@ export class TrabajadoresComponent implements OnInit {
     })
   }
 
-  getHabitacionByHotel() {
-    this.transporteService.getHabitaciones().subscribe({
+  getHabitacionByHotel(idHotel: number) {
+    this.transporteService.getHabitaciones(idHotel).subscribe({
       next: (data) => {
         console.log('Habitacion fetched: ', data);
         if(data && data.resultado && Array.isArray(data.resultado)) {
-          this.habitaciones = data.resultado.map<SelectOption<number>>(
+          this.habitaciones = data.resultado.filter(habitacion => habitacion.estado.idEstado == 1).map<SelectOption<HabitacionesDTO>>(
             (habitacion) => ({
-              value: habitacion.idHabitacion,
+              value: habitacion,
               viewValue: habitacion.numeroHabitacion.toString(),
             })
           )
         }
+      }
+    })
+  }
+
+  onListeningHotel() {
+    this.formGroupLogistic.get('hotel')?.valueChanges.subscribe(hotel => {
+      if(hotel !== null) {
+        this.getHabitacionByHotel(hotel.idHotel)
       }
     })
   }
@@ -302,7 +316,38 @@ export class TrabajadoresComponent implements OnInit {
     })
   }
 
+  onSave() {
+    const logistic = this.formGroupLogistic.value
+    logistic['idFaena'] = this.currentWorker?.idFaena
+    logistic['runTrabajador'] = this.currentWorker?.run
+    logistic['hotel'] = this.formGroupLogistic.get('hotel')?.value.nombreHotel
+    logistic['habitacion'] = this.formGroupLogistic.get('habitacion')?.value.numeroHabitacion
+    this.transporteService.getLogistic(logistic).pipe(
+      switchMap(res => {
+        return this.transporteService.updateRoomState( this.formGroupLogistic.get('habitacion')?.value.idHabitacion, 2)
+      })
+    ).subscribe({
+      next: (data: any) => {
+        console.log('Data logistic fetched: ', data)
+        Swal.fire({
+          icon: 'success',
+          title: 'Logisitca guardada exitosamente',
+          text: 'La logistica ha sido guardado correctamente',
+          confirmButtonText: 'OK',
+        });
+        this.onSearch();
+        this.matDialogRef.close();
+        this.formGroupLogistic.reset();
+      }
+    })
+  }
+
   onSelect(data: any) {
     console.log(data)
+  }
+
+  onClose() {
+    this.formGroupLogistic.reset()
+    this.matDialogRef.close()
   }
 }
